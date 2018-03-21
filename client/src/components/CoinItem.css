@@ -1,0 +1,42 @@
+.row {
+  background-color: #fff;
+  margin: 8px 0;
+  line-height: 80px;
+  text-align: center;
+}
+
+.header {
+  background-color: rgb(212, 195, 97);
+  font-weight: 700;
+  line-height: 40px;
+  font-size: 120%;
+}
+
+.counter {
+  background-color: rgb(212, 195, 97);
+  font-size: 120%;
+  font-weight: 700;
+}
+
+.icon {
+  background-color: #fff;
+  width: 60px;
+  height: 60px;
+}
+
+.name {
+  font-size: 120%;
+  overflow: hidden;
+}
+
+.price {
+  font-size: 100%;
+}
+
+.supply {
+  font-size: 100%;
+}
+
+.volume {
+  font-size: 100%;
+}
