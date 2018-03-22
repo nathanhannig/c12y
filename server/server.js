@@ -14,7 +14,7 @@ let corsOption = {
 
 app.use(cors(corsOption))
 
-//rest API requirements
+// Rest API requirements
 app.use(bodyParser.urlencoded({
   extended: true
 }))
@@ -32,6 +32,52 @@ let coinList
 let watchList
 let priceCounter = 0
 let fsym
+
+// Gets the list of all coins
+const getCoinList = () => {
+  const coinListUrl = 'https://min-api.cryptocompare.com/data/all/coinlist'
+
+  return axios.get(coinListUrl)
+    .then(function (response) {
+      data['coinList'] = {}
+      data['coinList']['coins'] = response['data']['Data']
+
+      data['watchList'] = {}
+      data['watchList']['coins'] = {}
+      data['watchList']['defaultWatchlist'] = response['data']['DefaultWatchlist']['CoinIs']
+
+      baseImageUrl = response['data']['BaseImageUrl']
+      baseLinkUrl = response['data']['BaseLinkUrl']
+      lastUpdated = moment().format('MMMM Do YYYY, h:mm:ss a')
+
+      coinList = Object.keys(data['coinList']['coins'])
+      watchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
+    })
+    .catch(function (response) {
+      console.error(response)
+    })
+}
+
+// Get the price of a coin
+const getPrices = (fsym) => {
+  let pricesUrl = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + fsym + '&tsyms=BTC,USD,EUR'
+
+  return axios.get(pricesUrl)
+    .then(function (response) {
+      data['coinList']['coins'][fsym]['price'] = response['data']
+      data['coinList']['coins'][fsym]['price']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
+
+      if (watchList.includes(data['coinList']['coins'][fsym]['Id'])) {
+        data['watchList']['coins'][fsym] = data['coinList']['coins'][fsym]
+      }
+
+    })
+    .catch(function (response) {
+      console.log(response)
+    })
+}
+
+// SETUP
 
 // Set a timer to update coin list
 const getCoinListTimer = setInterval(() => {
@@ -63,57 +109,14 @@ getCoinList().then(() => {
   }, 25); // Calls 45 times per second
 })
 
-// Gets the list of all coins
-function getCoinList() {
-  const coinListUrl = 'https://min-api.cryptocompare.com/data/all/coinlist'
-
-  return axios.get(coinListUrl)
-    .then(function (response) {
-      data['coinList'] = {}
-      data['coinList']['coins'] = response['data']['Data']
-
-      data['watchList'] = {}
-      data['watchList']['coins'] = {}
-      data['watchList']['defaultWatchlist'] = response['data']['DefaultWatchlist']['CoinIs']
-
-      baseImageUrl = response['data']['BaseImageUrl']
-      baseLinkUrl = response['data']['BaseLinkUrl']
-      lastUpdated = moment().format('MMMM Do YYYY, h:mm:ss a')
-
-      coinList = Object.keys(data['coinList']['coins'])
-      watchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
-    })
-    .catch(function (response) {
-      console.error(response)
-    })
-}
-
-// Get the price of a coin
-function getPrices(fsym) {
-  let pricesUrl = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + fsym + '&tsyms=BTC,USD,EUR'
-
-  return axios.get(pricesUrl)
-    .then(function (response) {
-      data['coinList']['coins'][fsym]['price'] = response['data']
-      data['coinList']['coins'][fsym]['price']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
-
-      if (watchList.includes(data['coinList']['coins'][fsym]['Id'])) {
-        data['watchList']['coins'][fsym] = data['coinList']['coins'][fsym]
-      }
-
-    })
-    .catch(function (response) {
-      console.log(response)
-    })
-}
-
 // ROUTES
 
 app.get('/', (req, res) => {
+
   res.sendFile(path.join(__dirname, '/views/index.html'));
 })
 
-app.get('/watchlist', function (req, res) {
+app.get('/watchlist', (req, res) => {
 
   res.send({
     coins: data['watchList']['coins'],
@@ -124,7 +127,7 @@ app.get('/watchlist', function (req, res) {
   })
 })
 
-app.get('/all/:page', function (req, res) {
+app.get('/all/:page', (req, res) => {
   // Check that page is a number and greater than 0, else default it to 1
   const page = !isNaN(req.params.page) && parseInt(req.params.page) > 0
     ? parseInt(req.params.page)
@@ -151,7 +154,7 @@ app.get('/all/:page', function (req, res) {
   })
 })
 
-app.get('/coin/:coin', function (req, res) {
+app.get('/coin/:coin', (req, res) => {
   const coin = req.params.coin.toUpperCase()
 
   if (data['coinList']
@@ -173,7 +176,6 @@ app.get('/coin/:coin', function (req, res) {
 
     res.status(500).send({ error: 'coin list not yet ready' })
   }
-
 })
 
 app.listen(3001)
