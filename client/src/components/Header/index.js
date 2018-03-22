@@ -4,7 +4,7 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
 import { LinkContainer  } from 'react-router-bootstrap'
 
 // App
-import './Header.css'
+import './index.css'
 
 const Header = () => (
   <header>

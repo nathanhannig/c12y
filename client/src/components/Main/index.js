@@ -6,11 +6,11 @@ import { Grid, Row } from 'react-bootstrap'
 // Redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchCoins } from '../actions'
+import { fetchCoins } from '../../actions'
 
 // App
-import CoinItem from './CoinItem'
-import './Main.css'
+import CoinItem from '../CoinItem'
+import './index.css'
 
 class Main extends Component {
   state = { loading: true }

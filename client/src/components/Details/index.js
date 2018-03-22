@@ -5,11 +5,11 @@ import { Grid, Row } from 'react-bootstrap'
 // Redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchCoin } from '../actions'
+import { fetchCoin } from '../../actions'
 
 // App
-import CoinItem from './CoinItem'
-import './Details.css'
+import CoinItem from '../CoinItem'
+import './index.css'
 
 class Details extends Component {
   state = { loading: true }

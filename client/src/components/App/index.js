@@ -4,20 +4,20 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 // Redux
 import { Provider } from 'react-redux'
-import store from '../store'
+import store from '../../store'
 
 // App
-import About from './About'
-import Coins from './Coins'
-import Contact from './Contact'
-import Details from './Details'
-import Header from './Header'
-import Login from './Login'
-import Footer from './Footer'
-import Main from './Main'
-import Privacy from './Privacy'
-import Register from './Register'
-import './App.css'
+import About from '../About'
+import Coins from '../Coins'
+import Contact from '../Contact'
+import Details from '../Details'
+import Header from '../Header'
+import Login from '../Login'
+import Footer from '../Footer'
+import Main from '../Main'
+import Privacy from '../Privacy'
+import Register from '../Register'
+import './index.css'
 
 class App extends Component {
   render() {

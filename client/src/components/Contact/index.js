@@ -3,7 +3,7 @@ import React from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
 // App
-import './Contact.css'
+import './index.css'
 
 const Contact = () => (
   <div className="Contact">

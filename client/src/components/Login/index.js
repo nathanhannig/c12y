@@ -3,12 +3,12 @@ import React from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
 // App
-import './Coins.css'
+import './index.css'
 
-const Coins = () => (
-  <div className="Coins">
+const Login = () => (
+  <div className="Login">
     <Grid>
-      <h3>Coins List</h3>
+      <h3>Login</h3>
       <Row>
         <Col xs={12}>
           TODO
@@ -18,4 +18,4 @@ const Coins = () => (
   </div>
 )
 
-export default Coins
+export default Login

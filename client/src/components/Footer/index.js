@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 // App
 import moment from 'moment'
-import './Footer.css'
+import './index.css'
 
 const Footer = () => (
   <footer>

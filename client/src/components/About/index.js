@@ -3,7 +3,7 @@ import React from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
 // App
-import './About.css'
+import './index.css'
 
 const About = () => (
   <div className="About">

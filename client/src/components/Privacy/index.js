@@ -3,7 +3,7 @@ import React from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
 // App
-import './Privacy.css'
+import './index.css'
 
 const Privacy = () => (
   <div className="Privacy">

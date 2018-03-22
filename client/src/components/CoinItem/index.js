@@ -3,7 +3,7 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
 // App
-import './CoinItem.css'
+import './index.css'
 
 const CoinItem = (props) => {
   let html
