@@ -1,14 +1,9 @@
-import { FETCH_COINS } from '../actions'
+import { COINS_FETCH } from '../actions'
 
-function coins(state = { loading: true, coins: {} }, action) {
-  let loading, coins
-
+function coins(state = {}, action) {
   switch (action.type) {
-    case FETCH_COINS:
-      loading = false
-      coins = action.payload
-
-      return { ...state, loading, coins }
+    case COINS_FETCH:
+      return action.payload
     default:
       return state
   }

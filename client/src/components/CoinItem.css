@@ -1,8 +1,10 @@
 .row {
   background-color: #fff;
   margin: 8px 0;
+}
+
+.list {
   line-height: 80px;
-  text-align: center;
 }
 
 .header {
@@ -10,18 +12,21 @@
   font-weight: 700;
   line-height: 40px;
   font-size: 120%;
+  text-align: center;
 }
 
 .counter {
   background-color: rgb(212, 195, 97);
   font-size: 120%;
   font-weight: 700;
+  text-align: center;
 }
 
 .icon {
   background-color: #fff;
   width: 60px;
   height: 60px;
+  margin-right: 20px;
 }
 
 .name {
@@ -31,12 +36,15 @@
 
 .price {
   font-size: 100%;
+  text-align: center;
 }
 
 .supply {
   font-size: 100%;
+  text-align: center;
 }
 
 .volume {
   font-size: 100%;
+  text-align: center;
 }

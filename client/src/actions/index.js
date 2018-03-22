@@ -1,14 +1,29 @@
 import API from '../utils'
 
-export const FETCH_COINS = 'FETCH_COINS'
+export const COINS_FETCH = 'COINS_FETCH'
+
+export const COIN_FETCH = 'COIN_FETCH'
 
 export function fetchCoins() {
   const request = API.fetchWatchlist()
 
   return (dispatch) => {
-    request.then((response) => {
+    return request.then((response) => {
       dispatch({
-        type: FETCH_COINS,
+        type: COINS_FETCH,
+        payload: response.data
+      })
+    })
+  }
+}
+
+export function fetchCoin(coin) {
+  const request = API.fetchCoin(coin)
+
+  return (dispatch) => {
+    return request.then((response) => {
+      dispatch({
+        type: COIN_FETCH,
         payload: response.data
       })
     })

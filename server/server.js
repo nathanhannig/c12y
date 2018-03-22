@@ -104,9 +104,36 @@ app.get('/watchlist', function (req, res) {
   res.send(data['watchList'])
 })
 
-app.get('/coinlist', function (req, res) {
+app.get('/all', function (req, res) {
 
   res.send(data['coinList'])
+})
+
+app.get('/coin/:coin', function (req, res) {
+  let coin = req.params.coin
+
+  coin = coin.toUpperCase()
+
+  if (data['coinList']
+    && data['coinList']["coins"][coin]) {
+
+    res.send(
+      {
+        coin: data['coinList']["coins"][coin],
+        baseImageUrl: data['coinList']['baseImageUrl'],
+        baseLinkUrl: data['coinList']['baseLinkUrl'],
+        lastUpdated: data['coinList']['lastUpdated']
+      }
+    )
+  } else if (data['coinList']
+    && data['coinList']["coins"]) {
+
+    res.status(404).send({ error: 'coin doesn\'t exist' })
+  } else {
+
+    res.status(500).send({ error: 'coin list not yet ready' })
+  }
+
 })
 
 app.listen(3001)

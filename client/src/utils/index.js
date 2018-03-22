@@ -15,6 +15,11 @@ function fetchWatchlist() {
   return axios.get(baseURL + '/watchlist')
 }
 
+function fetchCoin(coin) {
+  return axios.get(baseURL + '/coin/' + coin)
+}
+
 export default {
-  fetchWatchlist
+  fetchWatchlist,
+  fetchCoin
 }
