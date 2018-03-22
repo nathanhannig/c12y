@@ -1,6 +1,6 @@
 // React
 import React, { Component } from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -28,7 +28,9 @@ class App extends Component {
             <Header />
             <Switch>
               <Route path="/about" component={About} />
-              <Route path="/coins" component={Coins} />
+              <Route exact path="/coins" component={Coins} />
+              <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
+              <Route path="/coins/:page" component={Coins} />
               <Route path="/contact" component={Contact} />
               <Route path="/login" component={Login} />
               <Route path="/privacy" component={Privacy} />

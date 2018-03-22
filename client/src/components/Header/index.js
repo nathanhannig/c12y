@@ -19,7 +19,7 @@ const Header = () => (
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
-          <LinkContainer to="/coins">
+          <LinkContainer to="/coins/1">
             <NavItem eventKey={1}>Coins</NavItem>
           </LinkContainer>
           <LinkContainer to="/about">

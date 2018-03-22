@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path');
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const moment = require('moment')
@@ -19,7 +20,15 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
+// http://expressjs.com/en/starter/static-files.html
+app.use(express.static('public'));
+
 let data = {}
+
+let baseImageUrl
+let baseLinkUrl
+let lastUpdated
+let coinList
 let watchList
 let priceCounter = 0
 let fsym
@@ -62,17 +71,16 @@ function getCoinList() {
     .then(function (response) {
       data['coinList'] = {}
       data['coinList']['coins'] = response['data']['Data']
-      data['coinList']['baseImageUrl'] = response['data']['BaseImageUrl']
-      data['coinList']['baseLinkUrl'] = response['data']['BaseLinkUrl']
-      data['coinList']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
 
       data['watchList'] = {}
       data['watchList']['coins'] = {}
       data['watchList']['defaultWatchlist'] = response['data']['DefaultWatchlist']['CoinIs']
-      data['watchList']['baseImageUrl'] = response['data']['BaseImageUrl']
-      data['watchList']['baseLinkUrl'] = response['data']['BaseLinkUrl']
-      data['watchList']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
 
+      baseImageUrl = response['data']['BaseImageUrl']
+      baseLinkUrl = response['data']['BaseLinkUrl']
+      lastUpdated = moment().format('MMMM Do YYYY, h:mm:ss a')
+
+      coinList = Object.keys(data['coinList']['coins'])
       watchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
     })
     .catch(function (response) {
@@ -99,20 +107,52 @@ function getPrices(fsym) {
     })
 }
 
-app.get('/watchlist', function (req, res) {
+// ROUTES
 
-  res.send(data['watchList'])
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/views/index.html'));
 })
 
-app.get('/all', function (req, res) {
+app.get('/watchlist', function (req, res) {
 
-  res.send(data['coinList'])
+  res.send({
+    coins: data['watchList']['coins'],
+    defaultWatchlist: data['watchList']['defaultWatchlist'],
+    baseImageUrl,
+    baseLinkUrl,
+    lastUpdated
+  })
+})
+
+app.get('/all/:page', function (req, res) {
+  // Check that page is a number and greater than 0, else default it to 1
+  const page = !isNaN(req.params.page) && parseInt(req.params.page) > 0
+    ? parseInt(req.params.page)
+    : 1
+
+  // Return 100 results
+  const end = (page * 100) - 1
+  const begin = end - 99
+
+  const coins = {}
+
+  for (let i = begin; i <= end; i++) {
+    coins[coinList[i]] = data['coinList']['coins'][coinList[i]]
+  }
+
+  res.send({
+    coins,
+    baseImageUrl,
+    baseLinkUrl,
+    lastUpdated,
+    page,
+    begin,
+    end
+  })
 })
 
 app.get('/coin/:coin', function (req, res) {
-  let coin = req.params.coin
-
-  coin = coin.toUpperCase()
+  const coin = req.params.coin.toUpperCase()
 
   if (data['coinList']
     && data['coinList']["coins"][coin]) {
@@ -120,9 +160,9 @@ app.get('/coin/:coin', function (req, res) {
     res.send(
       {
         coin: data['coinList']["coins"][coin],
-        baseImageUrl: data['coinList']['baseImageUrl'],
-        baseLinkUrl: data['coinList']['baseLinkUrl'],
-        lastUpdated: data['coinList']['lastUpdated']
+        baseImageUrl,
+        baseLinkUrl,
+        lastUpdated
       }
     )
   } else if (data['coinList']
