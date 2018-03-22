@@ -1,6 +1,7 @@
 // React
 import React from 'react'
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
+import { LinkContainer  } from 'react-router-bootstrap'
 
 // App
 import './Header.css'
@@ -9,34 +10,38 @@ const Header = () => (
   <header>
     <Navbar collapseOnSelect>
       <Navbar.Header>
-        <Navbar.Brand>
-          <a href="/">c12y - Cryptocurrency Info</a>
-        </Navbar.Brand>
+        <LinkContainer to="/">
+          <Navbar.Brand>
+            c12y - Cryptocurrency Info
+          </Navbar.Brand>
+        </LinkContainer>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
         <Nav>
-          <NavItem eventKey={1} href="#">
-            Coins
-          </NavItem>
-          <NavItem eventKey={2} href="#">
-            About
-          </NavItem>
+          <LinkContainer to="/coins">
+            <NavItem eventKey={1}>Coins</NavItem>
+          </LinkContainer>
+          <LinkContainer to="/about">
+            <NavItem eventKey={2}>About</NavItem>
+          </LinkContainer>
           <NavDropdown eventKey={3} title="Social" id="basic-nav-dropdown">
-            <MenuItem eventKey={3.1}>Facebook</MenuItem>
-            <MenuItem eventKey={3.2}>Twitter</MenuItem>
-            <MenuItem eventKey={3.3}>Instagram</MenuItem>
+            <MenuItem eventKey={3.1} href="http://www.facebook.com">Facebook</MenuItem>
+            <MenuItem eventKey={3.2} href="http://www.twitter.com">Twitter</MenuItem>
+            <MenuItem eventKey={3.3} href="http://www.instagram.com">Instagram</MenuItem>
             <MenuItem divider />
-            <MenuItem eventKey={3.3}>Contact Us</MenuItem>
+            <LinkContainer to="/contact">
+              <MenuItem eventKey={3.3}>Contact Us</MenuItem>
+            </LinkContainer>
           </NavDropdown>
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="#">
-            Login
-          </NavItem>
-          <NavItem eventKey={2} href="#">
-            Sign Up
-          </NavItem>
+          <LinkContainer to="/login">
+            <NavItem eventKey={1}>Login </NavItem>
+          </LinkContainer>
+          <LinkContainer to="/register">
+            <NavItem eventKey={2}>Sign Up</NavItem>
+          </LinkContainer>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
