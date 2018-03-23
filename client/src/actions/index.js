@@ -4,8 +4,14 @@ export const COINS_FETCH = 'COINS_FETCH'
 
 export const COIN_FETCH = 'COIN_FETCH'
 
-export function fetchCoins() {
-  const request = API.fetchWatchlist()
+export function fetchCoins(page) {
+  let request
+
+  if (page) {
+    request = API.fetchCoinlist(page)
+  } else {
+    request = API.fetchWatchlist()
+  }
 
   return (dispatch) => {
     return request.then((response) => {

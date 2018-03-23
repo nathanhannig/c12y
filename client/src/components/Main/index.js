@@ -44,8 +44,11 @@ class Main extends Component {
 
       let price = 'N/A', supply = 'N/A', volume = 'N/A'
 
-      // Check if RAW info is available
-      if (coins.coins[item].price && coins.coins[item].price.RAW) {
+      // Check if RAW USD info is available
+      if (coins.coins[item].price
+        && coins.coins[item].price.RAW
+        && coins.coins[item].price.RAW[item]
+        && coins.coins[item].price.RAW[item].USD) {
         // Check if RAW price is available
         price = coins.coins[item].price.RAW[item].USD.PRICE
 
@@ -76,14 +79,14 @@ class Main extends Component {
       )
     })
 
-    html.unshift((<CoinItem key={'header'} header counter={'#'} name={'Name'} price={'Price'} volume={'Volume'} supply={'Supply'} />))
+    html.unshift((<CoinItem key={'header'} header counter={'#'} name={'Name'} price={'Price'} volume={'Volume'} supply={'Circulating'} />))
 
     return html
   }
 
   render() {
     return (
-      <div className="App" >
+      <div className="Main" >
         <Grid>
           <h3>Watch List</h3>
           {this.renderCoinList()}

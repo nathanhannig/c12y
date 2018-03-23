@@ -28,9 +28,9 @@ class App extends Component {
             <Header />
             <Switch>
               <Route path="/about" component={About} />
-              <Route exact path="/coins" component={Coins} />
+              <Route exact key="1" path="/coins" component={Coins} />
               <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
-              <Route path="/coins/:page" component={Coins} />
+              <Route path="/coins/:page" render={(props) => (<Coins key={props.match.params.page} {...props} />)} />
               <Route path="/contact" component={Contact} />
               <Route path="/login" component={Login} />
               <Route path="/privacy" component={Privacy} />

@@ -38,7 +38,7 @@ const getCoinList = () => {
   const coinListUrl = 'https://min-api.cryptocompare.com/data/all/coinlist'
 
   return axios.get(coinListUrl)
-    .then(function (response) {
+    .then((response) => {
       data['coinList'] = {}
       data['coinList']['coins'] = response['data']['Data']
 
@@ -53,7 +53,7 @@ const getCoinList = () => {
       coinList = Object.keys(data['coinList']['coins'])
       watchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
     })
-    .catch(function (response) {
+    .catch((response) => {
       console.error(response)
     })
 }
@@ -63,7 +63,7 @@ const getPrices = (fsym) => {
   let pricesUrl = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=' + fsym + '&tsyms=BTC,USD,EUR'
 
   return axios.get(pricesUrl)
-    .then(function (response) {
+    .then((response) => {
       data['coinList']['coins'][fsym]['price'] = response['data']
       data['coinList']['coins'][fsym]['price']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
 
@@ -72,7 +72,7 @@ const getPrices = (fsym) => {
       }
 
     })
-    .catch(function (response) {
+    .catch((response) => {
       console.log(response)
     })
 }
@@ -118,6 +118,10 @@ app.get('/', (req, res) => {
 
 app.get('/watchlist', (req, res) => {
 
+  if (!data['watchList']) {
+    res.status(500).send({ error: 'watch list not yet ready' })
+  }
+
   res.send({
     coins: data['watchList']['coins'],
     defaultWatchlist: data['watchList']['defaultWatchlist'],
@@ -128,6 +132,11 @@ app.get('/watchlist', (req, res) => {
 })
 
 app.get('/all/:page', (req, res) => {
+
+  if (!data['coinList']) {
+    res.status(500).send({ error: 'coin list not yet ready' })
+  }
+
   // Check that page is a number and greater than 0, else default it to 1
   const page = !isNaN(req.params.page) && parseInt(req.params.page) > 0
     ? parseInt(req.params.page)
@@ -136,6 +145,7 @@ app.get('/all/:page', (req, res) => {
   // Return 100 results
   const end = (page * 100) - 1
   const begin = end - 99
+  const total = coinList.length
 
   const coins = {}
 
@@ -150,12 +160,17 @@ app.get('/all/:page', (req, res) => {
     lastUpdated,
     page,
     begin,
-    end
+    end,
+    total
   })
 })
 
 app.get('/coin/:coin', (req, res) => {
   const coin = req.params.coin.toUpperCase()
+
+  if (!data['coinList']) {
+    res.status(500).send({ error: 'coin list not yet ready' })
+  }
 
   if (data['coinList']
     && data['coinList']["coins"][coin]) {
@@ -168,13 +183,9 @@ app.get('/coin/:coin', (req, res) => {
         lastUpdated
       }
     )
-  } else if (data['coinList']
-    && data['coinList']["coins"]) {
-
-    res.status(404).send({ error: 'coin doesn\'t exist' })
   } else {
 
-    res.status(500).send({ error: 'coin list not yet ready' })
+    res.status(404).send({ error: 'coin doesn\'t exist' })
   }
 })
 
