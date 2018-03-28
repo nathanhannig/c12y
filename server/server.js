@@ -42,16 +42,29 @@ const getCoinList = () => {
       data['coinList'] = {}
       data['coinList']['coins'] = response['data']['Data']
 
-      data['watchList'] = {}
-      data['watchList']['coins'] = {}
-      data['watchList']['defaultWatchlist'] = response['data']['DefaultWatchlist']['CoinIs']
-
       baseImageUrl = response['data']['BaseImageUrl']
       baseLinkUrl = response['data']['BaseLinkUrl']
       lastUpdated = moment().format('MMMM Do YYYY, h:mm:ss a')
 
-      coinList = Object.keys(data['coinList']['coins'])
-      watchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
+      coinList = Object.keys(data['coinList']['coins']).map((item) => {
+        return { id: item, label: response['data']['Data'][item]["FullName"] }
+      })
+
+      const defaultWatchList = response['data']['DefaultWatchlist']['CoinIs'].split(',')
+
+      data['watchList'] = {}
+      data['watchList']['coins'] = {}
+
+      watchList = Object.keys(data['coinList']['coins']).map((item) => {
+        if (defaultWatchList.includes(data['coinList']['coins'][item]['Id'])) {
+          data['watchList']['coins'][item] = data['coinList']['coins'][item]
+
+          return { id: item, label: response['data']['Data'][item]["FullName"] }
+        }
+      }).filter((item) => {
+        // Filter out nulls that are present from the previous Map
+        return item
+      })
     })
     .catch((response) => {
       console.error(response)
@@ -64,11 +77,11 @@ const getPrices = (fsym) => {
 
   return axios.get(pricesUrl)
     .then((response) => {
-      data['coinList']['coins'][fsym]['price'] = response['data']
-      data['coinList']['coins'][fsym]['price']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
-
-      if (watchList.includes(data['coinList']['coins'][fsym]['Id'])) {
-        data['watchList']['coins'][fsym] = data['coinList']['coins'][fsym]
+      if (response['data']['RAW']
+        && response['data']['RAW'][fsym]['USD']) {
+        data['coinList']['coins'][fsym]['price'] = { USD: {} }
+        data['coinList']['coins'][fsym]['price']['USD'] = response['data']['RAW'][fsym]['USD']
+        data['coinList']['coins'][fsym]['price']['lastUpdated'] = moment().format('MMMM Do YYYY, h:mm:ss a')
       }
 
     })
@@ -77,6 +90,53 @@ const getPrices = (fsym) => {
     })
 }
 
+const sortByMktCap = (list) => {
+
+  const coins = data['coinList']['coins']
+
+  list.sort((a, b) => {
+    let aMktCap = 0
+    let bMktCap = 0
+
+    if (coins[a.id].price
+      && coins[a.id].price.USD) {
+
+      aMktCap = coins[a.id].price.USD.MKTCAP
+    }
+
+    if (coins[b.id].price
+      && coins[b.id].price.USD) {
+
+      bMktCap = coins[b.id].price.USD.MKTCAP
+    }
+
+    return bMktCap - aMktCap
+  })
+}
+
+const sortByVolume = (list) => {
+
+  const coins = data['coinList']['coins']
+
+  list.sort((a, b) => {
+    let aVolume = 0
+    let bVolume = 0
+
+    if (coins[a.id].price
+      && coins[a.id].price.USD) {
+
+      aVolume = coins[a.id].price.USD.TOTALVOLUME24HTO
+    }
+
+    if (coins[b.id].price
+      && coins[b.id].price.USD) {
+
+      bVolume = coins[b.id].price.USD.TOTALVOLUME24HTO
+    }
+
+    return bVolume - aVolume
+  })
+}
 // SETUP
 
 // Set a timer to update coin list
@@ -103,6 +163,10 @@ getCoinList().then(() => {
     // Set next coin to perform price check on
     if (priceCounter === Object.keys(data['coinList']['coins']).length - 1) {
       priceCounter = 0
+
+      // Provide a default sort
+      sortByMktCap(coinList)
+      sortByMktCap(watchList)
     } else {
       priceCounter++
     }
@@ -118,13 +182,22 @@ app.get('/', (req, res) => {
 
 app.get('/watchlist', (req, res) => {
 
-  if (!data['watchList']) {
+  if (!data['watchList'] || !data['coinList']
+    || !data['watchList']['coins'] || !data['coinList']['coins']) {
     res.status(500).send({ error: 'watch list not yet ready' })
+    return
   }
 
+  // Build watchlist
+  let coins = {}
+  watchList.map((item) => {
+    coins[item.id] = data['coinList']['coins'][item.id]
+  })
+
   res.send({
-    coins: data['watchList']['coins'],
-    defaultWatchlist: data['watchList']['defaultWatchlist'],
+    coins,
+    watchList,
+    coinList,
     baseImageUrl,
     baseLinkUrl,
     lastUpdated
@@ -149,12 +222,13 @@ app.get('/all/:page', (req, res) => {
 
   const coins = {}
 
-  for (let i = begin; i <= end; i++) {
-    coins[coinList[i]] = data['coinList']['coins'][coinList[i]]
+  for (let i = begin; i <= end && i < total; i++) {
+    coins[coinList[i]["id"]] = data['coinList']['coins'][coinList[i]["id"]]
   }
 
   res.send({
     coins,
+    coinList,
     baseImageUrl,
     baseLinkUrl,
     lastUpdated,

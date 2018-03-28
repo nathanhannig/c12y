@@ -1,7 +1,8 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Grid, Row } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
+import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 
 // Redux
 import { bindActionCreators } from 'redux';
@@ -21,15 +22,43 @@ class Main extends Component {
     })
   }
 
+  renderSeachBox = () => {
+    let { coins } = this.props
+    let options = ['']
+
+    if (coins && coins.coinList) {
+      options = coins.coinList
+    }
+
+    return (
+      <div className="search">
+        Search
+        <Typeahead
+          onChange={(selected) => {
+            this.props.history.push("/" + selected[0].id)
+          }}
+          options={options}
+          selected={this.state.selected}
+        />
+      </div>
+    )
+  }
+
   renderCoinList = () => {
     let { coins } = this.props
 
     if (this.state.loading) {
-      return (<div className="loader"></div>)
+      return (
+        <div className="loader"></div>
+      )
     }
 
     if (!coins.coins) {
-      return (<Row>Coin information is not ready, please refresh the page.</Row>)
+      return (
+        <Row>
+          Coin information is not ready, please refresh the page.
+        </Row>
+      )
     }
 
     let html = Object.keys(coins.coins).map((item, i) => {
@@ -42,15 +71,15 @@ class Main extends Component {
       let icon = coins.coins[item].ImageUrl
         && coins.baseImageUrl + coins.coins[item].ImageUrl
 
-      let price = 'N/A', supply = 'N/A', volume = 'N/A'
+      let price = 'N/A',
+        supply = 'N/A',
+        volume = 'N/A'
 
       // Check if RAW USD info is available
       if (coins.coins[item].price
-        && coins.coins[item].price.RAW
-        && coins.coins[item].price.RAW[item]
-        && coins.coins[item].price.RAW[item].USD) {
+        && coins.coins[item].price.USD) {
         // Check if RAW price is available
-        price = coins.coins[item].price.RAW[item].USD.PRICE
+        price = coins.coins[item].price.USD.PRICE
 
         // Convert to $ with commas
         price = '$ ' + parseFloat(price).toFixed(2).replace(/./g, function (c, i, a) {
@@ -58,7 +87,7 @@ class Main extends Component {
         })
 
         // Check if RAW price is available
-        supply = coins.coins[item].price.RAW[item].USD.SUPPLY
+        supply = coins.coins[item].price.USD.SUPPLY
 
         // Convert to whole number with commas
         supply = parseFloat(supply).toFixed(0).replace(/./g, function (c, i, a) {
@@ -66,7 +95,7 @@ class Main extends Component {
         })
 
         // Check if RAW voluume is available
-        volume = coins.coins[item].price.RAW[item].USD.TOTALVOLUME24HTO
+        volume = coins.coins[item].price.USD.TOTALVOLUME24HTO
 
         // Convert to $ with commas
         volume = '$ ' + parseFloat(volume).toFixed(2).replace(/./g, function (c, i, a) {
@@ -88,7 +117,14 @@ class Main extends Component {
     return (
       <div className="Main" >
         <Grid>
-          <h3>Watch List</h3>
+          <Row className="page-title">
+            <Col xs={12} md={6}>
+              <h3>Watch List</h3>
+            </Col>
+            <Col xs={12} md={6}>
+              {this.renderSeachBox()}
+            </Col>
+          </Row>
           {this.renderCoinList()}
         </Grid>
       </div>

@@ -31,7 +31,11 @@ const CoinItem = (props) => {
     )
   }
 
-  return html
+  return (
+    <div className="CoinItem">
+      {html}
+    </div>
+  )
 }
 
 export default CoinItem

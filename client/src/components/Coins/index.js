@@ -57,12 +57,9 @@ class Coins extends Component {
 
       // Check if RAW USD info is available
       if (coins.coins[item].price
-        && coins.coins[item].price.RAW
-        && coins.coins[item].price.RAW[item]
-        && coins.coins[item].price.RAW[item].USD) {
+        && coins.coins[item].price.USD) {
         // Check if RAW price is available
-        console.log(item)
-        price = coins.coins[item].price.RAW[item].USD.PRICE
+        price = coins.coins[item].price.USD.PRICE
 
         // Convert to $ with commas
         price = '$ ' + parseFloat(price).toFixed(2).replace(/./g, function (c, i, a) {
@@ -70,7 +67,7 @@ class Coins extends Component {
         })
 
         // Check if RAW price is available
-        supply = coins.coins[item].price.RAW[item].USD.SUPPLY
+        supply = coins.coins[item].price.USD.SUPPLY
 
         // Convert to whole number with commas
         supply = parseFloat(supply).toFixed(0).replace(/./g, function (c, i, a) {
@@ -78,7 +75,7 @@ class Coins extends Component {
         })
 
         // Check if RAW voluume is available
-        volume = coins.coins[item].price.RAW[item].USD.TOTALVOLUME24HTO
+        volume = coins.coins[item].price.USD.TOTALVOLUME24HTO
 
         // Convert to $ with commas
         volume = '$ ' + parseFloat(volume).toFixed(2).replace(/./g, function (c, i, a) {

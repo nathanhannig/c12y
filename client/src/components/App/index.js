@@ -10,7 +10,7 @@ import store from '../../store'
 import About from '../About'
 import Coins from '../Coins'
 import Contact from '../Contact'
-import Details from '../Details'
+import Overview from '../Overview'
 import Header from '../Header'
 import Login from '../Login'
 import Footer from '../Footer'
@@ -35,7 +35,7 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/privacy" component={Privacy} />
               <Route path="/register" component={Register} />
-              <Route path="/:coin" component={Details} />
+              <Route path="/:coin" component={Overview} />
               <Route path="/" component={Main} />
             </Switch>
             <Footer />

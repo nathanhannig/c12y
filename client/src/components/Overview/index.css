@@ -1,0 +1,13 @@
+.Overview .icon {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.Overview .details {
+  font-size: 140%;
+}
+
+.Overview .title {
+  font-weight: 700;
+}

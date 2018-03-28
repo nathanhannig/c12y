@@ -1,13 +1,8 @@
-.row {
-  background-color: #fff;
-  margin: 8px 0;
-}
-
-.list {
+.CoinItem .list {
   line-height: 80px;
 }
 
-.header {
+.CoinItem .header {
   background-color: rgb(212, 195, 97);
   font-weight: 700;
   line-height: 40px;
@@ -15,36 +10,35 @@
   text-align: center;
 }
 
-.counter {
+.CoinItem .counter {
   background-color: rgb(212, 195, 97);
   font-size: 120%;
   font-weight: 700;
   text-align: center;
 }
 
-.icon {
+.CoinItem .icon {
   background-color: #fff;
   width: 60px;
   height: 60px;
   margin-right: 20px;
 }
 
-.name {
+.CoinItem .name {
   font-size: 120%;
-  overflow: hidden;
 }
 
-.price {
+.CoinItem .price {
   font-size: 100%;
   text-align: center;
 }
 
-.supply {
+.CoinItem .supply {
   font-size: 100%;
   text-align: center;
 }
 
-.volume {
+.CoinItem .volume {
   font-size: 100%;
   text-align: center;
 }
