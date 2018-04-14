@@ -8,7 +8,11 @@ import './index.css'
 const Login = () => (
   <div className="Login">
     <Grid>
-      <h3>Login</h3>
+      <Row className="page-title">
+        <Col xs={12}>
+          <h3>Login</h3>
+        </Col>
+      </Row>
       <Row>
         <Col xs={12}>
           TODO

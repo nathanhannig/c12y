@@ -1,44 +1,73 @@
 .CoinItem .list {
-  line-height: 80px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(129, 129, 129, 0.205);
+  border-radius: 10px;
+  transition: background-color 0.2s;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.CoinItem .list:hover {
+  background-color: #ececec;
 }
 
 .CoinItem .header {
-  background-color: rgb(212, 195, 97);
-  font-weight: 700;
-  line-height: 40px;
-  font-size: 120%;
+  padding: 10px 0;
+  color: #818181;
+  font-size: 100%;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  font-weight: 700;
+  border-bottom: 1px solid #818181;
 }
 
 .CoinItem .counter {
-  background-color: rgb(212, 195, 97);
-  font-size: 120%;
-  font-weight: 700;
-  text-align: center;
+  font-size: 160%;
+
 }
 
-.CoinItem .icon {
-  background-color: #fff;
+.CoinItem .icon img {
   width: 60px;
   height: 60px;
-  margin-right: 20px;
 }
 
 .CoinItem .name {
   font-size: 120%;
+
 }
 
 .CoinItem .price {
-  font-size: 100%;
-  text-align: center;
+  font-size: 120%;
 }
 
 .CoinItem .supply {
-  font-size: 100%;
-  text-align: center;
+  font-size: 120%;
 }
 
 .CoinItem .volume {
-  font-size: 100%;
-  text-align: center;
+  font-size: 120%;
+}
+
+/* Extra small devices (991px and down) */
+@media (max-width: 991px) {
+  .CoinItem .list {
+    text-align: left;
+  }
+
+  .CoinItem .header {
+    text-align: left;
+  }
+
+  .CoinItem .price {
+    font-size: 120%;
+  }
+
+  .CoinItem .supply {
+    font-size: 120%;
+  }
+
+  .CoinItem .volume {
+    font-size: 120%;
+  }
 }

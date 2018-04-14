@@ -4,10 +4,15 @@
   margin-bottom: 10px;
 }
 
-.page-title.row {
-  background-color: transparent;
-}
-
 .dropdown-menu>li>a {
   font-size: 120%;
+}
+
+/* Extra small devices (991px and down) */
+@media (max-width: 991px) {
+  .search {
+    float: left;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
 }

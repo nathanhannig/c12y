@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-const baseURL = process.env.REACT_APP_API_URL
-
 // const headers = new Headers()
 // headers.append('Authorization', 'c12y')
 // headers.append('Content-Type', 'application/json')
@@ -11,20 +9,36 @@ const baseURL = process.env.REACT_APP_API_URL
 // const putHeaders = { method: 'PUT', headers: headers }
 // const deleteHeaders = { method: 'DELETE', headers: headers }
 
-function fetchWatchlist() {
-  return axios.get(baseURL + '/watchlist')
-}
+const fetchUser = () => axios.get('/api/current_user')
 
-function fetchCoinlist(page) {
-  return axios.get(baseURL + '/all/' + page)
-}
+const fetchWatchlist = () => axios.get('/api/watchlist')
 
-function fetchCoin(coin) {
-  return axios.get(baseURL + '/coin/' + coin)
-}
+const fetchCoinlist = page => axios.get(`/api/all/${page}`)
+
+const fetchCoin = coin => axios.get(`/api/coin/${coin}`)
+
+// Format large numbers with commas at every thousandth decimal spot
+const formatNumberToString = value =>
+  value.replace(/./g, (match, offset, string) => (offset && match !== '.' && (string.length - offset) % 3 === 0
+    ? `,${match}`
+    : match))
+
+const formatToDollars = value =>
+  `$ ${formatNumberToString(parseFloat(value).toFixed(2))}`
+
+const formatToPercent = value =>
+  `${formatNumberToString(parseFloat(value).toFixed(2))} %`
+
+const formatToWholeNumber = value =>
+  formatNumberToString(parseFloat(value).toFixed(0))
 
 export default {
+  fetchUser,
   fetchWatchlist,
   fetchCoinlist,
-  fetchCoin
+  fetchCoin,
+  formatNumberToString,
+  formatToDollars,
+  formatToWholeNumber,
+  formatToPercent,
 }

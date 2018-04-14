@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "concurrently": "^3.5.1",
     "create-react-app": "^1.5.2"
+  },
+  "scripts": {
+    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "server": "cd server && yarn run dev",
+    "client": "cd client && yarn start"
   }
 }

@@ -1,6 +1,7 @@
 // React
 import React from 'react'
 import { Row, Col } from 'react-bootstrap'
+import PropTypes from 'prop-types'
 
 // App
 import './index.css'
@@ -11,9 +12,10 @@ const CoinItem = (props) => {
   // Check if header prop was passed
   if (props.header) {
     html = (
-      <Row className="header">
+      <Row className="header vertical-align">
         <Col xs={12} md={1}>{props.counter}</Col>
-        <Col xs={12} md={4}>{props.name}</Col>
+        <Col xs={12} md={1} />
+        <Col xs={12} md={3}>{props.name}</Col>
         <Col xs={12} md={2}>{props.price}</Col>
         <Col xs={12} md={2}>{props.supply}</Col>
         <Col xs={12} md={3}>{props.volume}</Col>
@@ -21,12 +23,13 @@ const CoinItem = (props) => {
     )
   } else {
     html = (
-      <Row className="list">
-        <Col className="counter" xs={12} md={1}>{props.counter}</Col>
-        <Col className="name" xs={12} md={4}>{props.icon ? <img className="icon" src={props.icon} alt={props.name} /> : ''}{props.name}</Col>
-        <Col className="price" xs={12} md={2}>{props.price}</Col>
-        <Col className="supply" xs={12} md={2}>{props.supply}</Col>
-        <Col className="volume" xs={12} md={3}>{props.volume}</Col>
+      <Row className="list vertical-align">
+        <Col xs={12} md={1} className="counter">{props.counter}</Col>
+        <Col xs={12} md={1} className="icon">{props.icon ? <img src={props.icon} alt={props.name} /> : ''}</Col>
+        <Col xs={12} md={3} className="name">{props.name}</Col>
+        <Col xs={12} md={2} className="price">{props.price}</Col>
+        <Col xs={12} md={2} className="supply">{props.supply}</Col>
+        <Col xs={12} md={3} className="volume">{props.volume}</Col>
       </Row>
     )
   }
@@ -36,6 +39,21 @@ const CoinItem = (props) => {
       {html}
     </div>
   )
+}
+
+CoinItem.propTypes = {
+  header: PropTypes.bool,
+  counter: PropTypes.any.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.string.isRequired,
+  supply: PropTypes.string.isRequired,
+  volume: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+}
+
+CoinItem.defaultProps = {
+  header: false,
+  icon: undefined,
 }
 
 export default CoinItem

@@ -1,51 +1,95 @@
 // React
-import React from 'react'
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap'
-import { LinkContainer  } from 'react-router-bootstrap'
+import React, { Component } from 'react'
+import { Navbar, Nav, NavItem } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
+import PropTypes from 'prop-types'
+
+// Redux
+import { connect } from 'react-redux'
 
 // App
 import './index.css'
 
-const Header = () => (
-  <header>
-    <Navbar collapseOnSelect>
-      <Navbar.Header>
-        <LinkContainer to="/">
-          <Navbar.Brand>
-            c12y - Cryptocurrency Info
-          </Navbar.Brand>
-        </LinkContainer>
-        <Navbar.Toggle />
-      </Navbar.Header>
-      <Navbar.Collapse>
-        <Nav>
-          <LinkContainer to="/coins/1">
-            <NavItem eventKey={1}>Coins</NavItem>
-          </LinkContainer>
-          <LinkContainer to="/about">
-            <NavItem eventKey={2}>About</NavItem>
-          </LinkContainer>
-          <NavDropdown eventKey={3} title="Social" id="basic-nav-dropdown">
-            <MenuItem eventKey={3.1} href="http://www.facebook.com">Facebook</MenuItem>
-            <MenuItem eventKey={3.2} href="http://www.twitter.com">Twitter</MenuItem>
-            <MenuItem eventKey={3.3} href="http://www.instagram.com">Instagram</MenuItem>
-            <MenuItem divider />
-            <LinkContainer to="/contact">
-              <MenuItem eventKey={3.3}>Contact Us</MenuItem>
-            </LinkContainer>
-          </NavDropdown>
-        </Nav>
-        <Nav pullRight>
-          <LinkContainer to="/login">
-            <NavItem eventKey={1}>Login </NavItem>
-          </LinkContainer>
-          <LinkContainer to="/register">
-            <NavItem eventKey={2}>Sign Up</NavItem>
-          </LinkContainer>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-  </header>
-)
+class Header extends Component {
+  renderContent() {
+    switch (this.props.auth) {
+      case null:
+        return ''
+      case false:
+        return (
+          <Nav pullRight>
+            <NavItem href="/auth/google" eventKey={1}>Login with <span style={{ fontWeight: 'bold' }}>Google</span></NavItem>
+          </Nav>
+        )
+      default:
+        return (
+          <Nav pullRight>
+            <NavItem href="/api/logout" eventKey={1}>Logout</NavItem>
+          </Nav>
+        )
+    }
+  }
 
-export default Header
+  render() {
+    return (
+      <header>
+        <Navbar collapseOnSelect>
+          <Navbar.Header>
+            <LinkContainer to="/">
+              <Navbar.Brand>
+                <span className="crypto">c</span>
+                <span className="underline">
+                  <span className="crypto">rypto</span>
+                  <span className="currency">currenc</span>
+                </span>
+                <span className="currency">y</span>
+              </Navbar.Brand>
+            </LinkContainer>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav>
+              <LinkContainer to="/coins">
+                <NavItem eventKey={1}>Coins</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/exchanges">
+                <NavItem eventKey={2}>Echanges</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/wallets">
+                <NavItem eventKey={3}>Wallets</NavItem>
+              </LinkContainer>
+            </Nav>
+
+            {this.renderContent()}
+
+          </Navbar.Collapse>
+        </Navbar>
+      </header>
+    )
+  }
+}
+
+Header.propTypes = {
+  auth: PropTypes.any,
+}
+
+Header.defaultProps = {
+  auth: null,
+}
+
+function mapStateToProps({ auth }) {
+  return { auth }
+}
+
+// React Router updates active class in Navbar outside Redux
+// so we oiutside of Redux
+// 'My views aren’t updating when something changes outside of Redux'
+// https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md
+export default connect(
+  mapStateToProps,
+  null,
+  null,
+  {
+    pure: false,
+  },
+)(Header)

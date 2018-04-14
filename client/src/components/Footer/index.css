@@ -6,3 +6,42 @@ footer {
   text-align: center;
   font-size: 120%;
 }
+
+footer ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer li {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
+footer .row {
+  background-color: #242729;
+  margin: 8px 0;
+}
+
+footer .btn {
+  font-size: 100%;
+}
+
+footer a:link,
+footer a:visited,
+footer .btn-link,
+footer .btn-link:visited {
+  color: #999 ;
+  transition: color 0.2s;
+}
+
+footer a:active,
+footer a:focus,
+footer a:hover,
+footer .btn-link:active,
+footer .btn-link:focus,
+footer .btn-link:hover {
+  color: #27ae60;
+  text-decoration: none;
+}

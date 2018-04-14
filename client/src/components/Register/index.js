@@ -8,7 +8,11 @@ import './index.css'
 const Register = () => (
   <div className="Register">
     <Grid>
-      <h3>Register</h3>
+      <Row className="page-title">
+        <Col xs={12}>
+          <h3>Register</h3>
+        </Col>
+      </Row>
       <Row>
         <Col xs={12}>
           TODO

@@ -9,5 +9,21 @@
 }
 
 .Overview .title {
+  color: #818181;
+  font-size: 70%;
+  text-transform: uppercase;
+  letter-spacing: .15em;
   font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.Overview .value {
+  margin: 0 0 18px 0;
+}
+
+/* Extra small devices (991px and down) */
+@media (max-width: 991px) {
+  .Overview .icon {
+    width: 200px;
+  }
 }

@@ -2,122 +2,150 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Grid, Row, Pager } from 'react-bootstrap'
+import { Grid, Row, Col, Pager } from 'react-bootstrap'
+import { Typeahead } from 'react-bootstrap-typeahead'
+import PropTypes from 'prop-types'
 
 // Redux
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
 import CoinItem from '../CoinItem'
+import API from '../../utils'
 import './index.css'
 
 class Coins extends Component {
   state = { loading: true }
 
   componentDidMount() {
-    const page = !isNaN(this.props.match.params.page) && parseInt(this.props.match.params.page, 10) > 0
-      ? parseInt(this.props.match.params.page, 10)
-      : 1
+    const { match } = this.props
+
+    const page =
+      !Number.isNaN(match.params.page) &&
+      parseInt(match.params.page, 10) > 0
+        ? parseInt(match.params.page, 10)
+        : 1
 
     this.props.fetchCoins(page).then(() => {
       this.setState({ loading: false })
     })
   }
 
+  renderSeachBox = () => {
+    const { coins, history } = this.props
+
+    let options = ['']
+
+    if (coins && coins.coinList) {
+      options = coins.coinList
+    }
+
+    return (
+      <div className="search">
+        <Typeahead
+          placeholder="Search"
+          onChange={(selected) => {
+            history.push(`/${selected[0].id}`)
+          }}
+          options={options}
+          selected={this.state.selected}
+        />
+      </div>
+    )
+  }
+
   renderCoinList = () => {
-    let { coins } = this.props
+    const { coins } = this.props
 
     if (this.state.loading) {
-      return (<div className="loader"></div>)
+      return <div className="loader" />
     }
 
     if (!coins.coins) {
-      return (<Row>Coin information is not ready, please refresh the page.</Row>)
+      return <Row>Coin information is not ready, please refresh the page.</Row>
     }
 
     if (Object.keys(coins.coins).length === 0) {
-      return (<Row>No coins to list.</Row>)
+      return <Row>No coins to list.</Row>
     }
 
-    let html = Object.keys(coins.coins).map((item, i) => {
-      let counter = coins.begin + i + 1
+    const html = Object.keys(coins.coins).map((item, i) => {
+      const counter = coins.begin + i + 1
 
-      let name = (
-        <Link to={'/' + item.toLowerCase()}>
-          {coins.coins[item].FullName}
-        </Link>
-      )
+      const name = coins.coins[item].FullName
 
-      let icon = coins.coins[item].ImageUrl
-        && coins.baseImageUrl + coins.coins[item].ImageUrl
+      const icon =
+        coins.coins[item].ImageUrl &&
+        coins.baseImageUrl + coins.coins[item].ImageUrl
 
-      let price = 'N/A', supply = 'N/A', volume = 'N/A'
+      let price = 'N/A'
+      let supply = 'N/A'
+      let volume = 'N/A'
 
       // Check if RAW USD info is available
-      if (coins.coins[item].price
-        && coins.coins[item].price.USD) {
-        // Check if RAW price is available
-        price = coins.coins[item].price.USD.PRICE
-
+      if (coins.prices[item]) {
         // Convert to $ with commas
-        price = '$ ' + parseFloat(price).toFixed(2).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
-
-        // Check if RAW price is available
-        supply = coins.coins[item].price.USD.SUPPLY
+        price = API.formatToDollars(coins.prices[item].PRICE)
 
         // Convert to whole number with commas
-        supply = parseFloat(supply).toFixed(0).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
-
-        // Check if RAW voluume is available
-        volume = coins.coins[item].price.USD.TOTALVOLUME24HTO
+        supply = API.formatToWholeNumber(coins.prices[item].SUPPLY)
 
         // Convert to $ with commas
-        volume = '$ ' + parseFloat(volume).toFixed(2).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
+        volume = API.formatToDollars(coins.prices[item].TOTALVOLUME24HTO)
       }
 
       return (
-        <CoinItem key={item} counter={counter} icon={icon} name={name} price={price} volume={volume} supply={supply} />
+        <Link key={item} to={`/${item.toLowerCase()}`}>
+          <CoinItem
+            counter={counter}
+            icon={icon}
+            name={name}
+            price={price}
+            volume={volume}
+            supply={supply}
+          />
+        </Link>
       )
     })
 
-    html.unshift((<CoinItem key={'header'} header counter={'#'} name={'Name'} price={'Price'} volume={'Volume'} supply={'Circulating'} />))
+    html.unshift(<CoinItem
+      key="header"
+      header
+      counter="#"
+      name="Name"
+      price="Price"
+      volume="Volume"
+      supply="Circulating"
+    />)
 
     return html
   }
 
   renderPager = () => {
-    let { coins } = this.props
+    const { coins } = this.props
 
     if (!coins.coins || Object.keys(coins.coins).length === 0) {
       return ''
     }
 
     const page = parseInt(coins.page, 10)
-    let last = Math.ceil(parseInt(coins.total, 10) / 100)
+    const last = Math.ceil(parseInt(coins.total, 10) / 100)
 
     let pager
     if (page === 1) {
       pager = (
         <Pager>
-          <LinkContainer to={"/coins/" + (page + 1)}>
-            <Pager.Item next>
-              Next 100 &rarr;
-            </Pager.Item>
+          <LinkContainer to={`/coins/${page + 1}`}>
+            <Pager.Item next>Next 100 &rarr;</Pager.Item>
           </LinkContainer>
         </Pager>
       )
     } else if (page === last) {
       pager = (
         <Pager>
-          <LinkContainer to={"/coins/" + (page - 1)}>
+          <LinkContainer to={`/coins/${page - 1}`}>
             <Pager.Item previous>&larr; Previos 100</Pager.Item>
           </LinkContainer>
         </Pager>
@@ -125,10 +153,10 @@ class Coins extends Component {
     } else {
       pager = (
         <Pager>
-          <LinkContainer to={"/coins/" + (page - 1)}>
+          <LinkContainer to={`/coins/${page - 1}`}>
             <Pager.Item previous>&larr; Previos 100</Pager.Item>
           </LinkContainer>
-          <LinkContainer to={"/coins/" + (page + 1)}>
+          <LinkContainer to={`/coins/${page + 1}`}>
             <Pager.Item next>Next 100 &rarr;</Pager.Item>
           </LinkContainer>
         </Pager>
@@ -140,9 +168,16 @@ class Coins extends Component {
 
   render() {
     return (
-      <div className="Coins" >
+      <div className="Coins">
         <Grid>
-          <h3>Coin List</h3>
+          <Row className="page-title">
+            <Col xs={12} md={6}>
+              <h3>Coins List</h3>
+            </Col>
+            <Col xs={12} md={6}>
+              {this.renderSeachBox()}
+            </Col>
+          </Row>
           {this.renderPager()}
           {this.renderCoinList()}
           {this.renderPager()}
@@ -152,19 +187,26 @@ class Coins extends Component {
   }
 }
 
-function mapStateToProps(state) {
+Coins.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  fetchCoins: PropTypes.func.isRequired,
+  coins: PropTypes.object.isRequired,
+}
+
+function mapStateToProps({ coins }) {
   return {
-    coins: state.coins
-  };
+    coins,
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCoins: bindActionCreators(fetchCoins, dispatch)
-  };
+    fetchCoins: bindActionCreators(fetchCoins, dispatch),
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Coins)

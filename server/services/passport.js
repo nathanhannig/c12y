@@ -9,31 +9,36 @@ passport.serializeUser((user, done) => {
   done(null, user.id)
 })
 
-passport.deserializeUser((id, done) => {
-  User.findById(id).then((user) => {
-    done(null, user)
-  })
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id)
+  done(null, user)
 })
 
-passport.use(new GoogleStrategy({
-  clientID: keys.googleClientID,
-  clientSecret: keys.googleClientSecret,
-  callbackURL: '/auth/google/callback'
-}, (accessToken, refreshToken, profile, done) => {
-  User.findOne({ googleId: profile.id })
-    .then((existingUser) => {
-      if (existingUser) {
-        // user exists
-        done(null, existingUser)
-      } else {
-        // create user
-        new User({
-          googleId: profile.id
-        })
-          .save()
-          .then((user) => {
-            done(null, user)
-          })
-      }
-    })
-}))
+passport.use(new GoogleStrategy(
+  {
+    clientID: keys.googleClientID,
+    clientSecret: keys.googleClientSecret,
+    callbackURL: '/auth/google/callback',
+    proxy: true,
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    const existingUser = await User.findOne({ googleId: profile.id })
+
+    if (existingUser) {
+      // user exists
+      done(null, existingUser)
+    }
+
+    // create user
+    const user = await new User({
+      googleId: profile.id,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+      email: profile.emails[0].value,
+      gender: profile.gender,
+      provider: 'google',
+    }).save()
+
+    done(null, user)
+  },
+))

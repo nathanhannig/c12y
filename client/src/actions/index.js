@@ -1,37 +1,38 @@
 import API from '../utils'
 
+export const USER_FETCH = 'USER_FETCH'
 export const COINS_FETCH = 'COINS_FETCH'
-
 export const COIN_FETCH = 'COIN_FETCH'
 
-export function fetchCoins(page) {
-  let request
+export const fetchUser = () => async (dispatch) => {
+  const response = await API.fetchUser()
 
-  if (page) {
-    request = API.fetchCoinlist(page)
-  } else {
-    request = API.fetchWatchlist()
-  }
-
-  return (dispatch) => {
-    return request.then((response) => {
-      dispatch({
-        type: COINS_FETCH,
-        payload: response.data
-      })
-    })
-  }
+  dispatch({
+    type: USER_FETCH,
+    payload: response.data,
+  })
 }
 
-export function fetchCoin(coin) {
-  const request = API.fetchCoin(coin)
+export const fetchCoins = page => async (dispatch) => {
+  let response
 
-  return (dispatch) => {
-    return request.then((response) => {
-      dispatch({
-        type: COIN_FETCH,
-        payload: response.data
-      })
-    })
+  if (page) {
+    response = await API.fetchCoinlist(page)
+  } else {
+    response = await API.fetchWatchlist()
   }
+
+  dispatch({
+    type: COINS_FETCH,
+    payload: response.data,
+  })
+}
+
+export const fetchCoin = coin => async (dispatch) => {
+  const response = await API.fetchCoin(coin)
+
+  dispatch({
+    type: COIN_FETCH,
+    payload: response.data,
+  })
 }

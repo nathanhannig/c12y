@@ -2,15 +2,17 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
+import { Typeahead } from 'react-bootstrap-typeahead'
+import PropTypes from 'prop-types'
 
 // Redux
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
 import CoinItem from '../CoinItem'
+import API from '../../utils'
 import './index.css'
 
 class Main extends Component {
@@ -23,7 +25,7 @@ class Main extends Component {
   }
 
   renderSeachBox = () => {
-    let { coins } = this.props
+    const { coins } = this.props
     let options = ['']
 
     if (coins && coins.coinList) {
@@ -32,10 +34,10 @@ class Main extends Component {
 
     return (
       <div className="search">
-        Search
         <Typeahead
+          placeholder="Search"
           onChange={(selected) => {
-            this.props.history.push("/" + selected[0].id)
+            this.props.history.push(`/${selected[0].id}`)
           }}
           options={options}
           selected={this.state.selected}
@@ -45,11 +47,11 @@ class Main extends Component {
   }
 
   renderCoinList = () => {
-    let { coins } = this.props
+    const { coins } = this.props
 
     if (this.state.loading) {
       return (
-        <div className="loader"></div>
+        <div className="loader" />
       )
     }
 
@@ -61,54 +63,43 @@ class Main extends Component {
       )
     }
 
-    let html = Object.keys(coins.coins).map((item, i) => {
-      let name = (
-        <Link to={'/' + item.toLowerCase()}>
-          {coins.coins[item].FullName}
-        </Link>
-      )
+    const html = Object.keys(coins.coins).map((item, i) => {
+      const name = coins.coins[item].FullName
 
-      let icon = coins.coins[item].ImageUrl
+      const icon = coins.coins[item].ImageUrl
         && coins.baseImageUrl + coins.coins[item].ImageUrl
 
-      let price = 'N/A',
-        supply = 'N/A',
-        volume = 'N/A'
+      let price = 'N/A'
+      let supply = 'N/A'
+      let volume = 'N/A'
 
       // Check if RAW USD info is available
-      if (coins.coins[item].price
-        && coins.coins[item].price.USD) {
-        // Check if RAW price is available
-        price = coins.coins[item].price.USD.PRICE
-
+      if (coins.prices[item]) {
         // Convert to $ with commas
-        price = '$ ' + parseFloat(price).toFixed(2).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
-
-        // Check if RAW price is available
-        supply = coins.coins[item].price.USD.SUPPLY
+        price = API.formatToDollars(coins.prices[item].PRICE)
 
         // Convert to whole number with commas
-        supply = parseFloat(supply).toFixed(0).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
-
-        // Check if RAW voluume is available
-        volume = coins.coins[item].price.USD.TOTALVOLUME24HTO
+        supply = API.formatToWholeNumber(coins.prices[item].SUPPLY)
 
         // Convert to $ with commas
-        volume = '$ ' + parseFloat(volume).toFixed(2).replace(/./g, function (c, i, a) {
-          return i && c !== "." && ((a.length - i) % 3 === 0) ? ',' + c : c;
-        })
+        volume = API.formatToDollars(coins.prices[item].TOTALVOLUME24HTO)
       }
 
       return (
-        <CoinItem key={item} counter={i + 1} icon={icon} name={name} price={price} volume={volume} supply={supply} />
+        <Link key={item} to={`/${item.toLowerCase()}`}>
+          <CoinItem
+            counter={i + 1}
+            icon={icon}
+            name={name}
+            price={price}
+            volume={volume}
+            supply={supply}
+          />
+        </Link>
       )
     })
 
-    html.unshift((<CoinItem key={'header'} header counter={'#'} name={'Name'} price={'Price'} volume={'Volume'} supply={'Circulating'} />))
+    html.unshift((<CoinItem key="header" header counter="#" name="Name" price="Price" volume="Volume" supply="Circulating" />))
 
     return html
   }
@@ -132,19 +123,27 @@ class Main extends Component {
   }
 }
 
+Main.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  fetchCoins: PropTypes.func.isRequired,
+  coins: PropTypes.object.isRequired,
+}
+
 function mapStateToProps(state) {
   return {
-    coins: state.coins
-  };
+    coins: state.coins,
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCoins: bindActionCreators(fetchCoins, dispatch)
-  };
+    fetchCoins: bindActionCreators(fetchCoins, dispatch),
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Main)
