@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 
+require('dotenv').config();
 const path = require('path')
 const express = require('express')
 const mongoose = require('mongoose')
@@ -15,6 +16,8 @@ const sendgridMail = require('@sendgrid/mail');
 const keys = require('./config/keys')
 require('./models/User')
 require('./services/passport')
+
+console.log(`Server is running in ${process.env.NODE_ENV} mode`)
 
 mongoose.connect(keys.mongoURI)
 
