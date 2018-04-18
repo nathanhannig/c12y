@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-require('dotenv').config();
+require('dotenv').config()
 const path = require('path')
 const express = require('express')
 const mongoose = require('mongoose')
@@ -12,16 +12,23 @@ const axios = require('axios')
 const moment = require('moment')
 const util = require('util')
 const fs = require('fs')
-const sendgridMail = require('@sendgrid/mail');
+const sendgridMail = require('@sendgrid/mail')
 const keys = require('./config/keys')
 require('./models/User')
 require('./services/passport')
 
 console.log(`Server is running in ${process.env.NODE_ENV} mode`)
 
-mongoose.connect(keys.mongoURI)
-
 const app = express()
+
+// http://expressjs.com/en/starter/static-files.html
+// Serves the React app
+app.use(express.static(path.join(__dirname, '/../build')))
+// Serves the help page CSS
+app.use(express.static(path.join(__dirname, 'public')))
+
+// Connect to database
+mongoose.connect(keys.mongoURI)
 
 app.use(cookieSession({
   maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -30,20 +37,18 @@ app.use(cookieSession({
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Used to allow CORS
 const corsOption = {
   origin: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }
 app.use(cors(corsOption))
 
-// Rest API requirements
+// Used to parse POST form requests to req.body
 app.use(bodyParser.urlencoded({
   extended: true,
 }))
 app.use(bodyParser.json())
-
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'))
 
 const writeFileAsync = util.promisify(fs.writeFile)
 const readFileAsync = util.promisify(fs.readFile)
@@ -447,6 +452,10 @@ app.post('/email/contact', (req, res) => {
 })
 
 require('./routes/authRoutes')(app)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT)
