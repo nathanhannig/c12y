@@ -11,6 +11,7 @@ const axios = require('axios')
 const moment = require('moment')
 const util = require('util')
 const fs = require('fs')
+const sendgridMail = require('@sendgrid/mail');
 const keys = require('./config/keys')
 require('./models/User')
 require('./services/passport')
@@ -399,9 +400,47 @@ app.get('/api/coin/:coin', (req, res) => {
 })
 
 app.post('/email/contact', (req, res) => {
-  console.log(req.body)
+  const { name, email, message } = req.body
+  const errors = {}
 
-  res.send('Sent email')
+  if (name.length) {
+    errors.name = 'Name cannot be empty'
+  }
+
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  if (regex.test(email)) {
+    errors.email = 'Email address is not valid.'
+  }
+
+  if (message.length) {
+    errors.message = 'Message cannot be empty'
+  }
+
+  if (Object.keys(errors).length) {
+    res.status(500).send(errors)
+    return
+  }
+
+  // using SendGrid's v3 Node.js Library
+  // https://github.com/sendgrid/sendgrid-nodejs
+  sendgridMail.setApiKey(keys.sendgridApiKey)
+
+  const msgSendgrid = {
+    to: 'breakpoint@gmail.com',
+    from: email,
+    subject: `Contact Form - ${name}`,
+    text: message,
+    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  }
+
+  sendgridMail.send(msgSendgrid)
+    .then(() => {
+      res.send('Sent email')
+    })
+    .catch(() => {
+      errors.submitted = 'Error sending email'
+      res.status(500).send(errors)
+    })
 })
 
 require('./routes/authRoutes')(app)

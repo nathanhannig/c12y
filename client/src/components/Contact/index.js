@@ -21,6 +21,8 @@ class Contact extends Component {
     message: '',
     touched: new Set([]),
     submitted: false,
+    sent: false,
+    errors: {},
   }
 
   getValidationState(item) {
@@ -60,29 +62,51 @@ class Contact extends Component {
   }
 
   handleSubmit = (event) => {
-    const { name, email, message } = this.state
+    const {
+      name,
+      email,
+      message,
+    } = this.state
 
     event.preventDefault()
 
-    axios.post(
-      '/email/contact',
-      {
-        name,
-        email,
-        message,
-      },
-    )
-      .then(() => {
-        this.setState({
-          submitted: true,
-        })
-      })
-      .catch(() => {
+    this.setState({
+      submitted: true,
+      errors: {},
+    })
 
-      });
+    if (this.getValidationState('name') === 'success'
+      && this.getValidationState('email') === 'success'
+      && this.getValidationState('message') === 'success') {
+      axios.post(
+        '/email/contact',
+        {
+          name,
+          email,
+          message,
+        },
+      )
+        .then(() => {
+          this.setState({
+            sent: true,
+          })
+        })
+        .catch((err) => {
+          this.setState({
+            submitted: false,
+            errors: err.response.data,
+          })
+        })
+    } else {
+      this.setState({
+        touched: new Set(['name', 'email', 'message']),
+      })
+    }
   }
 
   render() {
+    const { submitted, sent, errors } = this.state
+
     return (
       <div className="Contact">
         <Grid>
@@ -93,6 +117,28 @@ class Contact extends Component {
           </Row>
           <Row>
             <form onSubmit={this.handleSubmit}>
+              { sent ?
+                <div className="formSuccess">
+                  <p>Email Sent</p>
+                </div> :
+                ''
+              }
+
+              { Object.keys(errors).length ?
+                <div className="formErrors">
+                  {Object.keys(errors).map((item) => {
+                  if (errors[item].length > 0) {
+                    return (
+                      <p key={item}>{errors[item]}</p>
+                    )
+                  }
+
+                  return ''
+                })}
+                </div> :
+                ''
+              }
+
               <FormGroup
                 controlId="formBasicText"
                 validationState={this.getValidationState('name')}
@@ -137,7 +183,10 @@ class Contact extends Component {
                 />
                 <FormControl.Feedback />
               </FormGroup>
-              <Button type="submit">Submit</Button>
+              {submitted
+                ? <Button disabled type="submit">Submit</Button>
+                : <Button type="submit">Submit</Button>
+              }
             </form>
           </Row>
         </Grid>
