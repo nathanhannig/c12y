@@ -20,10 +20,7 @@ require('./services/passport')
 console.log(`Server is running in ${process.env.NODE_ENV} mode`)
 
 const app = express()
-
 // http://expressjs.com/en/starter/static-files.html
-// Serves the React app
-app.use(express.static(path.join(__dirname, '/../build')))
 // Serves the help page CSS
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -411,16 +408,16 @@ app.post('/email/contact', (req, res) => {
   const { name, email, message } = req.body
   const errors = {}
 
-  if (name.length) {
+  if (!name.length) {
     errors.name = 'Name cannot be empty'
   }
 
   const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  if (regex.test(email)) {
+  if (!regex.test(email)) {
     errors.email = 'Email address is not valid.'
   }
 
-  if (message.length) {
+  if (!message.length) {
     errors.message = 'Message cannot be empty'
   }
 
@@ -453,7 +450,11 @@ app.post('/email/contact', (req, res) => {
 
 require('./routes/authRoutes')(app)
 
+// Serves the React app
+app.use(express.static(path.join(__dirname, '/../client/build')))
+
 app.get('*', (req, res) => {
+  console.log('wild card path executed')
   res.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
 

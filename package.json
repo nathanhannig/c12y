@@ -1,7 +1,9 @@
 {
+  "name": "c12y",
+  "version": "1.0.0",
+  "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
   "dependencies": {
-    "concurrently": "^3.5.1",
-    "create-react-app": "^1.5.2"
+    "concurrently": "^3.5.1"
   },
   "scripts": {
     "start": "concurrently \"yarn server\" \"yarn client\"",

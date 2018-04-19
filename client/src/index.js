@@ -1,7 +1,7 @@
 // React
 import React from 'react'
 import ReactDOM from 'react-dom'
-import registerServiceWorker from './registerServiceWorker'
+import { unregister } from './registerServiceWorker'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -20,4 +20,8 @@ ReactDOM.render(
   document.getElementById('root'),
 )
 
-registerServiceWorker()
+// // https://github.com/ReactTraining/react-router/issues/5520
+// // This breaks direct calls to API in production
+// registerServiceWorker()
+// // If registerServiceWorker is used, remove below line
+unregister()
