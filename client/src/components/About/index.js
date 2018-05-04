@@ -8,7 +8,7 @@ import './index.css'
 const About = () => (
   <div className="About">
     <Grid>
-      <Row className="page-title">
+      <Row>
         <Col xs={12}>
           <h3>About Us</h3>
         </Col>

@@ -8,7 +8,7 @@ import './index.css'
 const Privacy = () => (
   <div className="Privacy">
     <Grid>
-      <Row className="page-title">
+      <Row>
         <Col xs={12}>
           <h3>Privacy Policy</h3>
         </Col>

@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Grid, Row, Col, Pager } from 'react-bootstrap'
-import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 
 // Redux
@@ -12,6 +11,8 @@ import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
+import moment from 'moment'
+import Metrics from '../Metrics'
 import CoinItem from '../CoinItem'
 import API from '../../utils'
 import './index.css'
@@ -19,7 +20,7 @@ import './index.css'
 class Coins extends Component {
   state = { loading: true }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { match } = this.props
 
     const page =
@@ -28,32 +29,11 @@ class Coins extends Component {
         ? parseInt(match.params.page, 10)
         : 1
 
-    this.props.fetchCoins(page).then(() => {
+    try {
+      await this.props.fetchCoins(page)
+    } finally {
       this.setState({ loading: false })
-    })
-  }
-
-  renderSeachBox = () => {
-    const { coins, history } = this.props
-
-    let options = ['']
-
-    if (coins && coins.coinList) {
-      options = coins.coinList
     }
-
-    return (
-      <div className="search">
-        <Typeahead
-          placeholder="Search"
-          onChange={(selected) => {
-            history.push(`/${selected[0].id}`)
-          }}
-          options={options}
-          selected={this.state.selected}
-        />
-      </div>
-    )
   }
 
   renderCoinList = () => {
@@ -87,13 +67,13 @@ class Coins extends Component {
       // Check if RAW USD info is available
       if (coins.prices[item]) {
         // Convert to $ with commas
-        price = API.formatToDollars(coins.prices[item].PRICE)
+        price = API.formatDollars(coins.prices[item].PRICE)
 
         // Convert to whole number with commas
-        supply = API.formatToWholeNumber(coins.prices[item].SUPPLY)
+        supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
 
         // Convert to $ with commas
-        volume = API.formatToDollars(coins.prices[item].TOTALVOLUME24HTO)
+        volume = API.formatDollars(coins.prices[item].TOTALVOLUME24HTO)
       }
 
       return (
@@ -110,15 +90,25 @@ class Coins extends Component {
       )
     })
 
-    html.unshift(<CoinItem
-      key="header"
-      header
-      counter="#"
-      name="Name"
-      price="Price"
-      volume="Volume"
-      supply="Circulating"
-    />)
+    html.unshift((
+      <CoinItem
+        key="header"
+        header
+        counter="#"
+        name="Name"
+        price="Price"
+        volume="Volume"
+        supply="Circulating"
+      />
+    ))
+
+    html.push((
+      <Row key="lastUpdated" className="last-updated">
+        <Col xs={12}>
+          <p>Last updated: { moment(this.props.coins.lastUpdated).fromNow() }</p>
+        </Col>
+      </Row>
+    ))
 
     return html
   }
@@ -170,14 +160,7 @@ class Coins extends Component {
     return (
       <div className="Coins">
         <Grid>
-          <Row className="page-title">
-            <Col xs={12} md={6}>
-              <h3>Coins List</h3>
-            </Col>
-            <Col xs={12} md={6}>
-              {this.renderSeachBox()}
-            </Col>
-          </Row>
+          <Metrics coins={this.props.coins} />
           {this.renderPager()}
           {this.renderCoinList()}
           {this.renderPager()}
@@ -189,7 +172,6 @@ class Coins extends Component {
 
 Coins.propTypes = {
   match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
   fetchCoins: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
 }

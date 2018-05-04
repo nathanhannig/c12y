@@ -1,0 +1,35 @@
+.metrics {
+  background-color: transparent;
+  margin: 10px 0 20px 0;
+}
+
+.metrics .header {
+  color: #818181;
+  font-size: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.metrics .value {
+  text-align: center;
+  font-size: 120%;
+}
+
+.search {
+  float: right;
+}
+
+.dropdown-menu>li>a {
+  font-size: 120%;
+}
+
+/* Extra small devices (991px and down) */
+@media (max-width: 991px) {
+  .search {
+    float: left;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}

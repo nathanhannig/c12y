@@ -26,7 +26,7 @@ passport.use(new GoogleStrategy(
 
     if (existingUser) {
       // user exists
-      done(null, existingUser)
+      return done(null, existingUser)
     }
 
     // create user
@@ -39,6 +39,6 @@ passport.use(new GoogleStrategy(
       provider: 'google',
     }).save()
 
-    done(null, user)
+    return done(null, user)
   },
 ))

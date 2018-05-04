@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 
 // Redux
@@ -11,6 +10,8 @@ import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
+import moment from 'moment'
+import Metrics from '../Metrics'
 import CoinItem from '../CoinItem'
 import API from '../../utils'
 import './index.css'
@@ -18,49 +19,23 @@ import './index.css'
 class Main extends Component {
   state = { loading: true }
 
-  componentDidMount() {
-    this.props.fetchCoins().then(() => {
+  async componentDidMount() {
+    try {
+      await this.props.fetchCoins()
+    } finally {
       this.setState({ loading: false })
-    })
-  }
-
-  renderSeachBox = () => {
-    const { coins } = this.props
-    let options = ['']
-
-    if (coins && coins.coinList) {
-      options = coins.coinList
     }
-
-    return (
-      <div className="search">
-        <Typeahead
-          placeholder="Search"
-          onChange={(selected) => {
-            this.props.history.push(`/${selected[0].id}`)
-          }}
-          options={options}
-          selected={this.state.selected}
-        />
-      </div>
-    )
   }
 
   renderCoinList = () => {
     const { coins } = this.props
 
     if (this.state.loading) {
-      return (
-        <div className="loader" />
-      )
+      return <div className="loader" />
     }
 
     if (!coins.coins) {
-      return (
-        <Row>
-          Coin information is not ready, please refresh the page.
-        </Row>
-      )
+      return <Row>Coin information is not ready, please refresh the page.</Row>
     }
 
     const html = Object.keys(coins.coins).map((item, i) => {
@@ -76,13 +51,13 @@ class Main extends Component {
       // Check if RAW USD info is available
       if (coins.prices[item]) {
         // Convert to $ with commas
-        price = API.formatToDollars(coins.prices[item].PRICE)
+        price = API.formatDollars(coins.prices[item].PRICE)
 
         // Convert to whole number with commas
-        supply = API.formatToWholeNumber(coins.prices[item].SUPPLY)
+        supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
 
         // Convert to $ with commas
-        volume = API.formatToDollars(coins.prices[item].TOTALVOLUME24HTO)
+        volume = API.formatDollars(coins.prices[item].TOTALVOLUME24HTO)
       }
 
       return (
@@ -99,7 +74,25 @@ class Main extends Component {
       )
     })
 
-    html.unshift((<CoinItem key="header" header counter="#" name="Name" price="Price" volume="Volume" supply="Circulating" />))
+    html.unshift((
+      <CoinItem
+        key="header"
+        header
+        counter="#"
+        name="Name"
+        price="Price"
+        volume="Volume"
+        supply="Circulating"
+      />
+    ))
+
+    html.push((
+      <Row key="lastUpdated" className="last-updated">
+        <Col xs={12}>
+          <p>Last updated: { moment(this.props.coins.lastUpdated).fromNow() }</p>
+        </Col>
+      </Row>
+    ))
 
     return html
   }
@@ -108,14 +101,7 @@ class Main extends Component {
     return (
       <div className="Main" >
         <Grid>
-          <Row className="page-title">
-            <Col xs={12} md={6}>
-              <h3>Watch List</h3>
-            </Col>
-            <Col xs={12} md={6}>
-              {this.renderSeachBox()}
-            </Col>
-          </Row>
+          <Metrics coins={this.props.coins} />
           {this.renderCoinList()}
         </Grid>
       </div>
@@ -124,9 +110,6 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
   fetchCoins: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
 }

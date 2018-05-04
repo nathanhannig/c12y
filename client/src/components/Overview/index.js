@@ -15,12 +15,11 @@ import './index.css'
 class Overview extends Component {
   state = { loading: true }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { match } = this.props
 
-    this.props.fetchCoin(match.params.coin).then(() => {
-      this.setState({ loading: false })
-    })
+    await this.props.fetchCoin(match.params.coin)
+    this.setState({ loading: false })
   }
 
   renderCoinOverviewItem = (item, title, value) => (
@@ -79,31 +78,31 @@ class Overview extends Component {
     // Check if RAW info is available
     if (coin.price) {
       // Convert to $ with commas
-      price = API.formatToDollars(coin.price.PRICE)
+      price = API.formatDollars(coin.price.PRICE)
 
       // Convert to whole number with commas
-      supply = API.formatToWholeNumber(coin.price.SUPPLY)
+      supply = API.formatWholeNumber(coin.price.SUPPLY)
 
       // Convert to $ with commas
-      totalVolume24HTo = API.formatToDollars(coin.price.TOTALVOLUME24HTO)
+      totalVolume24HTo = API.formatDollars(coin.price.TOTALVOLUME24HTO)
 
       // Convert to $ with commas
-      open24Hour = API.formatToDollars(coin.price.OPEN24HOUR)
+      open24Hour = API.formatDollars(coin.price.OPEN24HOUR)
 
       // Convert to $ with commas
-      high24Hour = API.formatToDollars(coin.price.HIGH24HOUR)
+      high24Hour = API.formatDollars(coin.price.HIGH24HOUR)
 
       // Convert to $ with commas
-      low24Hour = API.formatToDollars(coin.price.LOW24HOUR)
+      low24Hour = API.formatDollars(coin.price.LOW24HOUR)
 
       // Convert to $ with commas
-      change24Hour = API.formatToDollars(coin.price.CHANGE24HOUR)
+      change24Hour = API.formatDollars(coin.price.CHANGE24HOUR)
 
       // Convert to % with commas
-      changePct24Hour = API.formatToPercent(coin.price.CHANGEPCT24HOUR)
+      changePct24Hour = API.formatPercent(coin.price.CHANGEPCT24HOUR)
 
       // Convert to $ with commas
-      marketCap = API.formatToDollars(coin.price.MKTCAP)
+      marketCap = API.formatDollars(coin.price.MKTCAP)
     }
 
     const html = [(
@@ -165,7 +164,7 @@ class Overview extends Component {
         <Grid>
           {coin.coin ?
             (
-              <Row className="page-title">
+              <Row>
                 <Col xs={12}>
                   <h3>{`${coin.coin.FullName} Details`}</h3>
                 </Col>

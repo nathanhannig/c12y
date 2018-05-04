@@ -61,7 +61,7 @@ class Contact extends Component {
     })
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     const {
       name,
       email,
@@ -78,25 +78,25 @@ class Contact extends Component {
     if (this.getValidationState('name') === 'success'
       && this.getValidationState('email') === 'success'
       && this.getValidationState('message') === 'success') {
-      axios.post(
-        '/email/contact',
-        {
-          name,
-          email,
-          message,
-        },
-      )
-        .then(() => {
-          this.setState({
-            sent: true,
-          })
+      try {
+        await axios.post(
+          '/email/contact',
+          {
+            name,
+            email,
+            message,
+          },
+        )
+
+        this.setState({
+          sent: true,
         })
-        .catch((err) => {
-          this.setState({
-            submitted: false,
-            errors: err.response.data,
-          })
+      } catch (error) {
+        this.setState({
+          submitted: false,
+          errors: error.response.data,
         })
+      }
     } else {
       this.setState({
         touched: new Set(['name', 'email', 'message']),
@@ -110,7 +110,7 @@ class Contact extends Component {
     return (
       <div className="Contact">
         <Grid>
-          <Row className="page-title">
+          <Row>
             <Col xs={12}>
               <h3>Contact Us</h3>
             </Col>

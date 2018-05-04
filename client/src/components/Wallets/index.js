@@ -3,47 +3,29 @@ import React from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 
 // App
+import walletList from './data.json'
 import './index.css'
 
 const renderList = () => {
-  const list = [
-    {
-      name: 'MyEtherWallet.com',
-      link: 'https://www.myetherwallet.com/',
-      description: 'A wallet used for Ethereum and other ERC-20 tokens.',
-    },
-    {
-      name: 'Exodus.io',
-      link: 'https://www.exodus.io/',
-      description: 'A desktop multi-asset wallet with ShapeShift built in.',
-    },
-  ]
-  const html = []
-  let counter = 1
-
-  list.forEach((item) => {
-    html.push((
-      <Row key={item.name} className="list vertical-align">
-        <Col className="counter" xs={12} md={1}>
-          {counter}
-        </Col>
-        <Col className="name" xs={12} md={4}>
-          <a href={item.link}>{item.name}</a>
-        </Col>
-        <Col className="description" xs={12} md={7}>
-          {item.description}
-        </Col>
-      </Row>
-    ))
-
-    counter += 1
-  })
+  const html = walletList.map((item, i) => (
+    <Row key={item.name} className="list vertical-align">
+      <Col className="counter" xs={12} md={1}>
+        {i + 1}
+      </Col>
+      <Col className="name" xs={12} md={2}>
+        <a href={item.link}>{item.name}</a>
+      </Col>
+      <Col className="description" xs={12} md={9}>
+        {item.description}
+      </Col>
+    </Row>
+  ))
 
   html.unshift((
     <Row key="header" className="header vertical-align">
       <Col xs={12} md={1}>#</Col>
-      <Col xs={12} md={4}>Name</Col>
-      <Col xs={12} md={7}>Description</Col>
+      <Col xs={12} md={2}>Name</Col>
+      <Col xs={12} md={9}>Description</Col>
     </Row>
   ))
 
@@ -53,7 +35,7 @@ const renderList = () => {
 const Wallets = () => (
   <div className="Wallets">
     <Grid>
-      <Row className="page-title">
+      <Row>
         <Col xs={12}>
           <h3>Wallets</h3>
         </Col>

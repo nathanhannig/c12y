@@ -1,5 +1,7 @@
 .CoinItem .list {
+  margin-bottom: 4px;
   padding: 18px 0;
+  background-color: #f8f8f8;
   border-bottom: 1px solid rgba(129, 129, 129, 0.205);
   border-radius: 10px;
   transition: background-color 0.2s;
@@ -9,6 +11,9 @@
 
 .CoinItem .list:hover {
   background-color: #ececec;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 4px 3px -3px #777;
 }
 
 .CoinItem .header {
@@ -17,14 +22,13 @@
   font-size: 100%;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: .15em;
+  letter-spacing: 0.15em;
   font-weight: 700;
   border-bottom: 1px solid #818181;
 }
 
 .CoinItem .counter {
   font-size: 160%;
-
 }
 
 .CoinItem .icon img {
@@ -34,7 +38,6 @@
 
 .CoinItem .name {
   font-size: 120%;
-
 }
 
 .CoinItem .price {

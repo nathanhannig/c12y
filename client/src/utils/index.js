@@ -23,13 +23,13 @@ const formatNumberToString = value =>
     ? `,${match}`
     : match))
 
-const formatToDollars = value =>
+const formatDollars = value =>
   `$ ${formatNumberToString(parseFloat(value).toFixed(2))}`
 
-const formatToPercent = value =>
+const formatPercent = value =>
   `${formatNumberToString(parseFloat(value).toFixed(2))} %`
 
-const formatToWholeNumber = value =>
+const formatWholeNumber = value =>
   formatNumberToString(parseFloat(value).toFixed(0))
 
 export default {
@@ -38,7 +38,7 @@ export default {
   fetchCoinlist,
   fetchCoin,
   formatNumberToString,
-  formatToDollars,
-  formatToWholeNumber,
-  formatToPercent,
+  formatDollars,
+  formatWholeNumber,
+  formatPercent,
 }
