@@ -5,6 +5,10 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
+// Redux
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+
 // App
 import API from '../../utils'
 import './index.css'
@@ -12,7 +16,7 @@ import './index.css'
 class Metrics extends Component {
   state = {}
 
-  renderSeachBox = () => {
+  renderSearchBox = () => {
     const { coins } = this.props
     let options = ['']
 
@@ -26,7 +30,8 @@ class Metrics extends Component {
           placeholder="Search"
           onChange={(selected) => {
             this.setState({ selected })
-            this.props.history.push(`/${selected[0].id}`)
+            // this.props.history.push(`/${selected[0].id}`)
+            this.props.dispatch(push(`/${selected[0].id}`))
           }}
           options={options}
           selected={this.state.selected}
@@ -75,7 +80,7 @@ class Metrics extends Component {
             </Row>
           </Col>
           <Col xs={12} md={3}>
-            {this.renderSeachBox()}
+            {this.renderSearchBox()}
           </Col>
         </Row>
       </div>
@@ -84,10 +89,8 @@ class Metrics extends Component {
 }
 
 Metrics.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
 }
 
-export default withRouter(Metrics)
+export default connect()(withRouter(Metrics))

@@ -1,14 +1,16 @@
 // React
 import React, { Component } from 'react'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { ConnectedRouter } from 'react-router-redux'
 import { fetchUser } from '../../actions'
 
 // App
+import withTracker from '../withTracker'
 import About from '../About'
 import Coins from '../Coins'
 import Contact from '../Contact'
@@ -30,34 +32,35 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <ConnectedRouter history={this.props.history}>
         <div className="App">
           <Header />
           <div className="Content">
             <Switch>
-              <Route exact key="1" path="/coins" component={Coins} />
+              <Route exact key="1" path="/coins" component={withTracker(Coins)} />
               <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
-              <Route path="/coins/:page" render={props => (<Coins key={props.match.params.page} {...props} />)} />
-              <Route path="/about" component={About} />
-              <Route path="/contact" component={Contact} />
-              <Route path="/exchanges" component={Exchanges} />
-              <Route path="/login" component={Login} />
-              <Route path="/privacy" component={Privacy} />
-              <Route path="/register" component={Register} />
-              <Route path="/wallets" component={Wallets} />
-              <Route path="/:coin" component={Overview} />
-              <Route path="/" component={Main} />
+              <Route path="/coins/:page" render={props => (<withTracker><Coins key={props.match.params.page} {...props} /></withTracker>)} />
+              <Route path="/about" component={withTracker(About)} />
+              <Route path="/contact" component={withTracker(Contact)} />
+              <Route path="/exchanges" component={withTracker(Exchanges)} />
+              <Route path="/login" component={withTracker(Login)} />
+              <Route path="/privacy" component={withTracker(Privacy)} />
+              <Route path="/register" component={withTracker(Register)} />
+              <Route path="/wallets" component={withTracker(Wallets)} />
+              <Route path="/:coin" component={withTracker(Overview)} />
+              <Route path="/" component={withTracker(Main)} />
             </Switch>
           </div>
           <Footer />
         </div>
-      </BrowserRouter>
+      </ConnectedRouter>
     )
   }
 }
 
 App.propTypes = {
   fetchUser: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 }
 
 function mapDispatchToProps(dispatch) {

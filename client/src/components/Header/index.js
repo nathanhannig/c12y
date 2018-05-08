@@ -53,7 +53,7 @@ class Header extends Component {
                 <NavItem eventKey={1}>Coins</NavItem>
               </LinkContainer>
               <LinkContainer to="/exchanges">
-                <NavItem eventKey={2}>Echanges</NavItem>
+                <NavItem eventKey={2}>Exchanges</NavItem>
               </LinkContainer>
               <LinkContainer to="/wallets">
                 <NavItem eventKey={3}>Wallets</NavItem>
@@ -82,7 +82,6 @@ function mapStateToProps({ auth }) {
 }
 
 // React Router updates active class in Navbar outside Redux
-// so we oiutside of Redux
 // 'My views aren’t updating when something changes outside of Redux'
 // https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md
 export default connect(
