@@ -1,5 +1,6 @@
 // Redux
 import { combineReducers } from 'redux'
+import { routerReducer } from 'react-router-redux'
 // import { reducer as formReducer } from 'redux-form'
 import auth from './auth'
 import coins from './coins'
@@ -9,5 +10,6 @@ export default combineReducers({
   auth,
   coins,
   coin,
+  router: routerReducer,
   // form: formReducer
 })
