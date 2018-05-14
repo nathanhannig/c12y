@@ -63,6 +63,7 @@ class Coins extends Component {
       let price = 'N/A'
       let supply = 'N/A'
       let volume = 'N/A'
+      let marketCap = 'N/A'
 
       // Check if RAW USD info is available
       if (coins.prices[item]) {
@@ -72,8 +73,9 @@ class Coins extends Component {
         // Convert to whole number with commas
         supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
 
-        // Convert to $ with commas
-        volume = API.formatDollars(coins.prices[item].TOTALVOLUME24HTO)
+        // Convert to whole $ with commas
+        volume = API.formatDollarsWholeNumber(coins.prices[item].TOTALVOLUME24HTO)
+        marketCap = API.formatDollarsWholeNumber(coins.prices[item].MKTCAP)
       }
 
       return (
@@ -85,6 +87,7 @@ class Coins extends Component {
             price={price}
             volume={volume}
             supply={supply}
+            marketCap={marketCap}
           />
         </Link>
       )
@@ -116,14 +119,16 @@ class Coins extends Component {
   renderPager = () => {
     const { coins } = this.props
 
-    if (!coins.coins || Object.keys(coins.coins).length === 0) {
+    if (this.state.loading ||
+      (!coins.coins || Object.keys(coins.coins).length === 0)) {
       return ''
     }
 
     const page = parseInt(coins.page, 10)
     const last = Math.ceil(parseInt(coins.total, 10) / 100)
 
-    let pager
+    let pager = ''
+
     if (page === 1) {
       pager = (
         <Pager>
@@ -136,15 +141,15 @@ class Coins extends Component {
       pager = (
         <Pager>
           <LinkContainer to={`/coins/${page - 1}`}>
-            <Pager.Item previous>&larr; Previos 100</Pager.Item>
+            <Pager.Item previous>&larr; Previous 100</Pager.Item>
           </LinkContainer>
         </Pager>
       )
-    } else {
+    } else if (page > 1 && page < last) {
       pager = (
         <Pager>
           <LinkContainer to={`/coins/${page - 1}`}>
-            <Pager.Item previous>&larr; Previos 100</Pager.Item>
+            <Pager.Item previous>&larr; Previous 100</Pager.Item>
           </LinkContainer>
           <LinkContainer to={`/coins/${page + 1}`}>
             <Pager.Item next>Next 100 &rarr;</Pager.Item>
@@ -157,13 +162,15 @@ class Coins extends Component {
   }
 
   render() {
+    const renderPager = this.renderPager()
+
     return (
       <div className="Coins">
         <Grid>
           <Metrics coins={this.props.coins} />
-          {this.renderPager()}
+          {renderPager}
           {this.renderCoinList()}
-          {this.renderPager()}
+          {renderPager}
         </Grid>
       </div>
     )

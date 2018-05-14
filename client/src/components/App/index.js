@@ -11,6 +11,7 @@ import { fetchUser } from '../../actions'
 
 // App
 import withTracker from '../withTracker'
+import ScrollToTop from '../ScrollToTop'
 import About from '../About'
 import Coins from '../Coins'
 import Contact from '../Contact'
@@ -25,6 +26,12 @@ import Register from '../Register'
 import Wallets from '../Wallets'
 import './index.css'
 
+// wrapping/composing
+const withTrackerWrapper = (Page) => {
+  const Wrapper = withTracker(Page)
+  return props => <Wrapper {...props} />
+}
+
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser()
@@ -33,26 +40,28 @@ class App extends Component {
   render() {
     return (
       <ConnectedRouter history={this.props.history}>
-        <div className="App">
-          <Header />
-          <div className="Content">
-            <Switch>
-              <Route exact key="1" path="/coins" component={withTracker(Coins)} />
-              <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
-              <Route path="/coins/:page" render={props => (<withTracker><Coins key={props.match.params.page} {...props} /></withTracker>)} />
-              <Route path="/about" component={withTracker(About)} />
-              <Route path="/contact" component={withTracker(Contact)} />
-              <Route path="/exchanges" component={withTracker(Exchanges)} />
-              <Route path="/login" component={withTracker(Login)} />
-              <Route path="/privacy" component={withTracker(Privacy)} />
-              <Route path="/register" component={withTracker(Register)} />
-              <Route path="/wallets" component={withTracker(Wallets)} />
-              <Route path="/:coin" component={withTracker(Overview)} />
-              <Route path="/" component={withTracker(Main)} />
-            </Switch>
+        <ScrollToTop>
+          <div className="App">
+            <Header />
+            <div className="Content">
+              <Switch>
+                <Route exact path="/coins" render={props => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
+                <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
+                <Route path="/coins/:page" render={props => withTrackerWrapper(Coins)({ ...props, key: props.match.params.page })} />
+                <Route path="/about" component={withTracker(About)} />
+                <Route path="/contact" component={withTracker(Contact)} />
+                <Route path="/exchanges" component={withTracker(Exchanges)} />
+                <Route path="/login" component={withTracker(Login)} />
+                <Route path="/privacy" component={withTracker(Privacy)} />
+                <Route path="/register" component={withTracker(Register)} />
+                <Route path="/wallets" component={withTracker(Wallets)} />
+                <Route path="/:coin" component={withTracker(Overview)} />
+                <Route path="/" component={withTracker(Main)} />
+              </Switch>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </ScrollToTop>
       </ConnectedRouter>
     )
   }

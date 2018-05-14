@@ -47,6 +47,7 @@ class Main extends Component {
       let price = 'N/A'
       let supply = 'N/A'
       let volume = 'N/A'
+      let marketCap = 'N/A'
 
       // Check if RAW USD info is available
       if (coins.prices[item]) {
@@ -56,8 +57,9 @@ class Main extends Component {
         // Convert to whole number with commas
         supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
 
-        // Convert to $ with commas
-        volume = API.formatDollars(coins.prices[item].TOTALVOLUME24HTO)
+        // Convert to whole $ with commas
+        volume = API.formatDollarsWholeNumber(coins.prices[item].TOTALVOLUME24HTO)
+        marketCap = API.formatDollarsWholeNumber(coins.prices[item].MKTCAP)
       }
 
       return (
@@ -69,6 +71,7 @@ class Main extends Component {
             price={price}
             volume={volume}
             supply={supply}
+            marketCap={marketCap}
           />
         </Link>
       )
@@ -84,6 +87,16 @@ class Main extends Component {
         volume="Volume"
         supply="Circulating"
       />
+    ))
+
+    html.push((
+      <Link key="viewAllCoins" to="/coins">
+        <Row className="viewAllCoins">
+          <Col xs={12}>
+            <p>View Top 100 Coins</p>
+          </Col>
+        </Row>
+      </Link>
     ))
 
     html.push((

@@ -61,7 +61,7 @@ const getCoinInfo = async (id, item) => {
   try {
     const response = await axios.get(coinInfoUrl)
 
-    // Regex used to strip empty tags, source must use WYSIWG
+    // Regex used to strip empty tags, source must use WYSIWYG
     const reBadSyntax = /<p>\s*[<strong>\s*</strong>]*<\/p>|<strong>\s*<\/strong>/gi
     const reRelativeURL = /"\//gi
 
@@ -311,9 +311,13 @@ const setup = async () => {
         return acc
       }, 0)
 
+      // Calculate BTC Dominance
+      app.locals.btcDominance = data.prices.BTC && data.prices.BTC.MKTCAP &&
+        ((data.prices.BTC.MKTCAP / app.locals.totalMarketCap) * 100)
+
       console.log(`${moment().format('MMMM Do YYYY, h:mm:ss a')} - Coin prices processed`)
     }
-  }, 750) // Recieves all coin prices within ~30 seconds
+  }, 750) // Receives all coin prices within ~30 seconds
 }
 
 // Run the setup

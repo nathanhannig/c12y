@@ -3,7 +3,7 @@ import GoogleAnalytics from 'react-ga'
 import PropTypes from 'prop-types'
 
 const DEFAULT_CONFIG = {
-  // // Use below for development debugging
+  // Un-comment below lines to use for development debugging
   // trackingId: '',
   // debug: true,
   // gaOptions: {

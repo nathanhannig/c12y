@@ -48,7 +48,7 @@ const Wallets = () => (
             allow users to send and receive cryptocurrencies and
             view their balance. If you want to use cryptocurrency,
             you will need to have a digital wallet to store your
-            cryptocurrency off of exchanbge websites.
+            cryptocurrency off of exchange websites.
           </p>
         </Col>
       </Row>

@@ -1,9 +1,10 @@
 .metrics {
+  margin-bottom: 20px;
   background-color: transparent;
-  margin: 20px 0;
 }
 
 .metrics .header {
+  margin-top: 20px;
   color: #818181;
   font-size: 100%;
   text-align: center;
@@ -18,7 +19,8 @@
 }
 
 .search {
-  float: right;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .dropdown-menu>li>a {
@@ -27,9 +29,5 @@
 
 /* Extra small devices (991px and down) */
 @media (max-width: 991px) {
-  .search {
-    float: left;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
+
 }

@@ -26,6 +26,9 @@ const formatNumberToString = value =>
 const formatDollars = value =>
   `$ ${formatNumberToString(parseFloat(value).toFixed(2))}`
 
+const formatDollarsWholeNumber = value =>
+  `$ ${formatNumberToString(parseFloat(value).toFixed(0))}`
+
 const formatPercent = value =>
   `${formatNumberToString(parseFloat(value).toFixed(2))} %`
 
@@ -39,6 +42,7 @@ export default {
   fetchCoin,
   formatNumberToString,
   formatDollars,
+  formatDollarsWholeNumber,
   formatWholeNumber,
   formatPercent,
 }
