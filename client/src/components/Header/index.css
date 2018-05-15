@@ -55,7 +55,7 @@ header .underline {
 }
 
 /* Extra small devices (991px and down) */
-@media (max-width: 991px) {
+@media only screen and (max-width: 992px) {
   header .user-welcome {
     visibility: hidden;
     width: 0px;

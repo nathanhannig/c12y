@@ -58,7 +58,7 @@ a:hover {
 }
 
 /* Extra small devices (991px and down) */
-@media (max-width: 991px) {
+@media only screen and (max-width: 992px) {
   .vertical-align.row {
       display: block; /* Turn off the flexible box layout */
   }

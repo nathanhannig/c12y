@@ -1,6 +1,6 @@
 // React
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Grid, Row, Col, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 // Redux
@@ -108,31 +108,31 @@ class Overview extends Component {
     const html = [(
       <div key="overview">
         <Row>
-          <Col xs={12} md={2}>
-            {icon ? <img className="icon" src={icon} alt={name} /> : ''}
+          <Col xs={12} sm={4} className="meta">
+            {icon ? <img className="icon" src={icon} alt={name} /> : ''}<br />
+            <a href={coin.coin.WebsiteUrl} target="_blank">
+              <Button bsSize="small" bsStyle="primary" className="website-url">Website</Button>
+            </a>
           </Col>
-          <Col xs={12} md={4}>
+          <Col xs={12} sm={4}>
             <Row className="details">
-              {this.renderCoinOverviewItem('coin.name', 'Name', (<span>{coinName} (<a href={coin.coin.WebsiteUrl} target="_blank">Website</a>)</span>))}
-              {this.renderCoinOverviewItem('symbol', 'Symbol', symbol)}
+              {this.renderCoinOverviewItem('price', 'Price', price)}
+              {this.renderCoinOverviewItem('change24HourCombined', 'Change', `${change24Hour} (${changePct24Hour})`)}
+              {this.renderCoinOverviewItem('volume', 'Volume', totalVolume24HTo)}
+              {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
+              {this.renderCoinOverviewItem('open24Hour', 'Open', open24Hour)}
+              {this.renderCoinOverviewItem('high24Hour', 'High', high24Hour)}
+              {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
+            </Row>
+          </Col>
+          <Col xs={12} sm={4} className="details">
+            <Row>
               {this.renderCoinOverviewItem('supply', 'Circulating Supply', supply)}
               {this.renderCoinOverviewItem('totalCoinSupply', 'Total Coin Supply', totalCoinSupply)}
               {this.renderCoinOverviewItem('algorithm', 'Algorithm', algorithm)}
               {this.renderCoinOverviewItem('proofType', 'Proof Type', proofType)}
               {this.renderCoinOverviewItem('fullyPremined', 'Fully Pre-Mined', fullyPremined)}
               {this.renderCoinOverviewItem('preMinedValue', 'Pre-Mined Value', preMinedValue)}
-            </Row>
-          </Col>
-          <Col xs={12} md={6}>
-            <Row className="details">
-              {this.renderCoinOverviewItem('price', 'Price', price)}
-              {this.renderCoinOverviewItem('volume', 'Volume', totalVolume24HTo)}
-              {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
-              {this.renderCoinOverviewItem('open24Hour', 'Open', open24Hour)}
-              {this.renderCoinOverviewItem('high24Hour', 'High', high24Hour)}
-              {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
-              {this.renderCoinOverviewItem('change24Hour', 'Change', change24Hour)}
-              {this.renderCoinOverviewItem('changePct24Hour', 'Change %', changePct24Hour)}
             </Row>
           </Col>
         </Row>

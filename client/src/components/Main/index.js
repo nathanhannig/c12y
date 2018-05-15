@@ -90,8 +90,8 @@ class Main extends Component {
     ))
 
     html.push((
-      <Link key="viewAllCoins" to="/coins">
-        <Row className="viewAllCoins">
+      <Link key="viewTopCoins" to="/coins">
+        <Row className="viewTopCoins">
           <Col xs={12}>
             <p>View Top 100 Coins</p>
           </Col>

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import numeral from 'numeral'
 
 // const headers = new Headers()
 // headers.append('Authorization', 'c12y')
@@ -17,30 +18,23 @@ const fetchCoinlist = page => axios.get(`/api/all/${page}`)
 
 const fetchCoin = coin => axios.get(`/api/coin/${coin}`)
 
-// Format large numbers with commas at every thousandth decimal spot
-const formatNumberToString = value =>
-  value.replace(/./g, (match, offset, string) => (offset && match !== '.' && (string.length - offset) % 3 === 0
-    ? `,${match}`
-    : match))
-
 const formatDollars = value =>
-  `$ ${formatNumberToString(parseFloat(value).toFixed(2))}`
+  numeral(value).format('$0,0.00')
 
 const formatDollarsWholeNumber = value =>
-  `$ ${formatNumberToString(parseFloat(value).toFixed(0))}`
+  numeral(value).format('$0,0')
 
 const formatPercent = value =>
-  `${formatNumberToString(parseFloat(value).toFixed(2))} %`
+  numeral(value / 100).format('0.00%')
 
 const formatWholeNumber = value =>
-  formatNumberToString(parseFloat(value).toFixed(0))
+  numeral(value).format('0,0')
 
 export default {
   fetchUser,
   fetchWatchlist,
   fetchCoinlist,
   fetchCoin,
-  formatNumberToString,
   formatDollars,
   formatDollarsWholeNumber,
   formatWholeNumber,
