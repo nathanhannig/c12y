@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { replace } from 'react-router-redux'
 import { fetchCoins } from '../../actions'
 
 // App
@@ -17,17 +18,31 @@ import CoinItem from '../CoinItem'
 import API from '../../utils'
 import './index.css'
 
+Number.isNaN = require('number-is-nan')
+
 class Coins extends Component {
   state = { loading: true }
 
   async componentDidMount() {
     const { match } = this.props
 
-    const page =
-      !Number.isNaN(Number(match.params.page)) &&
-      parseInt(match.params.page, 10) > 0
-        ? parseInt(match.params.page, 10)
-        : 1
+    let page = 1
+
+    //
+    if (match.params.page) {
+      if (Number.isNaN(Number(match.params.page)) ||
+        parseInt(match.params.page, 10) < 1) {
+        this.props.replace('/coins')
+      }
+
+      page = parseInt(match.params.page, 10)
+    }
+
+    // const page =
+    //   !Number.isNaN(Number(match.params.page)) &&
+    //   parseInt(match.params.page, 10) > 0
+    //     ? parseInt(match.params.page, 10)
+    //     : '1'
 
     try {
       await this.props.fetchCoins(page)
@@ -187,6 +202,7 @@ Coins.propTypes = {
   match: PropTypes.object.isRequired,
   fetchCoins: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
+  replace: PropTypes.func.isRequired,
 }
 
 function mapStateToProps({ coins }) {
@@ -198,6 +214,7 @@ function mapStateToProps({ coins }) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoins: bindActionCreators(fetchCoins, dispatch),
+    replace: bindActionCreators(replace, dispatch),
   }
 }
 

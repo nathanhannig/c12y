@@ -10,7 +10,6 @@
 .env.test.local
 .env.production.local
 dev.js
-coins.json
 
 npm-debug.log*
 yarn-debug.log*

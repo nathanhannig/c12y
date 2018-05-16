@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 // Redux
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
@@ -31,7 +32,7 @@ class Metrics extends Component {
           placeholder="Search"
           onChange={(selected) => {
             this.setState({ selected })
-            this.props.dispatch(push(`/${selected[0].id}`))
+            this.props.push(`/${selected[0].id}`)
           }}
           options={options}
           selected={this.state.selected}
@@ -55,7 +56,6 @@ class Metrics extends Component {
 
     return (
       <div className="metrics">
-
         <Row>
           <Col xs={6} md={6}>
             <Row>
@@ -77,7 +77,6 @@ class Metrics extends Component {
               </Col>
             </Row>
           </Col>
-
           <Col xs={6} md={6}>
             <Row>
               <Col xs={12} md={6}>
@@ -94,15 +93,23 @@ class Metrics extends Component {
             </Row>
           </Col>
         </Row>
-
       </div>
     )
   }
 }
 
 Metrics.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
 }
 
-export default connect()(withRouter(Metrics))
+function mapDispatchToProps(dispatch) {
+  return {
+    push: bindActionCreators(push, dispatch),
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withRouter(Metrics))

@@ -6,11 +6,14 @@ import PropTypes from 'prop-types'
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { replace } from 'react-router-redux'
 import { fetchCoin } from '../../actions'
 
 // App
 import API from '../../utils'
 import './index.css'
+
+Number.isNaN = require('number-is-nan')
 
 class Overview extends Component {
   state = { loading: true }
@@ -18,8 +21,12 @@ class Overview extends Component {
   async componentDidMount() {
     const { match } = this.props
 
-    await this.props.fetchCoin(match.params.coin)
-    this.setState({ loading: false })
+    try {
+      await this.props.fetchCoin(match.params.coin)
+      this.setState({ loading: false })
+    } catch (error) {
+      this.props.replace('/')
+    }
   }
 
   renderCoinOverviewItem = (item, title, value) => (
@@ -190,6 +197,7 @@ Overview.propTypes = {
   match: PropTypes.object.isRequired,
   fetchCoin: PropTypes.func.isRequired,
   coin: PropTypes.object.isRequired,
+  replace: PropTypes.func.isRequired,
 }
 
 function mapStateToProps({ coin }) {
@@ -201,6 +209,7 @@ function mapStateToProps({ coin }) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoin: bindActionCreators(fetchCoin, dispatch),
+    replace: bindActionCreators(replace, dispatch),
   }
 }
 
