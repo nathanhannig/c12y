@@ -17,19 +17,31 @@ const CoinItem = (props) => {
         <Col smHidden md={1} />
         <Col sm={12} md={2}>{props.name}</Col>
         <Col sm={12} md={2}>{props.price}</Col>
-        <Col sm={12} md={3}>{props.supply}</Col>
-        <Col sm={12} md={3}>{props.volume}</Col>
+        <Col sm={12} md={2}>{props.change}</Col>
+        <Col sm={12} md={2}>{props.supply}</Col>
+        <Col sm={12} md={2}>{props.volume}</Col>
       </Row>
     )
   } else {
+    let changeStyle = 'change green'
+
+    if (props.change[0] === '-') {
+      changeStyle = 'change red'
+    } else if (props.change === '0.00%') {
+      changeStyle = 'change'
+    }
+
     html = (
       <Row className="list vertical-align">
         <Col xs={2} sm={1} md={1} className="counter">{props.counter}</Col>
         <Col xs={4} sm={2} md={1} className="icon">{props.icon ? <img src={props.icon} alt={props.name} /> : ''}</Col>
         <Col xs={6} sm={9} md={2} className="name">{props.name}</Col>
         <Col xs={12} sm={12} md={2} data-title="Price:" className="price">{props.price}</Col>
-        <Col xs={12} sm={12} md={3} data-title="Circulating:" className="supply">{props.supply}</Col>
-        <Col xs={12} sm={12} md={3} data-title="Volume:" className="volume">{props.volume}</Col>
+        <Col xs={12} sm={12} md={2} data-title="Change:" className="price">
+          <span className={changeStyle}>{props.change}</span>
+        </Col>
+        <Col xs={12} sm={12} md={2} data-title="Circulating:" className="supply">{props.supply}</Col>
+        <Col xs={12} sm={12} md={2} data-title="Volume:" className="volume">{props.volume}</Col>
         <Col xs={12} sm={12} mdHidden lgHidden data-title="Market Cap:" className="market">{props.marketCap}</Col>
       </Row>
     )
@@ -47,6 +59,7 @@ CoinItem.propTypes = {
   counter: PropTypes.any.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
+  change: PropTypes.string.isRequired,
   supply: PropTypes.string.isRequired,
   volume: PropTypes.string.isRequired,
   marketCap: PropTypes.string,

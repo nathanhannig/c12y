@@ -1,7 +1,7 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
+import { Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { IoAndroidHappy as SmileyFace } from 'react-icons/lib/io'
 
@@ -35,14 +35,23 @@ class Footer extends Component {
   renderTipModal = () => (
     <Modal show={this.state.showModal} onHide={this.handleModalClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Give A Tip Of Crypto</Modal.Title>
+        <Modal.Title>Give A Tip Of Crypto!</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p style={{ textAlign: 'center' }}>
-            Put a smile on our faces and support us by donating to our Wallet addresses below. <span style={{ fontSize: '300%' }}><SmileyFace /></span>
-        </p>
+        <Row>
+          <Col xs={12} sm={9}>
+            <p style={{ textAlign: 'center' }}>
+              Put a smile on our faces and support us by donating to our wallet
+              addresses below. If you would like to donate a cryptocurrency not
+              listed below, please contact us!
+            </p>
+          </Col>
+          <Col xs={12} sm={3} style={{ textAlign: 'center' }}>
+            <span style={{ fontSize: '400%' }}><SmileyFace /></span>
+          </Col>
+        </Row>
 
-        <h4>Bitcoin {this.state.copiedBTC ? <span style={{ color: 'green' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copied</span> : null}</h4>
+        <h4>Bitcoin {this.state.copiedBTC ? <span style={{ display: 'inline-block', float: 'right' }} className="green">Copied</span> : null}</h4>
         <FormGroup>
           <InputGroup>
             <FormControl type="text" readOnly defaultValue={this.state.addressBTC} />
@@ -63,7 +72,7 @@ class Footer extends Component {
 
         <hr />
 
-        <h4>Ethereum {this.state.copiedETH ? <span style={{ color: 'green' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copied</span> : null}</h4>
+        <h4>Ethereum {this.state.copiedETH ? <span style={{ display: 'inline-block', float: 'right' }} className="green">Copied</span> : null}</h4>
         <FormGroup>
           <InputGroup>
             <FormControl type="text" readOnly defaultValue={this.state.addressETH} />
@@ -84,7 +93,7 @@ class Footer extends Component {
 
         <hr />
 
-        <h4>Litecoin {this.state.copiedLTC ? <span style={{ color: 'green' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copied</span> : null}</h4>
+        <h4>Litecoin {this.state.copiedLTC ? <span style={{ display: 'inline-block', float: 'right' }} className="green">Copied</span> : null}</h4>
         <FormGroup>
           <InputGroup>
             <FormControl type="text" readOnly defaultValue={this.state.addressLTC} />

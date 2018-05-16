@@ -18,8 +18,13 @@ const fetchCoinlist = page => axios.get(`/api/all/${page}`)
 
 const fetchCoin = coin => axios.get(`/api/coin/${coin}`)
 
-const formatDollars = value =>
-  numeral(value).format('$0,0.00')
+const formatDollars = (value) => {
+  if (value >= 0.01 || value <= -0.01 || value === 0) {
+    return numeral(value).format('$0,0.00')
+  }
+
+  return numeral(value).format('$0.0000000000')
+}
 
 const formatDollarsWholeNumber = value =>
   numeral(value).format('$0,0')

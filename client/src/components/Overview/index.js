@@ -54,16 +54,13 @@ class Overview extends Component {
     const icon = coin.coin.ImageUrl
       && coin.baseImageUrl + coin.coin.ImageUrl
     const name = coin.coin.FullName
-    const coinName = coin.coin.CoinName
-    const symbol = coin.coin.Symbol
     const algorithm = coin.coin.Algorithm
     const proofType = coin.coin.ProofType
     const fullyPremined = coin.coin.FullyPremined
     const preMinedValue = coin.coin.PreMinedValue
-    let totalCoinSupply = coin.coin.TotalCoinSupply
-
-    // Convert to whole number with commas
-    totalCoinSupply = parseFloat(totalCoinSupply).toFixed(0).replace(/./g, (c, i, a) => (i && c !== '.' && ((a.length - i) % 3 === 0) ? `,${c}` : c))
+    const totalCoinSupply = Number.isNaN(Number(coin.coin.TotalCoinSupply)) ?
+      coin.coin.TotalCoinSupply :
+      API.formatWholeNumber(coin.coin.TotalCoinSupply)
 
     let price = 'N/A'
     let supply = 'N/A'
@@ -105,6 +102,14 @@ class Overview extends Component {
       marketCap = API.formatDollars(coin.price.MKTCAP)
     }
 
+    let changeStyle
+
+    if (changePct24Hour[0] === '-') {
+      changeStyle = 'change red'
+    } else if (changePct24Hour === '0.00%') {
+      changeStyle = 'change'
+    }
+
     const html = [(
       <div key="overview">
         <Row>
@@ -117,7 +122,11 @@ class Overview extends Component {
           <Col xs={12} sm={4}>
             <Row className="details">
               {this.renderCoinOverviewItem('price', 'Price', price)}
-              {this.renderCoinOverviewItem('change24HourCombined', 'Change', `${change24Hour} (${changePct24Hour})`)}
+              {this.renderCoinOverviewItemHTML(
+                'change24HourCombined',
+                'Change',
+                `${change24Hour} <span class="${changeStyle}">(${changePct24Hour})</span>`,
+              )}
               {this.renderCoinOverviewItem('volume', 'Volume', totalVolume24HTo)}
               {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
               {this.renderCoinOverviewItem('open24Hour', 'Open', open24Hour)}

@@ -33,6 +33,14 @@ a:hover {
   100% { transform: rotate(360deg); }
 }
 
+.red {
+  color: #e74c3c;
+}
+
+.green {
+  color: #2ecc71;
+}
+
 .Content .container {
   padding-bottom: 10px;
   background-color: #fff;

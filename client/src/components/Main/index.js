@@ -45,6 +45,7 @@ class Main extends Component {
         && coins.baseImageUrl + coins.coins[item].ImageUrl
 
       let price = 'N/A'
+      let change = 'M/A'
       let supply = 'N/A'
       let volume = 'N/A'
       let marketCap = 'N/A'
@@ -53,6 +54,9 @@ class Main extends Component {
       if (coins.prices[item]) {
         // Convert to $ with commas
         price = API.formatDollars(coins.prices[item].PRICE)
+
+        // Convert to percent
+        change = API.formatPercent(coins.prices[item].CHANGEPCT24HOUR)
 
         // Convert to whole number with commas
         supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
@@ -69,6 +73,7 @@ class Main extends Component {
             icon={icon}
             name={name}
             price={price}
+            change={change}
             volume={volume}
             supply={supply}
             marketCap={marketCap}
@@ -84,6 +89,7 @@ class Main extends Component {
         counter="#"
         name="Name"
         price="Price"
+        change="Change"
         volume="Volume"
         supply="Circulating"
       />

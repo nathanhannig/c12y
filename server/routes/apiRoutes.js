@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = (app) => {
   app.get('/api/help', (req, res) => {
-    res.sendFile(path.join(__dirname, '/views/index.html'))
+    res.sendFile(path.join(__dirname, '../views/index.html'))
   })
 
   app.get('/api/watchlist', (req, res) => {
@@ -68,7 +68,7 @@ module.exports = (app) => {
     }
 
     // Check that page is a number and greater than 0, else default it to 1
-    const page = !Number.isNaN(req.params.page) && parseInt(req.params.page, 10) > 0
+    const page = !Number.isNaN(Number(req.params.page)) && parseInt(req.params.page, 10) > 0
       ? parseInt(req.params.page, 10)
       : 1
 
@@ -126,6 +126,16 @@ module.exports = (app) => {
       return res.send({
         coin: data.coins[coin],
         price: data.prices[coin],
+        baseImageUrl,
+        baseLinkUrl,
+        lastUpdated,
+      })
+    }
+
+    if (data.coins
+      && data.coins[coin]) {
+      return res.send({
+        coin: data.coins[coin],
         baseImageUrl,
         baseLinkUrl,
         lastUpdated,

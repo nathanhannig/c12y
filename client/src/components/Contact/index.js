@@ -116,17 +116,18 @@ class Contact extends Component {
             </Col>
           </Row>
           <Row>
-            <form onSubmit={this.handleSubmit}>
-              { sent ?
-                <div className="formSuccess">
-                  <p>Email Sent</p>
-                </div> :
+            <Col xs={12}>
+              <form onSubmit={this.handleSubmit}>
+                { sent ?
+                  <div className="formSuccess">
+                    <p>Email Sent</p>
+                  </div> :
                 ''
               }
 
-              { Object.keys(errors).length ?
-                <div className="formErrors">
-                  {Object.keys(errors).map((item) => {
+                { Object.keys(errors).length ?
+                  <div className="formErrors">
+                    {Object.keys(errors).map((item) => {
                   if (errors[item].length > 0) {
                     return (
                       <p key={item}>{errors[item]}</p>
@@ -135,59 +136,60 @@ class Contact extends Component {
 
                   return ''
                 })}
-                </div> :
+                  </div> :
                 ''
               }
 
-              <FormGroup
-                controlId="formBasicText"
-                validationState={this.getValidationState('name')}
-              >
-                <ControlLabel>Your Name</ControlLabel>
-                <FormControl
-                  name="name"
-                  autoComplete="name"
-                  type="text"
-                  value={this.state.name}
-                  placeholder="Enter Name"
-                  onChange={this.handleChange}
-                />
-                <FormControl.Feedback />
-              </FormGroup>
-              <FormGroup
-                controlId="formBasicText"
-                validationState={this.getValidationState('email')}
-              >
-                <ControlLabel>Email Address</ControlLabel>
-                <FormControl
-                  name="email"
-                  autoComplete="email"
-                  type="email"
-                  value={this.state.email}
-                  placeholder="Enter Email"
-                  onChange={this.handleChange}
-                />
-                <FormControl.Feedback />
-              </FormGroup>
-              <FormGroup
-                controlId="formControlsTextarea"
-                validationState={this.getValidationState('message')}
-              >
-                <ControlLabel>Message</ControlLabel>
-                <FormControl
-                  name="message"
-                  componentClass="textarea"
-                  value={this.state.message}
-                  placeholder="Enter Message"
-                  onChange={this.handleChange}
-                />
-                <FormControl.Feedback />
-              </FormGroup>
-              {submitted
+                <FormGroup
+                  controlId="formBasicText"
+                  validationState={this.getValidationState('name')}
+                >
+                  <ControlLabel>Your Name</ControlLabel>
+                  <FormControl
+                    name="name"
+                    autoComplete="name"
+                    type="text"
+                    value={this.state.name}
+                    placeholder="Enter Name"
+                    onChange={this.handleChange}
+                  />
+                  <FormControl.Feedback />
+                </FormGroup>
+                <FormGroup
+                  controlId="formBasicText"
+                  validationState={this.getValidationState('email')}
+                >
+                  <ControlLabel>Email Address</ControlLabel>
+                  <FormControl
+                    name="email"
+                    autoComplete="email"
+                    type="email"
+                    value={this.state.email}
+                    placeholder="Enter Email"
+                    onChange={this.handleChange}
+                  />
+                  <FormControl.Feedback />
+                </FormGroup>
+                <FormGroup
+                  controlId="formControlsTextarea"
+                  validationState={this.getValidationState('message')}
+                >
+                  <ControlLabel>Message</ControlLabel>
+                  <FormControl
+                    name="message"
+                    componentClass="textarea"
+                    value={this.state.message}
+                    placeholder="Enter Message"
+                    onChange={this.handleChange}
+                  />
+                  <FormControl.Feedback />
+                </FormGroup>
+                {submitted
                 ? <Button disabled type="submit">Submit</Button>
                 : <Button type="submit">Submit</Button>
               }
-            </form>
+              </form>
+            </Col>
           </Row>
         </Grid>
       </div>
