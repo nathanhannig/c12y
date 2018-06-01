@@ -1,14 +1,21 @@
 // React
 import React, { Component } from 'react'
-import {
-  Grid,
-  Row,
-  Col,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  Button,
-} from 'react-bootstrap'
+// import {
+//   Grid,
+//   Row,
+//   Col,
+//   FormGroup,
+//   FormControl,
+//   ControlLabel,
+//   Button,
+// } from 'react-bootstrap'
+import Grid from 'react-bootstrap/lib/Grid'
+import Row from 'react-bootstrap/lib/Row'
+import Col from 'react-bootstrap/lib/Col'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
+import FormControl from 'react-bootstrap/lib/FormControl'
+import ControlLabel from 'react-bootstrap/lib/ControlLabel'
+import Button from 'react-bootstrap/lib/Button'
 
 // App
 import axios from 'axios'

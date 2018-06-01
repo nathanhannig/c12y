@@ -1,7 +1,10 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Grid, Row, Col } from 'react-bootstrap'
+// import { Grid, Row, Col } from 'react-bootstrap'
+import Grid from 'react-bootstrap/lib/Grid'
+import Row from 'react-bootstrap/lib/Row'
+import Col from 'react-bootstrap/lib/Col'
 import PropTypes from 'prop-types'
 
 // Redux
@@ -10,7 +13,7 @@ import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
-import moment from 'moment'
+import moment from 'moment/min/moment.min'
 import Metrics from '../Metrics'
 import CoinItem from '../CoinItem'
 import API from '../../utils'

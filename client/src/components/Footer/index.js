@@ -1,12 +1,19 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
+// import { Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
+import Row from 'react-bootstrap/lib/Row'
+import Col from 'react-bootstrap/lib/Col'
+import Modal from 'react-bootstrap/lib/Modal'
+import Button from 'react-bootstrap/lib/Button'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
+import InputGroup from 'react-bootstrap/lib/InputGroup'
+import FormControl from 'react-bootstrap/lib/FormControl'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { IoAndroidHappy as SmileyFace } from 'react-icons/lib/io'
 
 // App
-import moment from 'moment'
+import moment from 'moment/min/moment.min'
 import './index.css'
 
 class Footer extends Component {
