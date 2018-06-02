@@ -1,12 +1,11 @@
 // React
 import React, { Component } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { ConnectedRouter } from 'react-router-redux'
 import { fetchUser } from '../../actions'
 
 // App
@@ -39,7 +38,7 @@ class App extends Component {
 
   render() {
     return (
-      <ConnectedRouter history={this.props.history}>
+      <Router>
         <ScrollToTop>
           <div className="App">
             <Header />
@@ -62,14 +61,13 @@ class App extends Component {
             <Footer />
           </div>
         </ScrollToTop>
-      </ConnectedRouter>
+      </Router>
     )
   }
 }
 
 App.propTypes = {
   fetchUser: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
 }
 
 function mapDispatchToProps(dispatch) {

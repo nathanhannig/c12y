@@ -10,7 +10,6 @@ import PropTypes from 'prop-types'
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { replace } from 'react-router-redux'
 import { fetchCoin } from '../../actions'
 
 // App
@@ -29,7 +28,7 @@ class Overview extends Component {
       await this.props.fetchCoin(match.params.coin)
       this.setState({ loading: false })
     } catch (error) {
-      this.props.replace('/')
+      this.props.history.replace('/')
     }
   }
 
@@ -198,10 +197,10 @@ class Overview extends Component {
 }
 
 Overview.propTypes = {
+  history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   fetchCoin: PropTypes.func.isRequired,
   coin: PropTypes.object.isRequired,
-  replace: PropTypes.func.isRequired,
 }
 
 function mapStateToProps({ coin }) {
@@ -213,7 +212,6 @@ function mapStateToProps({ coin }) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoin: bindActionCreators(fetchCoin, dispatch),
-    replace: bindActionCreators(replace, dispatch),
   }
 }
 
