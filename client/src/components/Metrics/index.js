@@ -5,13 +5,9 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
+import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-
-// Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 
 // App
 import API from '../../utils'
@@ -34,7 +30,7 @@ class Metrics extends Component {
           placeholder="Search"
           onChange={(selected) => {
             this.setState({ selected })
-            this.props.push(`/${selected[0].id}`)
+            this.props.history.push(`/${selected[0].id}`)
           }}
           options={options}
           selected={this.state.selected}
@@ -101,17 +97,8 @@ class Metrics extends Component {
 }
 
 Metrics.propTypes = {
-  push: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   coins: PropTypes.object.isRequired,
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    push: bindActionCreators(push, dispatch),
-  }
-}
-
-export default connect(
-  null,
-  mapDispatchToProps,
-)(withRouter(Metrics))
+export default withRouter(Metrics)

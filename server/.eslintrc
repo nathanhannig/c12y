@@ -1,27 +1,19 @@
 {
   "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false,
-    "ecmaVersion": 8
+      "sourceType": "module",
+      "allowImportExportEverywhere": false,
+      "codeFrame": false,
+      "ecmaVersion": 8
   },
-  "extends": "airbnb",
+  "extends": "airbnb-base",
   "env": {
-    "node": true,
-    "jest": true
+      "node": true,
+      "jest": true
   },
   "rules": {
-    "import/first": 0,
-    "semi": 0,
-    "linebreak-style": 0,
-    "react/jsx-filename-extension": [1, {
-      "extensions": [".js", ".jsx"]
-    }],
-    "jsx-a11y/anchor-is-valid": [ "error", {
-      "components": [ "Link" ],
-      "specialLink": [ "to" ],
-      "aspects": [ "noHref", "invalidHref", "preferButton" ]
-    }]
+      "import/first": 0,
+      "semi": 0,
+      "linebreak-style": 0
   }
 }

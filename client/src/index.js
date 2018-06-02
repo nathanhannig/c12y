@@ -4,36 +4,17 @@ import ReactDOM from 'react-dom'
 import { unregister } from './registerServiceWorker'
 
 // Redux
-import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
-import ReduxThunk from 'redux-thunk'
-import { routerMiddleware } from 'react-router-redux'
-import createHistory from 'history/createBrowserHistory'
-import reducer from './reducers/'
+import store from './store'
 
 // App
 import App from './components/App'
 import './index.css'
 
-// https://github.com/zalmoxisus/redux-devtools-extension
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // eslint-disable-line
-
-const history = createHistory()
-
-const store = createStore(
-  reducer,
-  composeEnhancers(applyMiddleware(
-    // middleware for intercepting thunks
-    ReduxThunk,
-    // middleware for intercepting and dispatching navigation actions
-    routerMiddleware(history),
-  )),
-)
-
 ReactDOM.render(
   (
     <Provider store={store}>
-      <App history={history} />
+      <App />
     </Provider>
   ),
   document.getElementById('root'),
