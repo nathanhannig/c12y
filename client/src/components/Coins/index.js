@@ -12,7 +12,6 @@ import PropTypes from 'prop-types'
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { replace } from 'react-router-redux'
 import { fetchCoins } from '../../actions'
 
 // App
@@ -36,7 +35,7 @@ class Coins extends Component {
     if (match.params.page) {
       if (Number.isNaN(Number(match.params.page)) ||
         parseInt(match.params.page, 10) < 1) {
-        this.props.replace('/coins')
+        this.props.history.replace('/coins')
       }
 
       page = parseInt(match.params.page, 10)
@@ -203,10 +202,10 @@ class Coins extends Component {
 }
 
 Coins.propTypes = {
+  history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   fetchCoins: PropTypes.func.isRequired,
   coins: PropTypes.object.isRequired,
-  replace: PropTypes.func.isRequired,
 }
 
 function mapStateToProps({ coins }) {
@@ -218,7 +217,6 @@ function mapStateToProps({ coins }) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchCoins: bindActionCreators(fetchCoins, dispatch),
-    replace: bindActionCreators(replace, dispatch),
   }
 }
 
