@@ -215,13 +215,13 @@ const sortByMktCap = (list) => {
     // out small coins with the below filters, usually market cap is too high
     if (prices[a.id] &&
       prices[a.id].PRICE > 0 &&
-      prices[a.id].TOTALVOLUME24HTO >= 1000000) {
+      prices[a.id].TOTALVOLUME24HTO >= 10000) {
       aMktCap = prices[a.id].MKTCAP
     }
 
     if (prices[b.id] &&
       prices[b.id].PRICE > 0 &&
-      prices[b.id].TOTALVOLUME24HTO >= 1000000) {
+      prices[b.id].TOTALVOLUME24HTO >= 10000) {
       bMktCap = prices[b.id].MKTCAP
     }
 

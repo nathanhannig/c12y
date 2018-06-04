@@ -129,8 +129,8 @@ class Contact extends Component {
                   <div className="formSuccess">
                     <p>Email Sent</p>
                   </div> :
-                ''
-              }
+                  ''
+                }
 
                 { Object.keys(errors).length ?
                   <div className="formErrors">
@@ -191,10 +191,13 @@ class Contact extends Component {
                   />
                   <FormControl.Feedback />
                 </FormGroup>
-                {submitted
-                ? <Button disabled type="submit">Submit</Button>
-                : <Button type="submit">Submit</Button>
-              }
+                <p>
+                  {submitted ?
+                    <Button disabled type="submit">Submit</Button> :
+                    <Button type="submit">Submit</Button>
+                  }
+                </p>
+
               </form>
             </Col>
           </Row>
