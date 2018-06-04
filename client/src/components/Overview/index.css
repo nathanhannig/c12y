@@ -18,7 +18,7 @@
   font-size: 70%;
   text-transform: uppercase;
   letter-spacing: .15em;
-  font-weight: 700;
+  font-weight: 500;
   margin: 0 0 4px 0;
 }
 
@@ -26,8 +26,9 @@
   margin: 0 0 18px 0;
 }
 
-.Overview .website-url {
+.Overview .coin-urls {
   width: 75%;
+  margin: 5px 0;
 }
 
 /* Extra small devices (991px and down) */

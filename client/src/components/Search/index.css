@@ -1,0 +1,40 @@
+.search {
+  margin: 20px auto;
+  width: 60%;
+  background-color: #eaeaea;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-icon {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 180%;
+}
+
+.search input {
+  border: none;
+  box-shadow: none;
+  background-color: #eaeaea;
+}
+
+.dropdown-menu>li>a {
+  font-size: 120%;
+}
+
+/* Extra small devices (991px and down) */
+@media only screen and (max-width: 992px) {
+  .search {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+}

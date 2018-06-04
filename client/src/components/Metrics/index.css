@@ -1,5 +1,4 @@
 .metrics {
-  margin-bottom: 20px;
   background-color: transparent;
 }
 
@@ -7,24 +6,14 @@
   margin-top: 20px;
   color: #818181;
   font-size: 100%;
-  text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .metrics .value {
-  text-align: center;
-  font-size: 120%;
-}
-
-.search {
-  margin-top: 20px;
-  width: 100%;
-}
-
-.dropdown-menu>li>a {
-  font-size: 120%;
+  font-size: 160%;
+  font-weight: 500;
 }
 
 /* Extra small devices (991px and down) */
