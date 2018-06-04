@@ -58,12 +58,19 @@ class Overview extends Component {
     }
 
     if (!coin.coin) {
-      return (<Row>Coin information is not ready, please refresh the page.</Row>)
+      return (
+        <Row>
+          <p>Coin information is not ready, please refresh the page.</p>
+        </Row>
+      )
     }
 
-    const icon = coin.coin.ImageUrl
-      && coin.baseImageUrl + coin.coin.ImageUrl
     const name = coin.coin.FullName
+
+    const icon =
+      coin.coin.ImageUrl
+      && `${coin.baseImageUrl + coin.coin.ImageUrl}?width=200`
+
     const algorithm = coin.coin.Algorithm
     const proofType = coin.coin.ProofType
     const fullyPremined = coin.coin.FullyPremined
@@ -71,6 +78,11 @@ class Overview extends Component {
     const totalCoinSupply = Number.isNaN(Number(coin.coin.TotalCoinSupply)) ?
       coin.coin.TotalCoinSupply :
       API.formatWholeNumber(coin.coin.TotalCoinSupply)
+
+    const twitter = coin.coin.Twitter
+    const twitterUrl = coin.coin.Twitter[0] === '@' ?
+      `http://www.twitter.com/${coin.coin.Twitter.substr(1)}` :
+      `http://www.twitter.com/${coin.coin.Twitter}`
 
     let price = 'N/A'
     let supply = 'N/A'
@@ -123,14 +135,21 @@ class Overview extends Component {
     const html = [(
       <div key="overview">
         <Row>
-          <Col xs={12} sm={4} className="meta">
-            {icon ? <img className="icon" src={icon} alt={name} /> : ''}<br />
-            <a href={coin.coin.WebsiteUrl} target="_blank">
-              <Button bsSize="small" bsStyle="primary" className="website-url">Website</Button>
-            </a>
+          <Col xs={12} sm={4} md={3} className="meta">
+            {icon ? <img className="icon" src={icon} alt={name} /> : ''}
+
+            {coin.coin.WebsiteUrl ?
+              <a href={coin.coin.WebsiteUrl} target="_blank">
+                <Button bsSize="small" bsStyle="primary" className="coin-urls">Website</Button>
+              </a> : ''}
+
+            {twitter ?
+              <a href={twitterUrl} target="_blank">
+                <Button bsSize="small" bsStyle="info" className="coin-urls">Twitter - {twitter}</Button>
+              </a> : ''}
           </Col>
-          <Col xs={12} sm={4}>
-            <Row className="details">
+          <Col xs={12} sm={4} md={4} className="details">
+            <Row>
               {this.renderCoinOverviewItem('price', 'Price', price)}
               {this.renderCoinOverviewItemHTML(
                 'change24HourCombined',
@@ -144,7 +163,7 @@ class Overview extends Component {
               {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
             </Row>
           </Col>
-          <Col xs={12} sm={4} className="details">
+          <Col xs={12} sm={4} md={5} className="details">
             <Row>
               {this.renderCoinOverviewItem('supply', 'Circulating Supply', supply)}
               {this.renderCoinOverviewItem('totalCoinSupply', 'Total Coin Supply', totalCoinSupply)}

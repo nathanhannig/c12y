@@ -15,6 +15,7 @@ import { fetchCoins } from '../../actions'
 // App
 import moment from 'moment/min/moment.min'
 import Metrics from '../Metrics'
+import Search from '../Search'
 import CoinItem from '../CoinItem'
 import API from '../../utils'
 import './index.css'
@@ -38,14 +39,18 @@ class Main extends Component {
     }
 
     if (!coins.coins) {
-      return <Row>Coin information is not ready, please refresh the page.</Row>
+      return (
+        <Row>
+          <p>Coin information is not ready, please refresh the page.</p>
+        </Row>
+      )
     }
 
     const html = Object.keys(coins.coins).map((item, i) => {
       const name = coins.coins[item].FullName
 
       const icon = coins.coins[item].ImageUrl
-        && coins.baseImageUrl + coins.coins[item].ImageUrl
+        && `${coins.baseImageUrl + coins.coins[item].ImageUrl}?width=50`
 
       let price = 'N/A'
       let change = 'M/A'
@@ -124,6 +129,14 @@ class Main extends Component {
       <div className="Main" >
         <Grid>
           <Metrics coins={this.props.coins} />
+          <Search coins={this.props.coins} />
+        </Grid>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <h3>Featured Coins</h3>
+            </Col>
+          </Row>
           {this.renderCoinList()}
         </Grid>
       </div>

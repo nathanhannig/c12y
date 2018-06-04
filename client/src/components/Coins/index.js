@@ -16,7 +16,7 @@ import { fetchCoins } from '../../actions'
 
 // App
 import moment from 'moment/min/moment.min'
-import Metrics from '../Metrics'
+import Search from '../Search'
 import CoinItem from '../CoinItem'
 import API from '../../utils'
 import './index.css'
@@ -31,7 +31,6 @@ class Coins extends Component {
 
     let page = 1
 
-    //
     if (match.params.page) {
       if (Number.isNaN(Number(match.params.page)) ||
         parseInt(match.params.page, 10) < 1) {
@@ -40,12 +39,6 @@ class Coins extends Component {
 
       page = parseInt(match.params.page, 10)
     }
-
-    // const page =
-    //   !Number.isNaN(Number(match.params.page)) &&
-    //   parseInt(match.params.page, 10) > 0
-    //     ? parseInt(match.params.page, 10)
-    //     : '1'
 
     try {
       await this.props.fetchCoins(page)
@@ -62,7 +55,11 @@ class Coins extends Component {
     }
 
     if (!coins.coins) {
-      return <Row>Coin information is not ready, please refresh the page.</Row>
+      return (
+        <Row>
+          <p>Coin information is not ready, please refresh the page.</p>
+        </Row>
+      )
     }
 
     if (Object.keys(coins.coins).length === 0) {
@@ -76,10 +73,10 @@ class Coins extends Component {
 
       const icon =
         coins.coins[item].ImageUrl &&
-        coins.baseImageUrl + coins.coins[item].ImageUrl
+        `${coins.baseImageUrl + coins.coins[item].ImageUrl}?width=50`
 
       let price = 'N/A'
-      let change = 'M/A'
+      let change = 'N/A'
       let supply = 'N/A'
       let volume = 'N/A'
       let marketCap = 'N/A'
@@ -186,12 +183,22 @@ class Coins extends Component {
   }
 
   render() {
+    const { coins } = this.props
     const renderPager = this.renderPager()
 
     return (
       <div className="Coins">
         <Grid>
-          <Metrics coins={this.props.coins} />
+          <Search coins={this.props.coins} />
+        </Grid>
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              {!this.state.loading ?
+                <h3>Coin List ({coins.begin + 1} - {coins.end + 1})</h3> :
+                ''}
+            </Col>
+          </Row>
           {renderPager}
           {this.renderCoinList()}
           {renderPager}

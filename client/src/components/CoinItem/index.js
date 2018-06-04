@@ -29,7 +29,7 @@ const CoinItem = (props) => {
 
     if (props.change[0] === '-') {
       changeStyle = 'change red'
-    } else if (props.change === '0.00%') {
+    } else if (props.change === '0.00%' || props.change === 'N/A') {
       changeStyle = 'change'
     }
 
