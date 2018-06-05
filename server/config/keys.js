@@ -1,6 +1,8 @@
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./prod') // eslint-disable-line
-} else {
-  // eslint-disable-line
-  module.exports = require('./dev') // eslint-disable-line
+module.exports = {
+  googleClientID: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  sendgridApiKey: process.env.SENDGRID_API_KEY,
+  contactFormEmail: process.env.CONTACT_FORM_EMAIL,
+  mongoURI: process.env.MONGO_URI,
+  cookieKey: process.env.COOKIE_KEY,
 }
