@@ -144,4 +144,36 @@ module.exports = (app) => {
 
     return res.status(404).send({ error: 'coin doesn\'t exist' })
   })
+
+  app.get('/api/gainers', (req, res) => {
+    const {
+      topGainers,
+      lastUpdated,
+    } = app.locals
+
+    if (!topGainers) {
+      return res.status(500).send({ error: 'gainers not yet ready' })
+    }
+
+    return res.send({
+      list: topGainers,
+      lastUpdated,
+    })
+  })
+
+  app.get('/api/losers', (req, res) => {
+    const {
+      topLosers,
+      lastUpdated,
+    } = app.locals
+
+    if (!topLosers) {
+      return res.status(500).send({ error: 'losers not yet ready' })
+    }
+
+    return res.send({
+      list: topLosers,
+      lastUpdated,
+    })
+  })
 }

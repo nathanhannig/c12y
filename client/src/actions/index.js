@@ -3,6 +3,8 @@ import API from '../utils'
 export const USER_FETCH = 'USER_FETCH'
 export const COINS_FETCH = 'COINS_FETCH'
 export const COIN_FETCH = 'COIN_FETCH'
+export const GAINERS_FETCH = 'GAINERS_FETCH'
+export const LOSERS_FETCH = 'LOSERS_FETCH'
 
 export const fetchUser = () => async (dispatch) => {
   const response = await API.fetchUser()
@@ -33,6 +35,24 @@ export const fetchCoin = coin => async (dispatch) => {
 
   dispatch({
     type: COIN_FETCH,
+    payload: response.data,
+  })
+}
+
+export const fetchGainers = () => async (dispatch) => {
+  const response = await API.fetchGainers()
+
+  dispatch({
+    type: GAINERS_FETCH,
+    payload: response.data,
+  })
+}
+
+export const fetchLosers = () => async (dispatch) => {
+  const response = await API.fetchLosers()
+
+  dispatch({
+    type: LOSERS_FETCH,
     payload: response.data,
   })
 }

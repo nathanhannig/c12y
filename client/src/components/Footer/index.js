@@ -1,7 +1,8 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-// import { Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
+// import { Grid, Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
+import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Modal from 'react-bootstrap/lib/Modal'
@@ -11,9 +12,17 @@ import InputGroup from 'react-bootstrap/lib/InputGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { IoAndroidHappy as SmileyFace } from 'react-icons/lib/io'
+import PropTypes from 'prop-types'
+
+// Redux
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { fetchGainers, fetchLosers } from '../../actions'
 
 // App
 import moment from 'moment/min/moment.min'
+import TopList from '../TopList'
+import API from '../../utils'
 import './index.css'
 
 class Footer extends Component {
@@ -25,6 +34,11 @@ class Footer extends Component {
     copiedBTC: false,
     copiedETH: false,
     copiedLTC: false,
+  }
+
+  async componentDidMount() {
+    await this.props.fetchGainers()
+    await this.props.fetchLosers()
   }
 
   handleModalShow = () => {
@@ -54,7 +68,7 @@ class Footer extends Component {
             </p>
           </Col>
           <Col xs={12} sm={3} style={{ textAlign: 'center' }}>
-            <span style={{ fontSize: '400%' }}><SmileyFace /></span>
+            <SmileyFace size={60} />
           </Col>
         </Row>
 
@@ -128,27 +142,85 @@ class Footer extends Component {
   render() {
     return (
       <footer>
-        <div className="row">
-          <div className="col-xs-12">
-            <ul>
-              <li>Copyright &copy; {moment().year()} by c12y.com</li>
-              <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/contact">Contact Us</Link></li>
-              <li><Link to="/privacy">Privacy Policy</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
-            <Button bsStyle="link" onClick={this.handleModalShow}>
-              <span style={{ fontSize: '180%' }}><SmileyFace /></span> Give A Tip!
-            </Button>
-          </div>
-        </div>
+        <Grid>
+          <Row className="topLists">
+            <Col xsHidden sm={1} />
+            <Col xs={12} sm={4}>
+              { this.props.gainers.list !== undefined ?
+                <TopList
+                  name="Top Gainers"
+                  list={this.props.gainers.list.map((item) => {
+                    const newValue = API.formatPercent(item.value)
+
+                    return { name: item.name, value: newValue }
+                  })}
+                /> :
+              ''
+            }
+            </Col>
+            <Col xsHidden sm={2} />
+            <Col xs={12} sm={4}>
+              { this.props.losers.list !== undefined ?
+                <TopList
+                  name="Top Losers"
+                  list={this.props.losers.list.map((item) => {
+                    const newValue = API.formatPercent(item.value)
+
+                    return { name: item.name, value: newValue }
+                  })}
+                /> :
+              ''
+            }
+            </Col>
+            <Col xsHidden sm={1} />
+          </Row>
+          <Row className="nav">
+            <Col xs={12}>
+              <ul>
+                <li>Copyright &copy; {moment().year()} by c12y.com</li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/contact">Contact Us</Link></li>
+                <li><Link to="/privacy">Privacy Policy</Link></li>
+              </ul>
+            </Col>
+          </Row>
+          <Row className="tip">
+            <Col xs={12}>
+              <Button bsStyle="success" onClick={this.handleModalShow}>
+                <SmileyFace size={40} /> Give A Tip!
+              </Button>
+            </Col>
+          </Row>
+        </Grid>
 
         {this.renderTipModal()}
       </footer >
     )
   }
 }
-export default Footer
+
+Footer.propTypes = {
+  fetchGainers: PropTypes.func.isRequired,
+  fetchLosers: PropTypes.func.isRequired,
+  gainers: PropTypes.object.isRequired,
+  losers: PropTypes.object.isRequired,
+}
+
+function mapStateToProps(state) {
+  return {
+    gainers: state.gainers,
+    losers: state.losers,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchGainers: bindActionCreators(fetchGainers, dispatch),
+    fetchLosers: bindActionCreators(fetchLosers, dispatch),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Footer)

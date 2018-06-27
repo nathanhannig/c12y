@@ -2,9 +2,7 @@ footer {
   background-color: #242729;
   color: #6a737c;
   margin-top: 20px;
-  padding: 50px;
-  text-align: center;
-  font-size: 120%;
+  padding: 10px 0 50px 0;
 }
 
 footer ul {
@@ -44,4 +42,20 @@ footer .btn-link:focus,
 footer .btn-link:hover {
   color: #27ae60;
   text-decoration: none;
+}
+
+footer .topLists {
+  font-size: 120%;
+}
+
+footer .nav {
+  margin-top: 50px;
+  font-size: 120%;
+  text-align: center;
+}
+
+footer .tip {
+  margin-top: 20px;
+  font-size: 120%;
+  text-align: center;
 }

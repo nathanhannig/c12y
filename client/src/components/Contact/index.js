@@ -49,7 +49,7 @@ class Contact extends Component {
       }
 
       if (item === 'message') {
-        if (value.length > 0) return 'success'
+        if (value.length) return 'success'
         return 'error'
       }
     }
@@ -106,6 +106,7 @@ class Contact extends Component {
       }
     } else {
       this.setState({
+        submitted: false,
         touched: new Set(['name', 'email', 'message']),
       })
     }

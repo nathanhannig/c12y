@@ -18,6 +18,11 @@ const fetchCoinlist = page => axios.get(`/api/all/${page}`)
 
 const fetchCoin = coin => axios.get(`/api/coin/${coin}`)
 
+const fetchGainers = () => axios.get('/api/gainers')
+
+const fetchLosers = () => axios.get('/api/losers')
+
+
 const formatDollars = (value) => {
   if (value >= 0.01 || value <= -0.01 || value === 0) {
     return numeral(value).format('$0,0.00')
@@ -30,7 +35,7 @@ const formatDollarsWholeNumber = value =>
   numeral(value).format('$0,0')
 
 const formatPercent = value =>
-  numeral(value / 100).format('0.00%')
+  numeral(value / 100).format('0,0.00%')
 
 const formatWholeNumber = value =>
   numeral(value).format('0,0')
@@ -40,6 +45,8 @@ export default {
   fetchWatchlist,
   fetchCoinlist,
   fetchCoin,
+  fetchGainers,
+  fetchLosers,
   formatDollars,
   formatDollarsWholeNumber,
   formatWholeNumber,

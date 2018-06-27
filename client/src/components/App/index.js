@@ -46,7 +46,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/coins" render={props => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
                 <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
-                <Route path="/coins/:page" render={props => withTrackerWrapper(Coins)({ ...props, key: props.match.params.page })} />
+                <Route path="/coins/:page" render={props => withTrackerWrapper(Coins)({ ...props, key: props.match.params.coin })} />
                 <Route path="/about" component={withTracker(About)} />
                 <Route path="/contact" component={withTracker(Contact)} />
                 <Route path="/exchanges" component={withTracker(Exchanges)} />
@@ -54,7 +54,7 @@ class App extends Component {
                 <Route path="/privacy" component={withTracker(Privacy)} />
                 <Route path="/register" component={withTracker(Register)} />
                 <Route path="/wallets" component={withTracker(Wallets)} />
-                <Route path="/:coin" component={withTracker(Overview)} />
+                <Route path="/:coin" render={props => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })} />
                 <Route path="/" component={withTracker(Main)} />
               </Switch>
             </div>

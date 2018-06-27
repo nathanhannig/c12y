@@ -25,12 +25,12 @@ const CoinItem = (props) => {
       </Row>
     )
   } else {
-    let changeStyle = 'change green'
+    let changeStyle = 'green'
 
     if (props.change[0] === '-') {
-      changeStyle = 'change red'
+      changeStyle = 'red'
     } else if (props.change === '0.00%' || props.change === 'N/A') {
-      changeStyle = 'change'
+      changeStyle = ''
     }
 
     html = (

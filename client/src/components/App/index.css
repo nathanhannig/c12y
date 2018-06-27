@@ -41,6 +41,14 @@ a:hover {
   color: #2ecc71;
 }
 
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
 .Content .container {
   margin-top: 10px;
   margin-bottom: 10px;

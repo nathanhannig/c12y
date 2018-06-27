@@ -2,10 +2,10 @@ const mongoose = require('mongoose')
 
 const { Schema } = mongoose
 
-const coinsSchema = new Schema({
+const coinSchema = new Schema({
   id: String,
   name: String,
   symbol: String,
 })
 
-mongoose.model('coins', coinsSchema)
+mongoose.model('coins', coinSchema)

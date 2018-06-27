@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Button from 'react-bootstrap/lib/Button'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet';
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -60,7 +61,9 @@ class Overview extends Component {
     if (!coin.coin) {
       return (
         <Row>
-          <p>Coin information is not ready, please refresh the page.</p>
+          <Col xs={12}>
+            <p>Coin information is not ready, please refresh the page.</p>
+          </Col>
         </Row>
       )
     }
@@ -197,8 +200,18 @@ class Overview extends Component {
   render() {
     const { coin } = this.props
 
+    const name = coin.coin ? coin.coin.FullName : ''
+    const symbol = coin.coin ? coin.coin.Symbol : ''
+    const price = coin.price ? API.formatDollars(coin.price.PRICE) : 'N/A'
+
     return (
       <div className="Overview">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`${name} ${price} - c12y.com`}</title>
+          <link rel="canonical" href={`https://c12y.com/${symbol.toLowerCase()}`} />
+          <meta name="description" content={`${name}`} />
+        </Helmet>
         <Grid>
           {coin.coin ?
             (

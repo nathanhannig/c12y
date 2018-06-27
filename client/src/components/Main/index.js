@@ -41,7 +41,9 @@ class Main extends Component {
     if (!coins.coins) {
       return (
         <Row>
-          <p>Coin information is not ready, please refresh the page.</p>
+          <Col xs={12}>
+            <p>Coin information is not ready, please refresh the page.</p>
+          </Col>
         </Row>
       )
     }

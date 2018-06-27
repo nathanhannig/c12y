@@ -6,8 +6,8 @@
     "concurrently": "^3.5.1"
   },
   "scripts": {
-    "start": "concurrently \"yarn server\" \"yarn client\"",
-    "server": "cd server && yarn run dev",
-    "client": "cd client && yarn start"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start"
   }
 }
