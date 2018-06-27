@@ -6,6 +6,7 @@ import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet';
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -129,6 +130,12 @@ class Main extends Component {
   render() {
     return (
       <div className="Main" >
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Cryptocurrency Prices - c12y.com</title>
+          <link rel="canonical" href="https://c12y.com/" />
+          <meta name="description" content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)." />
+        </Helmet>
         <Grid>
           <Metrics coins={this.props.coins} />
           <Search coins={this.props.coins} />

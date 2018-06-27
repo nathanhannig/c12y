@@ -4,6 +4,7 @@ import React from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
+import { Helmet } from 'react-helmet';
 
 // App
 import walletList from './data.json'
@@ -37,6 +38,12 @@ const renderList = () => {
 
 const Wallets = () => (
   <div className="Wallets">
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Wallets - c12y.com</title>
+      <link rel="canonical" href="https://c12y.com/wallets" />
+      <meta name="description" content="List of the best cryptocurrency wallets. - c12y.com." />
+    </Helmet>
     <Grid>
       <Row>
         <Col xs={12}>

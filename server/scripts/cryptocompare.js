@@ -154,6 +154,7 @@ module.exports = (app) => {
         data.coins[item].Technology = response.data.Data.General.Technology
           .replace(reBadSyntax, '').replace(reRelativeURL, '"https://www.cryptocompare.com/')
         data.coins[item].WebsiteUrl = response.data.Data.General.WebsiteUrl
+          .replace('-', '')
         data.coins[item].Twitter = response.data.Data.General.Twitter
         data.coins[item].StartDate = response.data.Data.General.StartDate
       }
@@ -226,11 +227,15 @@ module.exports = (app) => {
       let aValue = 0
       let bValue = 0
 
-      if (prices[a]) {
+      if (prices[a] &&
+        prices[a].PRICE > 0 &&
+        prices[a].TOTALVOLUME24HTO >= 10000) {
         aValue = prices[a].CHANGEPCT24HOUR
       }
 
-      if (prices[b]) {
+      if (prices[b] &&
+        prices[b].PRICE > 0 &&
+        prices[b].TOTALVOLUME24HTO >= 10000) {
         bValue = prices[b].CHANGEPCT24HOUR
       }
 
@@ -252,11 +257,15 @@ module.exports = (app) => {
       let aValue = 0
       let bValue = 0
 
-      if (prices[a]) {
+      if (prices[a] &&
+        prices[a].PRICE > 0 &&
+        prices[a].TOTALVOLUME24HTO >= 10000) {
         aValue = prices[a].CHANGEPCT24HOUR
       }
 
-      if (prices[b]) {
+      if (prices[b] &&
+        prices[b].PRICE > 0 &&
+        prices[b].TOTALVOLUME24HTO >= 10000) {
         bValue = prices[b].CHANGEPCT24HOUR
       }
 

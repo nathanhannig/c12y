@@ -4,12 +4,19 @@ import React from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
+import { Helmet } from 'react-helmet';
 
 // App
 import './index.css'
 
 const Privacy = () => (
   <div className="Privacy">
+    <Helmet>
+      <meta charSet="utf-8" />
+      <title>Privacy Policy- c12y.com</title>
+      <link rel="canonical" href="https://c12y.com/privacy" />
+      <meta name="description" content="Privacy Policy at c12y.com." />
+    </Helmet>
     <Grid>
       <Row>
         <Col xs={12}>

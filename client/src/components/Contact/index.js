@@ -16,6 +16,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Button from 'react-bootstrap/lib/Button'
+import { Helmet } from 'react-helmet';
 
 // App
 import axios from 'axios'
@@ -117,6 +118,12 @@ class Contact extends Component {
 
     return (
       <div className="Contact">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Contact Us - c12y.com</title>
+          <link rel="canonical" href="https://c12y.com/contact" />
+          <meta name="description" content="Contact Us at c12y.com." />
+        </Helmet>
         <Grid>
           <Row>
             <Col xs={12}>

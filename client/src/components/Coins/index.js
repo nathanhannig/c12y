@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Pager from 'react-bootstrap/lib/Pager'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet';
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -65,7 +66,11 @@ class Coins extends Component {
     }
 
     if (Object.keys(coins.coins).length === 0) {
-      return <Row>No coins to list.</Row>
+      return (<Row>
+          <Col xs={12}>
+            No coins to list.
+          </Col>
+        </Row>)
     }
 
     const html = Object.keys(coins.coins).map((item, i) => {
@@ -171,7 +176,7 @@ class Coins extends Component {
     } else if (page > 1 && page < last) {
       pager = (
         <Pager>
-          <LinkContainer to={`/coins/${page - 1}`}>
+          <LinkContainer to={`/coins${page - 1 === 1 ? '' : `/${page - 1}`}`}>
             <Pager.Item previous>&larr; Previous 100</Pager.Item>
           </LinkContainer>
           <LinkContainer to={`/coins/${page + 1}`}>
@@ -190,6 +195,14 @@ class Coins extends Component {
 
     return (
       <div className="Coins">
+        {!this.state.loading ?
+          (<Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
+            <link rel="canonical" href={`https://c12y.com/coins${coins.page === 1 ? '' : `/${coins.page}`}`} />
+            <meta name="description" content={`List of the top ${coins.begin + 1} - ${coins.end + 1} cryptocurrency coins. - c12y.com.`} />
+          </Helmet>) :
+          ''}
         <Grid>
           <Search coins={this.props.coins} />
         </Grid>
@@ -197,7 +210,7 @@ class Coins extends Component {
           <Row>
             <Col xs={12}>
               {!this.state.loading ?
-                <h3>Coin List ({coins.begin + 1} - {coins.end + 1})</h3> :
+                <h3>Coins (List {coins.begin + 1} - {coins.end + 1})</h3> :
                 ''}
             </Col>
           </Row>
