@@ -1,0 +1,44 @@
+.Overview .icon {
+  width: 75%;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.Overview .meta {
+  text-align: center;
+}
+
+.Overview .details {
+  padding-top: 10px;
+  font-size: 140%;
+}
+
+.Overview .title {
+  color: #818181;
+  font-size: 70%;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.Overview .value {
+  margin: 0 0 18px 0;
+}
+
+.Overview .coin-urls {
+  width: 75%;
+  margin: 5px 0;
+}
+
+/* Extra small devices (991px and down) */
+@media only screen and (max-width: 992px) {
+  .Overview .icon {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .Overview .website-url {
+    width: 100%;
+  }
+}
