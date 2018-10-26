@@ -12,34 +12,34 @@ import './index.css'
 const TopList = (props) => {
   const { name, list } = props
 
+  const listItems = list.map((item) => {
+    let valueStyle = 'green'
+
+    if (item.value[0] === '-') {
+      valueStyle = 'red'
+    } else if (item.value === '0.00%' || item.value === 'N/A') {
+      valueStyle = ''
+    }
+
+    return (
+      <Link key={item.name} to={item.name}>
+        <Row className="item">
+          <Col xs={6}>{item.name}</Col>
+          <Col className={`right ${valueStyle}`} xs={6}>{item.value}</Col>
+        </Row>
+      </Link>
+    )
+  })
+
   return (
     <div className="TopList">
       <Row>
         <Col xs={12}>
-          <p className="title">
-            {name}
-          </p>
+          <p className="title">{name}</p>
         </Col>
       </Row>
-      { list.map((item) => {
-        let valueStyle = 'green'
-
-        if (item.value[0] === '-') {
-          valueStyle = 'red'
-        } else if (item.value === '0.00%' || item.value === 'N/A') {
-          valueStyle = ''
-        }
-
-        return (
-          <Link key={item.name} to={item.name}>
-            <Row className="item">
-              <Col xs={6}>{item.name}</Col>
-              <Col className={`right ${valueStyle}`} xs={6}>{item.value}</Col>
-            </Row>
-          </Link>
-      )
-})}
-    </div >
+      {listItems}
+    </div>
   )
 }
 

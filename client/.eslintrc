@@ -16,6 +16,11 @@
     "import/first": 0,
     "semi": 0,
     "linebreak-style": 0,
+    "react/jsx-no-bind": ["error", {
+      "ignoreRefs": true,
+      "allowArrowFunctions": false,
+      "allowBind": false
+    }],
     "react/no-did-mount-set-state": 0,
     "react/forbid-prop-types": 0,
     "react/jsx-filename-extension": [1, {
