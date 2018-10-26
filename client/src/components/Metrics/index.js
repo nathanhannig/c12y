@@ -15,17 +15,17 @@ import './index.css'
 const Metrics = (props) => {
   const { coins } = props
 
-  const totalMarketCap = coins.totalMarketCap &&
-      API.formatDollarsWholeNumber(coins.totalMarketCap)
+  const totalMarketCap = (coins.totalMarketCap &&
+    API.formatDollarsWholeNumber(coins.totalMarketCap)) || '-'
 
-  const totalVolume24h = coins.totalVolume24h &&
-      API.formatDollarsWholeNumber(coins.totalVolume24h)
+  const totalVolume24h = (coins.totalVolume24h &&
+    API.formatDollarsWholeNumber(coins.totalVolume24h)) || '-'
 
-  const totalCoins = coins.coinList &&
-  API.formatWholeNumber(coins.coinList.length)
+  const totalCoins = (coins.coinList &&
+    API.formatWholeNumber(coins.coinList.length)) || '-'
 
-  const btcDominance = coins.btcDominance &&
-      API.formatPercent(coins.btcDominance)
+  const btcDominance = (coins.btcDominance &&
+    API.formatPercent(coins.btcDominance)) || '-'
 
   return (
     <div className="metrics">

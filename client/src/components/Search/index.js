@@ -16,6 +16,11 @@ import './index.css'
 class Search extends Component {
   state = {}
 
+  handleChange = (selected) => {
+    this.setState({ selected })
+    this.props.history.push(`/${selected[0].id}`)
+  }
+
   render() {
     const { coins } = this.props
     let options = ['']
@@ -32,10 +37,7 @@ class Search extends Component {
               <Typeahead
                 placeholder="Find a coin"
                 bsSize="large"
-                onChange={(selected) => {
-                  this.setState({ selected })
-                  this.props.history.push(`/${selected[0].id}`)
-                }}
+                onChange={this.handleChange}
                 options={options}
                 selected={this.state.selected}
               />

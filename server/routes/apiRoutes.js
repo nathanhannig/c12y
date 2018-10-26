@@ -6,27 +6,17 @@ module.exports = (app) => {
   })
 
   app.get('/api/watchlist', (req, res) => {
-    const {
-      data,
-      watchList,
-      coinList,
-      totalMarketCap,
-      totalVolume24h,
-      btcDominance,
-      baseImageUrl,
-      baseLinkUrl,
-      lastUpdated,
-    } = app.locals
+    const { data } = app.locals
 
-    if (!data.coins || !watchList) {
+    if (!data.coins || !data.watchList) {
       return res.status(500).send({ error: 'watch list not yet ready' })
     }
 
-    // Build watchlist
+    // Build watch list
     const coins = {}
     const prices = {}
 
-    watchList.map((item) => {
+    data.watchList.map((item) => {
       coins[item.id] = data.coins[item.id]
 
       if (data.prices
@@ -40,30 +30,21 @@ module.exports = (app) => {
     return res.send({
       coins,
       prices,
-      watchList,
-      coinList,
-      totalMarketCap,
-      totalVolume24h,
-      btcDominance,
-      baseImageUrl,
-      baseLinkUrl,
-      lastUpdated,
+      watchList: data.watchList,
+      coinList: data.coinList,
+      totalMarketCap: data.totalMarketCap,
+      totalVolume24h: data.totalVolume24h,
+      btcDominance: data.btcDominance,
+      baseImageUrl: data.baseImageUrl,
+      baseLinkUrl: data.baseLinkUrl,
+      lastUpdated: data.lastUpdated,
     })
   })
 
   app.get('/api/all/:page', (req, res) => {
-    const {
-      data,
-      coinList,
-      totalMarketCap,
-      totalVolume24h,
-      btcDominance,
-      baseImageUrl,
-      baseLinkUrl,
-      lastUpdated,
-    } = app.locals
+    const { data } = app.locals
 
-    if (!data || !coinList) {
+    if (!data || !data.coinList) {
       return res.status(500).send({ error: 'coin list not yet ready' })
     }
 
@@ -75,29 +56,29 @@ module.exports = (app) => {
     // Return 100 results
     const end = (page * 100) - 1
     const begin = end - 99
-    const total = coinList.length
+    const total = data.coinList.length
 
     const coins = {}
     const prices = {}
     for (let i = begin; i <= end && i < total; i += 1) {
-      coins[coinList[i].id] = data.coins[coinList[i].id]
+      coins[data.coinList[i].id] = data.coins[data.coinList[i].id]
 
       if (data.prices
-        && data.prices[coinList[i].id]) {
-        prices[coinList[i].id] = data.prices[coinList[i].id]
+        && data.prices[data.coinList[i].id]) {
+        prices[data.coinList[i].id] = data.prices[data.coinList[i].id]
       }
     }
 
     return res.send({
       coins,
       prices,
-      coinList,
-      totalMarketCap,
-      totalVolume24h,
-      btcDominance,
-      baseImageUrl,
-      baseLinkUrl,
-      lastUpdated,
+      coinList: data.coinList,
+      totalMarketCap: data.totalMarketCap,
+      totalVolume24h: data.totalVolume24h,
+      btcDominance: data.btcDominance,
+      baseImageUrl: data.baseImageUrl,
+      baseLinkUrl: data.baseLinkUrl,
+      lastUpdated: data.lastUpdated,
       page,
       begin,
       end,
@@ -106,12 +87,7 @@ module.exports = (app) => {
   })
 
   app.get('/api/coin/:coin', (req, res) => {
-    const {
-      data,
-      baseImageUrl,
-      baseLinkUrl,
-      lastUpdated,
-    } = app.locals
+    const { data } = app.locals
 
     const coin = req.params.coin.toUpperCase()
 
@@ -126,9 +102,9 @@ module.exports = (app) => {
       return res.send({
         coin: data.coins[coin],
         price: data.prices[coin],
-        baseImageUrl,
-        baseLinkUrl,
-        lastUpdated,
+        baseImageUrl: data.baseImageUrl,
+        baseLinkUrl: data.baseLinkUrl,
+        lastUpdated: data.lastUpdated,
       })
     }
 
@@ -136,9 +112,9 @@ module.exports = (app) => {
       && data.coins[coin]) {
       return res.send({
         coin: data.coins[coin],
-        baseImageUrl,
-        baseLinkUrl,
-        lastUpdated,
+        baseImageUrl: data.baseImageUrl,
+        baseLinkUrl: data.baseLinkUrl,
+        lastUpdated: data.lastUpdated,
       })
     }
 
@@ -146,34 +122,28 @@ module.exports = (app) => {
   })
 
   app.get('/api/gainers', (req, res) => {
-    const {
-      topGainers,
-      lastUpdated,
-    } = app.locals
+    const { data } = app.locals
 
-    if (!topGainers) {
+    if (!data.topGainers) {
       return res.status(500).send({ error: 'gainers not yet ready' })
     }
 
     return res.send({
-      list: topGainers,
-      lastUpdated,
+      list: data.topGainers,
+      lastUpdated: data.lastUpdated,
     })
   })
 
   app.get('/api/losers', (req, res) => {
-    const {
-      topLosers,
-      lastUpdated,
-    } = app.locals
+    const { data } = app.locals
 
-    if (!topLosers) {
+    if (!data.topLosers) {
       return res.status(500).send({ error: 'losers not yet ready' })
     }
 
     return res.send({
-      list: topLosers,
-      lastUpdated,
+      list: data.topLosers,
+      lastUpdated: data.lastUpdated,
     })
   })
 }
