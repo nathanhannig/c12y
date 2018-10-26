@@ -6,7 +6,6 @@ import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Button from 'react-bootstrap/lib/Button'
-import { IoAndroidHappy as SmileyFace } from 'react-icons/lib/io'
 import PropTypes from 'prop-types'
 
 // Redux
@@ -15,6 +14,7 @@ import { connect } from 'react-redux'
 import { fetchGainers, fetchLosers } from '../../actions'
 
 // App
+import { IoMdHappy as SmileyFace } from 'react-icons/io'
 import format from 'date-fns/format'
 import TopList from '../../components/TopList'
 import TipModal from '../../components/TipModal'
@@ -91,7 +91,7 @@ class Footer extends Component {
           <Row className="tip">
             <Col xs={12}>
               <Button bsStyle="success" onClick={this.handleModalShow}>
-                <SmileyFace size={40} /> Give A Tip!
+                <SmileyFace className="smiley" size={40} /> Give A Tip!
               </Button>
             </Col>
           </Row>

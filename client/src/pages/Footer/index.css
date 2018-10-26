@@ -59,3 +59,7 @@ footer .tip {
   font-size: 120%;
   text-align: center;
 }
+
+footer .smiley {
+  vertical-align: middle;
+}
