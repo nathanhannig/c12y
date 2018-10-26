@@ -9,10 +9,10 @@ import FormGroup from 'react-bootstrap/lib/FormGroup'
 import InputGroup from 'react-bootstrap/lib/InputGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { IoAndroidHappy as SmileyFace } from 'react-icons/lib/io'
 import PropTypes from 'prop-types'
 
 // App
+import { IoMdHappy as SmileyFace } from 'react-icons/io'
 import './index.css'
 
 class TipModal extends Component {

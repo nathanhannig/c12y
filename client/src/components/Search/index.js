@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 // App
-import { IoAndroidSearch as SearchIcon } from 'react-icons/lib/io'
+import { IoMdSearch as SearchIcon } from 'react-icons/io'
 import './index.css'
 
 class Search extends Component {

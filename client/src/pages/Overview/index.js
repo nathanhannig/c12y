@@ -142,12 +142,12 @@ class Overview extends Component {
             {icon ? <img className="icon" src={icon} alt={name} /> : ''}
 
             {coin.coin.WebsiteUrl ?
-              <a href={coin.coin.WebsiteUrl} target="_blank">
+              <a href={coin.coin.WebsiteUrl} rel="noopener noreferrer" target="_blank">
                 <Button bsSize="small" bsStyle="primary" className="coin-urls">Website</Button>
               </a> : ''}
 
             {twitter ?
-              <a href={twitterUrl} target="_blank">
+              <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
                 <Button bsSize="small" bsStyle="info" className="coin-urls">Twitter - {twitter}</Button>
               </a> : ''}
           </Col>
