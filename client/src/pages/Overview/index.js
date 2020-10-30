@@ -68,63 +68,44 @@ class Overview extends Component {
       )
     }
 
-    const name = coin.coin.FullName
-
-    const icon =
-      coin.coin.ImageUrl
-      && `${coin.baseImageUrl + coin.coin.ImageUrl}?width=200`
-
-    const algorithm = coin.coin.Algorithm
-    const proofType = coin.coin.ProofType
-    const fullyPremined = coin.coin.FullyPremined
-    const preMinedValue = coin.coin.PreMinedValue
-    const totalCoinSupply = Number.isNaN(Number(coin.coin.TotalCoinSupply)) ?
-      coin.coin.TotalCoinSupply :
-      API.formatWholeNumber(coin.coin.TotalCoinSupply)
-
-    const twitter = coin.coin.Twitter
-    const twitterUrl = coin.coin.Twitter[0] === '@' ?
-      `http://www.twitter.com/${coin.coin.Twitter.substr(1)}` :
-      `http://www.twitter.com/${coin.coin.Twitter}`
+    const { name } = coin.coin
+    const algorithm = coin.coin.algorithm ? coin.coin.algorithm : 'N/A'
+    const icon = coin.coin.image && coin.coin.image.large
+    const { twitter } = coin.coin
+    const twitterUrl = `http://www.twitter.com/${coin.coin.twitter}`
 
     let price = 'N/A'
-    let supply = 'N/A'
-    let totalVolume24HTo = 'N/A'
-    let open24Hour = 'N/A'
+    let volume24Hour = 'N/A'
     let high24Hour = 'N/A'
     let low24Hour = 'N/A'
     let change24Hour = 'N/A'
     let changePct24Hour = 'N/A'
     let marketCap = 'N/A'
+    let circulatingSupply = 'N/A'
 
-    // Check if RAW info is available
     if (coin.price) {
       // Convert to $ with commas
-      price = API.formatDollars(coin.price.PRICE)
-
-      // Convert to whole number with commas
-      supply = API.formatWholeNumber(coin.price.SUPPLY)
+      price = API.formatDollars(coin.price.price)
 
       // Convert to $ with commas
-      totalVolume24HTo = API.formatDollars(coin.price.TOTALVOLUME24HTO)
+      volume24Hour = API.formatDollars(coin.price.volume_24h)
 
       // Convert to $ with commas
-      open24Hour = API.formatDollars(coin.price.OPEN24HOUR)
+      high24Hour = API.formatDollars(coin.price.volume_high_24h)
 
       // Convert to $ with commas
-      high24Hour = API.formatDollars(coin.price.HIGH24HOUR)
+      low24Hour = API.formatDollars(coin.price.volume_low_24h)
 
       // Convert to $ with commas
-      low24Hour = API.formatDollars(coin.price.LOW24HOUR)
-
-      // Convert to $ with commas
-      change24Hour = API.formatDollars(coin.price.CHANGE24HOUR)
+      change24Hour = API.formatDollars(coin.price.change_24h)
 
       // Convert to % with commas
-      changePct24Hour = API.formatPercent(coin.price.CHANGEPCT24HOUR)
+      changePct24Hour = API.formatPercent(coin.price.change_percentage_24h)
 
       // Convert to $ with commas
-      marketCap = API.formatDollars(coin.price.MKTCAP)
+      marketCap = API.formatDollars(coin.price.market_cap)
+
+      circulatingSupply = API.formatWholeNumber(coin.price.circulating_supply)
     }
 
     let changeStyle
@@ -141,15 +122,25 @@ class Overview extends Component {
           <Col xs={12} sm={4} md={3} className="meta">
             {icon ? <img className="icon" src={icon} alt={name} /> : ''}
 
-            {coin.coin.WebsiteUrl ?
-              <a href={coin.coin.WebsiteUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="primary" className="coin-urls">Website</Button>
-              </a> : ''}
+            {coin.coin.websiteUrl
+              ? (
+                <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
+                  <Button bsSize="small" bsStyle="primary" className="coin-urls">Website</Button>
+                </a>
+              ) : ''}
 
-            {twitter ?
-              <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="info" className="coin-urls">Twitter - {twitter}</Button>
-              </a> : ''}
+            {twitter
+              ? (
+                <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
+                  <Button bsSize="small" bsStyle="info" className="coin-urls">
+
+
+Twitter -
+                    {' '}
+                    {twitter}
+                  </Button>
+                </a>
+              ) : ''}
           </Col>
           <Col xs={12} sm={4} md={4} className="details">
             <Row>
@@ -159,35 +150,23 @@ class Overview extends Component {
                 'Change',
                 `${change24Hour} <span class="${changeStyle}">(${changePct24Hour})</span>`,
               )}
-              {this.renderCoinOverviewItem('volume', 'Volume', totalVolume24HTo)}
-              {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
-              {this.renderCoinOverviewItem('open24Hour', 'Open', open24Hour)}
               {this.renderCoinOverviewItem('high24Hour', 'High', high24Hour)}
               {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
+
             </Row>
           </Col>
           <Col xs={12} sm={4} md={5} className="details">
             <Row>
-              {this.renderCoinOverviewItem('supply', 'Circulating Supply', supply)}
-              {this.renderCoinOverviewItem('totalCoinSupply', 'Total Coin Supply', totalCoinSupply)}
+              {this.renderCoinOverviewItem('volume', 'Volume', volume24Hour)}
+              {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
+              {this.renderCoinOverviewItem('circulatingSupply', 'Circulating Supply', circulatingSupply)}
               {this.renderCoinOverviewItem('algorithm', 'Algorithm', algorithm)}
-              {this.renderCoinOverviewItem('proofType', 'Proof Type', proofType)}
-              {this.renderCoinOverviewItem('fullyPremined', 'Fully Pre-Mined', fullyPremined)}
-              {this.renderCoinOverviewItem('preMinedValue', 'Pre-Mined Value', preMinedValue)}
             </Row>
           </Col>
         </Row>
         <Row className="details">
-          {coin.coin.Description
-            ? <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.Description)}</Col>
-            : ''
-          }
-          {coin.coin.Features
-            ? <Col xs={12}>{this.renderCoinOverviewItemHTML('features', 'Features', coin.coin.Features)}</Col>
-            : ''
-          }
-          {coin.coin.Technology
-            ? <Col xs={12}>{this.renderCoinOverviewItemHTML('technology', 'Technology', coin.coin.Technology)}</Col>
+          {coin.coin.description
+            ? <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.description)}</Col>
             : ''
           }
         </Row>
@@ -200,24 +179,25 @@ class Overview extends Component {
   render() {
     const { coin } = this.props
 
-    const name = coin.coin ? coin.coin.FullName : ''
-    const symbol = coin.coin ? coin.coin.Symbol : ''
-    const price = coin.price ? API.formatDollars(coin.price.PRICE) : 'N/A'
+    const id = coin.coin ? coin.coin.id : ''
+    const name = coin.coin ? coin.coin.name : ''
+    const symbol = coin.coin ? coin.coin.symbol : ''
+    const price = coin.price ? API.formatDollars(coin.price.price) : 'N/A'
 
     return (
       <div className="Overview">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>{`${name} ${price} - c12y.com`}</title>
-          <link rel="canonical" href={`https://c12y.com/${symbol.toLowerCase()}`} />
+          <title>{`${name} (${symbol.toUpperCase()}) price, volume, market cap, and info | c12y.com`}</title>
+          <link rel="canonical" href={`https://c12y.com/${id.toLowerCase()}`} />
           <meta name="description" content={`${name}`} />
         </Helmet>
         <Grid>
-          {coin.coin ?
-            (
+          {coin.coin
+            ? (
               <Row>
                 <Col xs={12}>
-                  <h3>{`${coin.coin.FullName} Details`}</h3>
+                  <h3>{`${coin.coin.name} (${coin.coin.symbol.toUpperCase()}) Details`}</h3>
                 </Col>
               </Row>
             ) : ''}
