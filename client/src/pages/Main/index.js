@@ -1,7 +1,6 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-// import { Grid, Row, Col } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -11,10 +10,10 @@ import { Helmet } from 'react-helmet';
 // Redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { formatDistance } from 'date-fns'
 import { fetchCoins } from '../../actions'
 
 // App
-import { formatDistance } from 'date-fns'
 import Metrics from '../../components/Metrics'
 import Search from '../../components/Search'
 import CoinItem from '../../components/CoinItem'
@@ -50,10 +49,9 @@ class Main extends Component {
     }
 
     const html = Object.keys(coins.coins).map((item, i) => {
-      const name = coins.coins[item].FullName
+      const { name } = coins.coins[item]
 
-      const icon = coins.coins[item].ImageUrl
-        && `${coins.baseImageUrl + coins.coins[item].ImageUrl}?width=50`
+      const icon = coins.coins[item].image && coins.coins[item].image.small
 
       let price = 'N/A'
       let change = 'N/A'
@@ -61,20 +59,19 @@ class Main extends Component {
       let volume = 'N/A'
       let marketCap = 'N/A'
 
-      // Check if RAW USD info is available
       if (coins.prices[item]) {
         // Convert to $ with commas
-        price = API.formatDollars(coins.prices[item].PRICE)
+        price = API.formatDollars(coins.prices[item].price)
 
         // Convert to percent
-        change = API.formatPercent(coins.prices[item].CHANGEPCT24HOUR)
+        change = API.formatPercent(coins.prices[item].change_percentage_24h)
 
         // Convert to whole number with commas
-        supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
+        supply = API.formatWholeNumber(coins.prices[item].circulating_supply)
 
         // Convert to whole $ with commas
-        volume = API.formatDollarsWholeNumber(coins.prices[item].TOTALVOLUME24HTO)
-        marketCap = API.formatDollarsWholeNumber(coins.prices[item].MKTCAP)
+        volume = API.formatDollarsWholeNumber(coins.prices[item].volume_24h)
+        marketCap = API.formatDollarsWholeNumber(coins.prices[item].market_cap)
       }
 
       return (
@@ -109,7 +106,13 @@ class Main extends Component {
     html.push((
       <Row key="lastUpdated" className="last-updated">
         <Col xs={12}>
-          <p>Last updated { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }</p>
+          <p>
+
+
+Last updated
+            {' '}
+            { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }
+          </p>
         </Col>
       </Row>
     ))
@@ -129,7 +132,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div className="Main" >
+      <div className="Main">
         <Helmet>
           <meta charSet="utf-8" />
           <title>Cryptocurrency Prices - c12y.com</title>

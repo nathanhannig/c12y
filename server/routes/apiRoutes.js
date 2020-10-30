@@ -35,8 +35,6 @@ module.exports = (app) => {
       totalMarketCap: data.totalMarketCap,
       totalVolume24h: data.totalVolume24h,
       btcDominance: data.btcDominance,
-      baseImageUrl: data.baseImageUrl,
-      baseLinkUrl: data.baseLinkUrl,
       lastUpdated: data.lastUpdated,
     })
   })
@@ -76,8 +74,6 @@ module.exports = (app) => {
       totalMarketCap: data.totalMarketCap,
       totalVolume24h: data.totalVolume24h,
       btcDominance: data.btcDominance,
-      baseImageUrl: data.baseImageUrl,
-      baseLinkUrl: data.baseLinkUrl,
       lastUpdated: data.lastUpdated,
       page,
       begin,
@@ -89,7 +85,7 @@ module.exports = (app) => {
   app.get('/api/coin/:coin', (req, res) => {
     const { data } = app.locals
 
-    const coin = req.params.coin.toUpperCase()
+    const coin = req.params.coin.toLowerCase()
 
     if (!data) {
       return res.status(500).send({ error: 'coin list not yet ready' })
@@ -102,8 +98,6 @@ module.exports = (app) => {
       return res.send({
         coin: data.coins[coin],
         price: data.prices[coin],
-        baseImageUrl: data.baseImageUrl,
-        baseLinkUrl: data.baseLinkUrl,
         lastUpdated: data.lastUpdated,
       })
     }
@@ -112,8 +106,6 @@ module.exports = (app) => {
       && data.coins[coin]) {
       return res.send({
         coin: data.coins[coin],
-        baseImageUrl: data.baseImageUrl,
-        baseLinkUrl: data.baseLinkUrl,
         lastUpdated: data.lastUpdated,
       })
     }
@@ -128,8 +120,17 @@ module.exports = (app) => {
       return res.status(500).send({ error: 'gainers not yet ready' })
     }
 
+    const list = [];
+    data.topGainers.forEach((item) => {
+      list.push({
+        id: item.id,
+        name: data.coins[item.id].name,
+        value: item.value,
+      })
+    })
+
     return res.send({
-      list: data.topGainers,
+      list,
       lastUpdated: data.lastUpdated,
     })
   })
@@ -141,8 +142,17 @@ module.exports = (app) => {
       return res.status(500).send({ error: 'losers not yet ready' })
     }
 
+    const list = [];
+    data.topLosers.forEach((item) => {
+      list.push({
+        id: item.id,
+        name: data.coins[item.id].name,
+        value: item.value,
+      })
+    })
+
     return res.send({
-      list: data.topLosers,
+      list,
       lastUpdated: data.lastUpdated,
     })
   })

@@ -2,13 +2,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-// import { Grid, Row, Col, Pager } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Pager from 'react-bootstrap/lib/Pager'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet';
+import { formatDistance } from 'date-fns'
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -16,7 +16,6 @@ import { connect } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
-import { formatDistance } from 'date-fns'
 import Search from '../../components/Search'
 import CoinItem from '../../components/CoinItem'
 import API from '../../utils'
@@ -33,8 +32,8 @@ class Coins extends Component {
     let page = 1
 
     if (match.params.page) {
-      if (Number.isNaN(Number(match.params.page)) ||
-        parseInt(match.params.page, 10) < 1) {
+      if (Number.isNaN(Number(match.params.page))
+        || parseInt(match.params.page, 10) < 1) {
         this.props.history.replace('/coins')
       }
 
@@ -69,6 +68,8 @@ class Coins extends Component {
       return (
         <Row>
           <Col xs={12}>
+
+
             No coins to list.
           </Col>
         </Row>
@@ -78,11 +79,9 @@ class Coins extends Component {
     const html = Object.keys(coins.coins).map((item, i) => {
       const counter = coins.begin + i + 1
 
-      const name = coins.coins[item].FullName
+      const { name } = coins.coins[item]
 
-      const icon =
-        coins.coins[item].ImageUrl &&
-        `${coins.baseImageUrl + coins.coins[item].ImageUrl}?width=50`
+      const icon = coins.coins[item].image && coins.coins[item].image.small
 
       let price = 'N/A'
       let change = 'N/A'
@@ -90,20 +89,19 @@ class Coins extends Component {
       let volume = 'N/A'
       let marketCap = 'N/A'
 
-      // Check if RAW USD info is available
       if (coins.prices[item]) {
         // Convert to $ with commas
-        price = API.formatDollars(coins.prices[item].PRICE)
+        price = API.formatDollars(coins.prices[item].price)
 
         // Convert to percent
-        change = API.formatPercent(coins.prices[item].CHANGEPCT24HOUR)
+        change = API.formatPercent(coins.prices[item].change_percentage_24h)
 
         // Convert to whole number with commas
-        supply = API.formatWholeNumber(coins.prices[item].SUPPLY)
+        supply = API.formatWholeNumber(coins.prices[item].circulating_supply)
 
         // Convert to whole $ with commas
-        volume = API.formatDollarsWholeNumber(coins.prices[item].TOTALVOLUME24HTO)
-        marketCap = API.formatDollarsWholeNumber(coins.prices[item].MKTCAP)
+        volume = API.formatDollarsWholeNumber(coins.prices[item].volume_24h)
+        marketCap = API.formatDollarsWholeNumber(coins.prices[item].market_cap)
       }
 
       return (
@@ -138,7 +136,13 @@ class Coins extends Component {
     html.push((
       <Row key="lastUpdated" className="last-updated">
         <Col xs={12}>
-          <p>Last updated { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }</p>
+          <p>
+
+
+Last updated
+            {' '}
+            { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }
+          </p>
         </Col>
       </Row>
     ))
@@ -149,8 +153,8 @@ class Coins extends Component {
   renderPager = () => {
     const { coins } = this.props
 
-    if (this.state.loading ||
-      (!coins.coins || Object.keys(coins.coins).length === 0)) {
+    if (this.state.loading
+      || (!coins.coins || Object.keys(coins.coins).length === 0)) {
       return ''
     }
 
@@ -197,25 +201,42 @@ class Coins extends Component {
 
     return (
       <div className="Coins">
-        {!this.state.loading ?
-          (
+        {!this.state.loading
+          ? (
             <Helmet>
               <meta charSet="utf-8" />
               <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
               <link rel="canonical" href={`https://c12y.com/coins${coins.page === 1 ? '' : `/${coins.page}`}`} />
               <meta name="description" content={`List of the top ${coins.begin + 1} - ${coins.end + 1} cryptocurrency coins. - c12y.com.`} />
             </Helmet>
-          ) :
-          ''}
+          )
+          : ''}
         <Grid>
           <Search coins={this.props.coins} />
         </Grid>
         <Grid>
           <Row>
             <Col xs={12}>
-              {!this.state.loading ?
-                <h3>Coins (List {coins.begin + 1} - {coins.end + 1})</h3> :
-                ''}
+              {!this.state.loading
+                ? (
+                  <h3>
+
+
+Coins (List
+                    {' '}
+                    {coins.begin + 1}
+                    {' '}
+
+
+-
+                    {' '}
+                    {coins.end + 1}
+
+
+)
+                  </h3>
+                )
+                : ''}
             </Col>
           </Row>
           {renderPager}
