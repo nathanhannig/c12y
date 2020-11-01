@@ -15,7 +15,7 @@ export const fetchUser = () => async (dispatch) => {
   })
 }
 
-export const fetchCoins = page => async (dispatch) => {
+export const fetchCoins = (page) => async (dispatch) => {
   let response
 
   if (page) {
@@ -30,7 +30,7 @@ export const fetchCoins = page => async (dispatch) => {
   })
 }
 
-export const fetchCoin = coin => async (dispatch) => {
+export const fetchCoin = (coin) => async (dispatch) => {
   const response = await API.fetchCoin(coin)
 
   dispatch({

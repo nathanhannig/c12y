@@ -15,13 +15,25 @@ const CoinItem = (props) => {
   if (props.header) {
     html = (
       <Row className="header vertical-align">
-        <Col sm={12} md={1}>{props.counter}</Col>
+        <Col sm={12} md={1}>
+          {props.counter}
+        </Col>
         <Col smHidden md={1} />
-        <Col sm={12} md={2}>{props.name}</Col>
-        <Col sm={12} md={2}>{props.price}</Col>
-        <Col sm={12} md={2}>{props.change}</Col>
-        <Col sm={12} md={2}>{props.supply}</Col>
-        <Col sm={12} md={2}>{props.volume}</Col>
+        <Col sm={12} md={2}>
+          {props.name}
+        </Col>
+        <Col sm={12} md={2}>
+          {props.price}
+        </Col>
+        <Col sm={12} md={2}>
+          {props.change}
+        </Col>
+        <Col sm={12} md={2}>
+          {props.supply}
+        </Col>
+        <Col sm={12} md={2}>
+          {props.volume}
+        </Col>
       </Row>
     )
   } else {
@@ -35,25 +47,35 @@ const CoinItem = (props) => {
 
     html = (
       <Row className="list vertical-align">
-        <Col xs={2} sm={1} md={1} className="counter">{props.counter}</Col>
-        <Col xs={4} sm={2} md={1} className="icon">{props.icon ? <img src={props.icon} alt={props.name} /> : ''}</Col>
-        <Col xs={6} sm={9} md={2} className="name">{props.name}</Col>
-        <Col xs={12} sm={12} md={2} data-title="Price:" className="price">{props.price}</Col>
+        <Col xs={2} sm={1} md={1} className="counter">
+          {props.counter}
+        </Col>
+        <Col xs={4} sm={2} md={1} className="icon">
+          {props.icon ? <img src={props.icon} alt={props.name} /> : ''}
+        </Col>
+        <Col xs={6} sm={9} md={2} className="name">
+          {props.name}
+        </Col>
+        <Col xs={12} sm={12} md={2} data-title="Price:" className="price">
+          {props.price}
+        </Col>
         <Col xs={12} sm={12} md={2} data-title="Change:" className="price">
           <span className={changeStyle}>{props.change}</span>
         </Col>
-        <Col xs={12} sm={12} md={2} data-title="Circulating:" className="supply">{props.supply}</Col>
-        <Col xs={12} sm={12} md={2} data-title="Volume:" className="volume">{props.volume}</Col>
-        <Col xs={12} sm={12} mdHidden lgHidden data-title="Market Cap:" className="market">{props.marketCap}</Col>
+        <Col xs={12} sm={12} md={2} data-title="Circulating:" className="supply">
+          {props.supply}
+        </Col>
+        <Col xs={12} sm={12} md={2} data-title="Volume:" className="volume">
+          {props.volume}
+        </Col>
+        <Col xs={12} sm={12} mdHidden lgHidden data-title="Market Cap:" className="market">
+          {props.marketCap}
+        </Col>
       </Row>
     )
   }
 
-  return (
-    <div className="CoinItem">
-      {html}
-    </div>
-  )
+  return <div className="CoinItem">{html}</div>
 }
 
 CoinItem.propTypes = {

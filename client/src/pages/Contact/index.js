@@ -16,7 +16,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup'
 import FormControl from 'react-bootstrap/lib/FormControl'
 import ControlLabel from 'react-bootstrap/lib/ControlLabel'
 import Button from 'react-bootstrap/lib/Button'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 
 // App
 import axios from 'axios'
@@ -63,18 +63,14 @@ class Contact extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const { name } = target
 
-    this.setState({
+    this.setState((prevState) => ({
       [name]: value,
-      touched: new Set([...this.state.touched, name]),
-    })
+      touched: new Set([...prevState.touched, name]),
+    }))
   }
 
   handleSubmit = async (event) => {
-    const {
-      name,
-      email,
-      message,
-    } = this.state
+    const { name, email, message } = this.state
 
     event.preventDefault()
 
@@ -83,18 +79,17 @@ class Contact extends Component {
       errors: {},
     })
 
-    if (this.getValidationState('name') === 'success'
-      && this.getValidationState('email') === 'success'
-      && this.getValidationState('message') === 'success') {
+    if (
+      this.getValidationState('name') === 'success' &&
+      this.getValidationState('email') === 'success' &&
+      this.getValidationState('message') === 'success'
+    ) {
       try {
-        await axios.post(
-          '/email/contact',
-          {
-            name,
-            email,
-            message,
-          },
-        )
+        await axios.post('/email/contact', {
+          name,
+          email,
+          message,
+        })
 
         this.setState({
           sent: true,
@@ -133,32 +128,29 @@ class Contact extends Component {
           <Row>
             <Col xs={12}>
               <form onSubmit={this.handleSubmit}>
-                { sent ?
+                {sent ? (
                   <div className="formSuccess">
                     <p>Email Sent</p>
-                  </div> :
+                  </div>
+                ) : (
                   ''
-                }
+                )}
 
-                { Object.keys(errors).length ?
+                {Object.keys(errors).length ? (
                   <div className="formErrors">
                     {Object.keys(errors).map((item) => {
-                  if (errors[item].length > 0) {
-                    return (
-                      <p key={item}>{errors[item]}</p>
-                    )
-                  }
+                      if (errors[item].length > 0) {
+                        return <p key={item}>{errors[item]}</p>
+                      }
 
-                  return ''
-                })}
-                  </div> :
-                ''
-              }
+                      return ''
+                    })}
+                  </div>
+                ) : (
+                  ''
+                )}
 
-                <FormGroup
-                  controlId="formBasicText"
-                  validationState={this.getValidationState('name')}
-                >
+                <FormGroup controlId="formBasicText" validationState={this.getValidationState('name')}>
                   <ControlLabel>Your Name</ControlLabel>
                   <FormControl
                     name="name"
@@ -170,10 +162,7 @@ class Contact extends Component {
                   />
                   <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup
-                  controlId="formBasicText"
-                  validationState={this.getValidationState('email')}
-                >
+                <FormGroup controlId="formBasicText" validationState={this.getValidationState('email')}>
                   <ControlLabel>Email Address</ControlLabel>
                   <FormControl
                     name="email"
@@ -185,10 +174,7 @@ class Contact extends Component {
                   />
                   <FormControl.Feedback />
                 </FormGroup>
-                <FormGroup
-                  controlId="formControlsTextarea"
-                  validationState={this.getValidationState('message')}
-                >
+                <FormGroup controlId="formControlsTextarea" validationState={this.getValidationState('message')}>
                   <ControlLabel>Message</ControlLabel>
                   <FormControl
                     name="message"
@@ -200,12 +186,14 @@ class Contact extends Component {
                   <FormControl.Feedback />
                 </FormGroup>
                 <p>
-                  {submitted ?
-                    <Button disabled type="submit">Submit</Button> :
+                  {submitted ? (
+                    <Button disabled type="submit">
+                      Submit
+                    </Button>
+                  ) : (
                     <Button type="submit">Submit</Button>
-                  }
+                  )}
                 </p>
-
               </form>
             </Col>
           </Row>

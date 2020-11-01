@@ -26,82 +26,69 @@ class TipModal extends Component {
   }
 
   renderAddress = (title, copied, address, handleCopy) => (
-    <React.Fragment>
+    <>
       <h4>
         {title}
-        {copied ?
-          <span style={{ display: 'inline-block', float: 'right' }} className="green">Copied</span> :
-          null}
+        {copied ? (
+          <span style={{ display: 'inline-block', float: 'right' }} className="green">
+            Copied
+          </span>
+        ) : null}
       </h4>
       <FormGroup>
         <InputGroup>
           <FormControl type="text" readOnly defaultValue={address} />
           <InputGroup.Button>
-            <CopyToClipboard
-              text={address}
-              onCopy={handleCopy}
-            >
+            <CopyToClipboard text={address} onCopy={handleCopy}>
               <Button>Copy</Button>
             </CopyToClipboard>
           </InputGroup.Button>
         </InputGroup>
       </FormGroup>
-    </React.Fragment>
+    </>
   )
 
   render() {
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
         <Modal.Header closeButton>
-          <Modal.Title>
-            Give A Tip Of Crypto!
-          </Modal.Title>
+          <Modal.Title>Give A Tip Of Crypto!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
             <Col xs={12} sm={9}>
               <p className="center">
-                Put a smile on our faces and support us by donating to our wallet
-                addresses below. If you would like to donate a cryptocurrency not
-                listed below, please contact us!
+                Put a smile on our faces and support us by donating to our wallet addresses below. If you would like to
+                donate a cryptocurrency not listed below, please contact us!
               </p>
             </Col>
             <Col xs={12} sm={3} style={{ textAlign: 'center' }}>
               <SmileyFace size={60} />
             </Col>
           </Row>
-          {this.renderAddress(
-            'Bitcoin',
-            this.state.copiedBTC,
-            this.state.addressBTC,
-            () => this.setState({
+          {this.renderAddress('Bitcoin', this.state.copiedBTC, this.state.addressBTC, () =>
+            this.setState({
               copiedBTC: true,
               copiedETH: false,
               copiedLTC: false,
-            }),
-        )}
+            })
+          )}
           <hr />
-          {this.renderAddress(
-            'Ethereum',
-            this.state.copiedETH,
-            this.state.addressETH,
-            () => this.setState({
+          {this.renderAddress('Ethereum', this.state.copiedETH, this.state.addressETH, () =>
+            this.setState({
               copiedBTC: false,
               copiedETH: true,
               copiedLTC: false,
-            }),
-        )}
+            })
+          )}
           <hr />
-          {this.renderAddress(
-            'Litecoin',
-            this.state.copiedLTC,
-            this.state.addressLTC,
-            () => this.setState({
+          {this.renderAddress('Litecoin', this.state.copiedLTC, this.state.addressLTC, () =>
+            this.setState({
               copiedBTC: false,
               copiedETH: false,
               copiedLTC: true,
-            }),
-        )}
+            })
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.onHide}>Close</Button>

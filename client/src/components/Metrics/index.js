@@ -15,17 +15,13 @@ import './index.css'
 const Metrics = (props) => {
   const { coins } = props
 
-  const totalMarketCap = (coins.totalMarketCap &&
-    API.formatDollarsWholeNumber(coins.totalMarketCap)) || '-'
+  const totalMarketCap = (coins.totalMarketCap && API.formatDollarsWholeNumber(coins.totalMarketCap)) || '-'
 
-  const totalVolume24h = (coins.totalVolume24h &&
-    API.formatDollarsWholeNumber(coins.totalVolume24h)) || '-'
+  const totalVolume24h = (coins.totalVolume24h && API.formatDollarsWholeNumber(coins.totalVolume24h)) || '-'
 
-  const totalCoins = (coins.coinList &&
-    API.formatWholeNumber(coins.coinList.length)) || '-'
+  const totalCoins = (coins.coinList && API.formatWholeNumber(coins.coinList.length)) || '-'
 
-  const btcDominance = (coins.btcDominance &&
-    API.formatPercent(coins.btcDominance)) || '-'
+  const btcDominance = (coins.btcDominance && API.formatPercent(coins.btcDominance)) || '-'
 
   return (
     <div className="metrics">
@@ -34,7 +30,9 @@ const Metrics = (props) => {
           <Row>
             <Col xs={12} md={6}>
               <Row>
-                <Col className="header" xs={12}>Market Cap</Col>
+                <Col className="header" xs={12}>
+                  Market Cap
+                </Col>
                 <Col className="value" xs={12}>
                   {totalMarketCap}
                 </Col>
@@ -42,7 +40,9 @@ const Metrics = (props) => {
             </Col>
             <Col xs={12} md={6}>
               <Row>
-                <Col className="header" xs={12}>24H Volume</Col>
+                <Col className="header" xs={12}>
+                  24H Volume
+                </Col>
                 <Col className="value" xs={12}>
                   {totalVolume24h}
                 </Col>
@@ -54,7 +54,9 @@ const Metrics = (props) => {
           <Row>
             <Col xs={12} md={6}>
               <Row>
-                <Col className="header" xs={12}>Total Coins</Col>
+                <Col className="header" xs={12}>
+                  Total Coins
+                </Col>
                 <Col className="value" xs={12}>
                   {totalCoins}
                 </Col>
@@ -62,7 +64,9 @@ const Metrics = (props) => {
             </Col>
             <Col xs={12} md={6}>
               <Row>
-                <Col className="header" xs={12}>BTC Dominance</Col>
+                <Col className="header" xs={12}>
+                  BTC Dominance
+                </Col>
                 <Col className="value" xs={12}>
                   {btcDominance}
                 </Col>

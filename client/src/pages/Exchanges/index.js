@@ -4,7 +4,7 @@ import React from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 
 // App
 import exchangeList from './data.json'
@@ -25,13 +25,19 @@ const renderList = () => {
     </Row>
   ))
 
-  html.unshift((
+  html.unshift(
     <Row key="header" className="header vertical-align">
-      <Col xs={12} md={1}>#</Col>
-      <Col xs={12} md={2}>Name</Col>
-      <Col xs={12} md={9}>Description</Col>
+      <Col xs={12} md={1}>
+        #
+      </Col>
+      <Col xs={12} md={2}>
+        Name
+      </Col>
+      <Col xs={12} md={9}>
+        Description
+      </Col>
     </Row>
-  ))
+  )
 
   return html
 }
@@ -53,11 +59,9 @@ const Exchanges = () => (
       <Row>
         <Col xs={12}>
           <p>
-            Exchanges are websites that allow users to buy, sell, and
-            trade cryptocurrencies for other assets, such as conventional
-            fiat money, or different digital currencies. Below is a list
-            of different cryptocurrecy exchanges that may be available
-            for you to use.
+            Exchanges are websites that allow users to buy, sell, and trade cryptocurrencies for other assets, such as
+            conventional fiat money, or different digital currencies. Below is a list of different cryptocurrecy
+            exchanges that may be available for you to use.
           </p>
         </Col>
       </Row>

@@ -17,9 +17,7 @@ const Login = () => (
         </Col>
       </Row>
       <Row>
-        <Col xs={12}>
-          TODO
-        </Col>
+        <Col xs={12}>TODO</Col>
       </Row>
     </Grid>
   </div>

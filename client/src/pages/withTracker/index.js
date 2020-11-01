@@ -11,10 +11,7 @@ const DEFAULT_CONFIG = {
   // },
 }
 
-GoogleAnalytics.initialize(
-  process.env.REACT_APP_GOOGLE_ANALYTICS_ID,
-  DEFAULT_CONFIG,
-)
+GoogleAnalytics.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID, DEFAULT_CONFIG)
 
 const withTracker = (ChildComponent, options = {}) => {
   const trackPage = (page) => {
@@ -31,7 +28,7 @@ const withTracker = (ChildComponent, options = {}) => {
       trackPage(page)
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
       const currentPage = this.props.location.pathname
       const nextPage = nextProps.location.pathname
 
@@ -41,6 +38,7 @@ const withTracker = (ChildComponent, options = {}) => {
     }
 
     render() {
+      // eslint-disable-next-line react/jsx-props-no-spreading
       return <ChildComponent {...this.props} />
     }
   }

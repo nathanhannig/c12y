@@ -1,19 +1,20 @@
 {
-  "parser": "babel-eslint",
-  "parserOptions": {
-      "sourceType": "module",
-      "allowImportExportEverywhere": false,
-      "codeFrame": false,
-      "ecmaVersion": 8
-  },
-  "extends": "airbnb-base",
-  "env": {
-      "node": true,
-      "jest": true
-  },
-  "rules": {
-      "import/first": 0,
-      "semi": 0,
-      "linebreak-style": 0
-  }
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": false,
+        "codeFrame": false,
+        "ecmaVersion": 11
+    },
+    "extends": "airbnb-base",
+    "env": {
+        "node": true,
+        "jest": true
+    },
+    "rules": {
+        "import/first": 0,
+        "semi": 0,
+        "linebreak-style": 0,
+        "max-len": ["error", { "code": 120 }]
+    }
 }

@@ -45,18 +45,22 @@ const getCoinInfo = async (app, id) => {
         small: response.data.image.small,
         large: response.data.image.large,
       }
-      data.coins[id].description = response.data.description.en
+      data.coins[id].description = response.data.description?.en
         .replace(reBadSyntax, '').replace(reRelativeURL, '"https://www.coingecko.com/')
-      data.coins[id].facebook = response.data.links.facebook_username
-      data.coins[id].twitter = response.data.links.twitter_screen_name
+      data.coins[id].facebook = response.data.links?.facebook_username
+      data.coins[id].twitter = response.data.links?.twitter_screen_name
       data.coins[id].startDate = response.data.genesis_date
-      data.coins[id].websiteUrl = response.data.links.homepage[0]
+
+      // ESLint hates destructuring directly into the object property, so this is the work around
+      const [websiteUrl] = response.data.links?.homepage
+      data.coins[id].websiteUrl = websiteUrl
+
       data.coins[id].algorithm = response.data.hashing_algorithm
       data.coins[id].categories = response.data.categories
       data.coins[id].lastUpdated = response.data.last_updated
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 }
 
@@ -86,8 +90,8 @@ const getCoinList = async (app) => {
                 symbol: item.symbol,
               },
               // callback function
-              (err) => {
-                if (err) { logger.error(err) }
+              (error) => {
+                if (error) { logger.error(`${format(new Date())} - ${error}`) }
               },
             )
           }
@@ -108,8 +112,8 @@ const getCoinList = async (app) => {
             },
             { upsert: true },
             // callback function
-            (err) => {
-              if (err) { logger.error(err) }
+            (error) => {
+              if (error) { logger.error(`${format(new Date())} - ${error}`) }
             },
           )
 
@@ -168,7 +172,7 @@ const getCoinList = async (app) => {
       }
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 }
 
@@ -187,28 +191,28 @@ const getPricesByChunk = async (page, limit) => {
     if (response.data) {
       response.data.forEach((item) => {
         prices[item.id] = {}
-        prices[item.id].price = item.market_data.current_price.usd
-        prices[item.id].volume_24h = item.market_data.total_volume.usd
-        prices[item.id].volume_high_24h = item.market_data.high_24h.usd
-        prices[item.id].volume_low_24h = item.market_data.low_24h.usd
-        prices[item.id].change_24h = item.market_data.price_change_24h
-        prices[item.id].change_percentage_1h = item.market_data.price_change_percentage_1h_in_currency.usd
-        prices[item.id].change_percentage_24h = item.market_data.price_change_percentage_24h_in_currency.usd
-        prices[item.id].change_percentage_7d = item.market_data.price_change_percentage_7d_in_currency.usd
-        prices[item.id].change_percentage_14d = item.market_data.price_change_percentage_14d_in_currency.usd
-        prices[item.id].change_percentage_30d = item.market_data.price_change_percentage_30d_in_currency.usd
-        prices[item.id].change_percentage_60d = item.market_data.price_change_percentage_60d_in_currency.usd
-        prices[item.id].change_percentage_200d = item.market_data.price_change_percentage_200d_in_currency.usd
-        prices[item.id].change_percentage_1y = item.market_data.price_change_percentage_1y_in_currency.usd
-        prices[item.id].market_cap = item.market_data.market_cap.usd
-        prices[item.id].market_cap_rank = item.market_data.market_cap_rank
-        prices[item.id].total_supply = item.market_data.total_supply
-        prices[item.id].circulating_supply = item.market_data.circulating_supply
+        prices[item.id].price = item.market_data?.current_price?.usd
+        prices[item.id].volume_24h = item.market_data?.total_volume?.usd
+        prices[item.id].volume_high_24h = item.market_data?.high_24h?.usd
+        prices[item.id].volume_low_24h = item.market_data?.low_24h?.usd
+        prices[item.id].change_24h = item.market_data?.price_change_24h
+        prices[item.id].change_percentage_1h = item.market_data?.price_change_percentage_1h_in_currency?.usd
+        prices[item.id].change_percentage_24h = item.market_data?.price_change_percentage_24h_in_currency?.usd
+        prices[item.id].change_percentage_7d = item.market_data?.price_change_percentage_7d_in_currency?.usd
+        prices[item.id].change_percentage_14d = item.market_data?.price_change_percentage_14d_in_currency?.usd
+        prices[item.id].change_percentage_30d = item.market_data?.price_change_percentage_30d_in_currency?.usd
+        prices[item.id].change_percentage_60d = item.market_data?.price_change_percentage_60d_in_currency?.usd
+        prices[item.id].change_percentage_200d = item.market_data?.price_change_percentage_200d_in_currency?.usd
+        prices[item.id].change_percentage_1y = item.market_data?.price_change_percentage_1y_in_currency?.usd
+        prices[item.id].market_cap = item.market_data?.market_cap?.usd
+        prices[item.id].market_cap_rank = item.market_data?.market_cap_rank
+        prices[item.id].total_supply = item.market_data?.total_supply
+        prices[item.id].circulating_supply = item.market_data?.circulating_supply
         prices[item.id].lastUpdated = item.last_updated
       })
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 
   return prices;
@@ -223,17 +227,15 @@ const sortByMktCap = (app, list) => {
 
     // API data is very inaccurate for small market coins so we attempt to filter
     // out small coins with the below filters, usually market cap is too high
-    if (prices[a.id]
-      && prices[a.id].price > 0
-      && prices[a.id].volume_24h >= 10000
-      && prices[a.id].market_cap) {
+    if (prices[a.id]?.price > 0
+      && prices[a.id]?.volume_24h >= 10000
+      && prices[a.id]?.market_cap) {
       aValue = prices[a.id].market_cap
     }
 
-    if (prices[b.id]
-      && prices[b.id].price > 0
-      && prices[b.id].volume_24h >= 10000
-      && prices[b.id].market_cap) {
+    if (prices[b.id]?.price > 0
+      && prices[b.id]?.volume_24h >= 10000
+      && prices[b.id]?.market_cap) {
       bValue = prices[b.id].market_cap
     }
 
@@ -243,7 +245,6 @@ const sortByMktCap = (app, list) => {
   return sortedList
 }
 
-
 const topGainers = (app, list) => {
   const { prices } = app.locals.data
   const gainers = [...list]
@@ -252,15 +253,15 @@ const topGainers = (app, list) => {
     let aValue = 0
     let bValue = 0
 
-    if (prices[a.id]
-      && prices[a.id].price > 0
-      && prices[a.id].volume_24h >= 100000) {
+    if (prices[a.id]?.price > 0
+      && prices[a.id]?.volume_24h >= 100000
+      && prices[a.id]?.change_percentage_24h) {
       aValue = prices[a.id].change_percentage_24h
     }
 
-    if (prices[b.id]
-      && prices[b.id].price > 0
-      && prices[b.id].volume_24h >= 100000) {
+    if (prices[b.id]?.price > 0
+      && prices[b.id]?.volume_24h >= 100000
+      && prices[b.id]?.change_percentage_24h) {
       bValue = prices[b.id].change_percentage_24h
     }
 
@@ -272,7 +273,7 @@ const topGainers = (app, list) => {
   return top5.map(item => ({
     id: item.id,
     name: item.name,
-    value: prices[item.id].change_percentage_24h,
+    value: prices[item.id]?.change_percentage_24h,
   }))
 }
 
@@ -283,15 +284,15 @@ const topLosers = (app, list) => {
     let aValue = 0
     let bValue = 0
 
-    if (prices[a.id]
-      && prices[a.id].price > 0
-      && prices[a.id].volume_24h >= 100000) {
+    if (prices[a.id]?.price > 0
+      && prices[a.id]?.volume_24h >= 100000
+      && prices[a.id]?.change_percentage_24h) {
       aValue = prices[a.id].change_percentage_24h
     }
 
-    if (prices[b.id]
-      && prices[b.id].price > 0
-      && prices[b.id].volume_24h >= 100000) {
+    if (prices[b.id]?.price > 0
+      && prices[b.id]?.volume_24h >= 100000
+      && prices[b.id]?.change_percentage_24h) {
       bValue = prices[b.id].change_percentage_24h
     }
 
@@ -303,7 +304,7 @@ const topLosers = (app, list) => {
   return top5.map(item => ({
     id: item.id,
     name: item.name,
-    value: prices[item.id].change_percentage_24h,
+    value: prices[item.id]?.change_percentage_24h,
   }))
 }
 
@@ -313,7 +314,7 @@ const calculateTotalMarketCap = (app, list) => {
   // Only include top 100 coins due to inaccurate CryptoCompare API info
   // for small market coins
   const totalMarketCap = list.slice(0, 100).reduce((acc, cur) => {
-    if (prices[cur.id]) {
+    if (prices[cur.id]?.market_cap) {
       return acc + prices[cur.id].market_cap
     }
 
@@ -328,7 +329,7 @@ const calculateTotal24hVolume = (app, list) => {
 
   // Only include top 500 coins due to inaccuracies for small market coins
   const total24hVolume = list.slice(0, 500).reduce((acc, cur) => {
-    if (prices[cur.id]) {
+    if (prices[cur.id]?.volume_24h) {
       return acc + prices[cur.id].volume_24h
     }
 
@@ -341,9 +342,7 @@ const calculateTotal24hVolume = (app, list) => {
 const calculateBTCDominance = (app) => {
   const { data } = app.locals
 
-  return data.prices.bitcoin
-    && data.prices.bitcoin.market_cap
-    && ((data.prices.bitcoin.market_cap / data.totalMarketCap) * 100)
+  return ((data.prices?.bitcoin?.market_cap / data.totalMarketCap) * 100)
 }
 
 module.exports = (app) => {

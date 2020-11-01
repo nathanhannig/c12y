@@ -4,7 +4,7 @@ import React from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 
 // App
 import walletList from './data.json'
@@ -25,13 +25,19 @@ const renderList = () => {
     </Row>
   ))
 
-  html.unshift((
+  html.unshift(
     <Row key="header" className="header vertical-align">
-      <Col xs={12} md={1}>#</Col>
-      <Col xs={12} md={2}>Name</Col>
-      <Col xs={12} md={9}>Description</Col>
+      <Col xs={12} md={1}>
+        #
+      </Col>
+      <Col xs={12} md={2}>
+        Name
+      </Col>
+      <Col xs={12} md={9}>
+        Description
+      </Col>
     </Row>
-  ))
+  )
 
   return html
 }
@@ -53,12 +59,9 @@ const Wallets = () => (
       <Row>
         <Col xs={12}>
           <p>
-            Wallets are a software program that stores private and
-            public keys and interacts with various blockchain to
-            allow users to send and receive cryptocurrencies and
-            view their balance. If you want to use cryptocurrency,
-            you will need to have a digital wallet to store your
-            cryptocurrency off of exchange websites.
+            Wallets are a software program that stores private and public keys and interacts with various blockchain to
+            allow users to send and receive cryptocurrencies and view their balance. If you want to use cryptocurrency,
+            you will need to have a digital wallet to store your cryptocurrency off of exchange websites.
           </p>
         </Col>
       </Row>

@@ -5,7 +5,7 @@ import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import PropTypes from 'prop-types'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -90,7 +90,7 @@ class Main extends Component {
       )
     })
 
-    html.unshift((
+    html.unshift(
       <CoinItem
         key="header"
         header
@@ -101,23 +101,22 @@ class Main extends Component {
         volume="Volume"
         supply="Circulating"
       />
-    ))
+    )
 
-    html.push((
+    html.push(
       <Row key="lastUpdated" className="last-updated">
         <Col xs={12}>
           <p>
-
-
-Last updated
-            {' '}
-            { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }
+            Last updated{' '}
+            {formatDistance(this.props.coins.lastUpdated, new Date(), {
+              addSuffix: true,
+            })}
           </p>
         </Col>
       </Row>
-    ))
+    )
 
-    html.push((
+    html.push(
       <Link key="viewTopCoins" to="/coins">
         <Row className="viewTopCoins">
           <Col xs={12}>
@@ -125,7 +124,7 @@ Last updated
           </Col>
         </Row>
       </Link>
-    ))
+    )
 
     return html
   }
@@ -137,7 +136,10 @@ Last updated
           <meta charSet="utf-8" />
           <title>Cryptocurrency Prices - c12y.com</title>
           <link rel="canonical" href="https://c12y.com/" />
-          <meta name="description" content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)." />
+          <meta
+            name="description"
+            content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)."
+          />
         </Helmet>
         <Grid>
           <Metrics coins={this.props.coins} />
@@ -173,7 +175,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
