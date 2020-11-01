@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
   "dependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^5.3.0"
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
