@@ -28,7 +28,8 @@ import './index.css'
 // wrapping/composing
 const withTrackerWrapper = (Page) => {
   const Wrapper = withTracker(Page)
-  return props => <Wrapper {...props} />
+  // eslint-disable-next-line react/display-name, react/jsx-props-no-spreading
+  return (props) => <Wrapper {...props} />
 }
 
 class App extends Component {
@@ -44,9 +45,12 @@ class App extends Component {
             <Header />
             <div className="Content">
               <Switch>
-                <Route exact path="/coins" render={props => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
-                <Route exact path="/coins/1" render={() => (<Redirect to="/coins" />)} />
-                <Route path="/coins/:page" render={props => withTrackerWrapper(Coins)({ ...props, key: props.match.params.coin })} />
+                <Route exact path="/coins" render={(props) => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
+                <Route exact path="/coins/1" render={() => <Redirect to="/coins" />} />
+                <Route
+                  path="/coins/:page"
+                  render={(props) => withTrackerWrapper(Coins)({ ...props, key: props.match.params.coin })}
+                />
                 <Route path="/about" component={withTracker(About)} />
                 <Route path="/contact" component={withTracker(Contact)} />
                 <Route path="/exchanges" component={withTracker(Exchanges)} />
@@ -54,7 +58,10 @@ class App extends Component {
                 <Route path="/privacy" component={withTracker(Privacy)} />
                 <Route path="/register" component={withTracker(Register)} />
                 <Route path="/wallets" component={withTracker(Wallets)} />
-                <Route path="/:coin" render={props => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })} />
+                <Route
+                  path="/:coin"
+                  render={(props) => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })}
+                />
                 <Route path="/" component={withTracker(Main)} />
               </Switch>
             </div>
@@ -76,7 +83,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(App)
+export default connect(null, mapDispatchToProps)(App)

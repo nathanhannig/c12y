@@ -3,7 +3,8 @@
         "browser": true,
         "commonjs": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     "parser": "babel-eslint",
     "extends": [
@@ -40,6 +41,7 @@
         "prettier"
     ],
     "rules": {
+        "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
         "react/react-in-jsx-scope": "off",
         "react/jsx-filename-extension": [
             1,
@@ -51,6 +53,9 @@
             }
         ],
         "react/display-name": 1,
+        "react/state-in-constructor": ["error", "never"],
+        "react/destructuring-assignment": 0,
+        "react/forbid-prop-types": 0,
         "semi": 0,
         "linebreak-style": 0,
         "prettier/prettier": [

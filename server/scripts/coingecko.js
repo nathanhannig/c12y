@@ -50,7 +50,11 @@ const getCoinInfo = async (app, id) => {
       data.coins[id].facebook = response.data.links.facebook_username
       data.coins[id].twitter = response.data.links.twitter_screen_name
       data.coins[id].startDate = response.data.genesis_date
-      data.coins[id].websiteUrl = response.data.links.homepage[0]
+
+      // ESLint hates destructuring directly into the object property, so this is the work around
+      const [websiteUrl] = response.data.links.homepage
+      data.coins[id].websiteUrl = websiteUrl
+
       data.coins[id].algorithm = response.data.hashing_algorithm
       data.coins[id].categories = response.data.categories
       data.coins[id].lastUpdated = response.data.last_updated

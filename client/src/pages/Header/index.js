@@ -21,13 +21,17 @@ class Header extends Component {
       case false:
         return (
           <Nav pullRight>
-            <NavItem href="/auth/google" eventKey={1}>Login with <span style={{ fontWeight: 'bold' }}>Google</span></NavItem>
+            <NavItem href="/auth/google" eventKey={1}>
+              Login with <span style={{ fontWeight: 'bold' }}>Google</span>
+            </NavItem>
           </Nav>
         )
       default:
         return (
           <Nav pullRight>
-            <NavItem href="/api/logout" eventKey={1}>Logout</NavItem>
+            <NavItem href="/api/logout" eventKey={1}>
+              Logout
+            </NavItem>
           </Nav>
         )
     }
@@ -64,7 +68,6 @@ class Header extends Component {
             </Nav>
 
             {this.renderContent()}
-
           </Navbar.Collapse>
         </Navbar>
       </header>
@@ -87,11 +90,6 @@ function mapStateToProps({ auth }) {
 // React Router updates active class in Navbar outside Redux
 // 'My views aren’t updating when something changes outside of Redux'
 // https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md
-export default connect(
-  mapStateToProps,
-  null,
-  null,
-  {
-    pure: false,
-  },
-)(Header)
+export default connect(mapStateToProps, null, null, {
+  pure: false,
+})(Header)

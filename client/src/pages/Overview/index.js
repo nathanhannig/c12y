@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Button from 'react-bootstrap/lib/Button'
 import PropTypes from 'prop-types'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 
 // Redux
 import { bindActionCreators } from 'redux'
@@ -36,8 +36,12 @@ class Overview extends Component {
   renderCoinOverviewItem = (item, title, value) => (
     <Col className={item} xs={12}>
       <Row>
-        <Col xs={12} className="title">{title}</Col>
-        <Col xs={12} className="value">{value}</Col>
+        <Col xs={12} className="title">
+          {title}
+        </Col>
+        <Col xs={12} className="value">
+          {value}
+        </Col>
       </Row>
     </Col>
   )
@@ -45,7 +49,9 @@ class Overview extends Component {
   renderCoinOverviewItemHTML = (item, title, value) => (
     <Col className={item} xs={12}>
       <Row>
-        <Col xs={12} className="title">{title}</Col>
+        <Col xs={12} className="title">
+          {title}
+        </Col>
         <Col xs={12} className="value" dangerouslySetInnerHTML={{ __html: value }} />
       </Row>
     </Col>
@@ -55,7 +61,7 @@ class Overview extends Component {
     const { coin } = this.props
 
     if (this.state.loading) {
-      return (<div className="loader" />)
+      return <div className="loader" />
     }
 
     if (!coin.coin) {
@@ -116,31 +122,31 @@ class Overview extends Component {
       changeStyle = 'change'
     }
 
-    const html = [(
+    const html = [
       <div key="overview">
         <Row>
           <Col xs={12} sm={4} md={3} className="meta">
             {icon ? <img className="icon" src={icon} alt={name} /> : ''}
 
-            {coin.coin.websiteUrl
-              ? (
-                <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
-                  <Button bsSize="small" bsStyle="primary" className="coin-urls">Website</Button>
-                </a>
-              ) : ''}
+            {coin.coin.websiteUrl ? (
+              <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
+                <Button bsSize="small" bsStyle="primary" className="coin-urls">
+                  Website
+                </Button>
+              </a>
+            ) : (
+              ''
+            )}
 
-            {twitter
-              ? (
-                <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                  <Button bsSize="small" bsStyle="info" className="coin-urls">
-
-
-Twitter -
-                    {' '}
-                    {twitter}
-                  </Button>
-                </a>
-              ) : ''}
+            {twitter ? (
+              <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
+                <Button bsSize="small" bsStyle="info" className="coin-urls">
+                  Twitter - {twitter}
+                </Button>
+              </a>
+            ) : (
+              ''
+            )}
           </Col>
           <Col xs={12} sm={4} md={4} className="details">
             <Row>
@@ -148,11 +154,10 @@ Twitter -
               {this.renderCoinOverviewItemHTML(
                 'change24HourCombined',
                 'Change',
-                `${change24Hour} <span class="${changeStyle}">(${changePct24Hour})</span>`,
+                `${change24Hour} <span class="${changeStyle}">(${changePct24Hour})</span>`
               )}
               {this.renderCoinOverviewItem('high24Hour', 'High', high24Hour)}
               {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
-
             </Row>
           </Col>
           <Col xs={12} sm={4} md={5} className="details">
@@ -165,13 +170,14 @@ Twitter -
           </Col>
         </Row>
         <Row className="details">
-          {coin.coin.description
-            ? <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.description)}</Col>
-            : ''
-          }
+          {coin.coin.description ? (
+            <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.description)}</Col>
+          ) : (
+            ''
+          )}
         </Row>
-      </div>
-    )]
+      </div>,
+    ]
 
     return html
   }
@@ -182,7 +188,6 @@ Twitter -
     const id = coin.coin ? coin.coin.id : ''
     const name = coin.coin ? coin.coin.name : ''
     const symbol = coin.coin ? coin.coin.symbol : ''
-    const price = coin.price ? API.formatDollars(coin.price.price) : 'N/A'
 
     return (
       <div className="Overview">
@@ -193,14 +198,15 @@ Twitter -
           <meta name="description" content={`${name}`} />
         </Helmet>
         <Grid>
-          {coin.coin
-            ? (
-              <Row>
-                <Col xs={12}>
-                  <h3>{`${coin.coin.name} (${coin.coin.symbol.toUpperCase()}) Details`}</h3>
-                </Col>
-              </Row>
-            ) : ''}
+          {coin.coin ? (
+            <Row>
+              <Col xs={12}>
+                <h3>{`${coin.coin.name} (${coin.coin.symbol.toUpperCase()}) Details`}</h3>
+              </Col>
+            </Row>
+          ) : (
+            ''
+          )}
           {this.renderCoinOverview()}
         </Grid>
       </div>
@@ -227,7 +233,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Overview)
+export default connect(mapStateToProps, mapDispatchToProps)(Overview)

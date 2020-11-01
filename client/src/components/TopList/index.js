@@ -25,7 +25,9 @@ const TopList = (props) => {
       <Link key={item.id} to={item.id}>
         <Row className="item">
           <Col xs={6}>{item.name}</Col>
-          <Col className={`right ${valueStyle}`} xs={6}>{item.value}</Col>
+          <Col className={`right ${valueStyle}`} xs={6}>
+            {item.value}
+          </Col>
         </Row>
       </Link>
     )

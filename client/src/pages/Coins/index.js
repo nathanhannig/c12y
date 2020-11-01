@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Pager from 'react-bootstrap/lib/Pager'
 import PropTypes from 'prop-types'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 import { formatDistance } from 'date-fns'
 
 // Redux
@@ -32,8 +32,7 @@ class Coins extends Component {
     let page = 1
 
     if (match.params.page) {
-      if (Number.isNaN(Number(match.params.page))
-        || parseInt(match.params.page, 10) < 1) {
+      if (Number.isNaN(Number(match.params.page)) || parseInt(match.params.page, 10) < 1) {
         this.props.history.replace('/coins')
       }
 
@@ -67,11 +66,7 @@ class Coins extends Component {
     if (Object.keys(coins.coins).length === 0) {
       return (
         <Row>
-          <Col xs={12}>
-
-
-            No coins to list.
-          </Col>
+          <Col xs={12}>No coins to list.</Col>
         </Row>
       )
     }
@@ -120,7 +115,7 @@ class Coins extends Component {
       )
     })
 
-    html.unshift((
+    html.unshift(
       <CoinItem
         key="header"
         header
@@ -131,21 +126,15 @@ class Coins extends Component {
         volume="Volume"
         supply="Circulating"
       />
-    ))
+    )
 
-    html.push((
+    html.push(
       <Row key="lastUpdated" className="last-updated">
         <Col xs={12}>
-          <p>
-
-
-Last updated
-            {' '}
-            { formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true }) }
-          </p>
+          <p>Last updated {formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true })}</p>
         </Col>
       </Row>
-    ))
+    )
 
     return html
   }
@@ -153,8 +142,7 @@ Last updated
   renderPager = () => {
     const { coins } = this.props
 
-    if (this.state.loading
-      || (!coins.coins || Object.keys(coins.coins).length === 0)) {
+    if (this.state.loading || !coins.coins || Object.keys(coins.coins).length === 0) {
       return ''
     }
 
@@ -201,42 +189,32 @@ Last updated
 
     return (
       <div className="Coins">
-        {!this.state.loading
-          ? (
-            <Helmet>
-              <meta charSet="utf-8" />
-              <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
-              <link rel="canonical" href={`https://c12y.com/coins${coins.page === 1 ? '' : `/${coins.page}`}`} />
-              <meta name="description" content={`List of the top ${coins.begin + 1} - ${coins.end + 1} cryptocurrency coins. - c12y.com.`} />
-            </Helmet>
-          )
-          : ''}
+        {!this.state.loading ? (
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
+            <link rel="canonical" href={`https://c12y.com/coins${coins.page === 1 ? '' : `/${coins.page}`}`} />
+            <meta
+              name="description"
+              content={`List of the top ${coins.begin + 1} - ${coins.end + 1} cryptocurrency coins. - c12y.com.`}
+            />
+          </Helmet>
+        ) : (
+          ''
+        )}
         <Grid>
           <Search coins={this.props.coins} />
         </Grid>
         <Grid>
           <Row>
             <Col xs={12}>
-              {!this.state.loading
-                ? (
-                  <h3>
-
-
-Coins (List
-                    {' '}
-                    {coins.begin + 1}
-                    {' '}
-
-
--
-                    {' '}
-                    {coins.end + 1}
-
-
-)
-                  </h3>
-                )
-                : ''}
+              {!this.state.loading ? (
+                <h3>
+                  Coins (List {coins.begin + 1} - {coins.end + 1})
+                </h3>
+              ) : (
+                ''
+              )}
             </Col>
           </Row>
           {renderPager}
@@ -267,7 +245,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Coins)
+export default connect(mapStateToProps, mapDispatchToProps)(Coins)
