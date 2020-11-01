@@ -45,14 +45,14 @@ const getCoinInfo = async (app, id) => {
         small: response.data.image.small,
         large: response.data.image.large,
       }
-      data.coins[id].description = response.data.description.en
+      data.coins[id].description = response.data.description?.en
         .replace(reBadSyntax, '').replace(reRelativeURL, '"https://www.coingecko.com/')
-      data.coins[id].facebook = response.data.links.facebook_username
-      data.coins[id].twitter = response.data.links.twitter_screen_name
+      data.coins[id].facebook = response.data.links?.facebook_username
+      data.coins[id].twitter = response.data.links?.twitter_screen_name
       data.coins[id].startDate = response.data.genesis_date
 
       // ESLint hates destructuring directly into the object property, so this is the work around
-      const [websiteUrl] = response.data.links.homepage
+      const [websiteUrl] = response.data.links?.homepage
       data.coins[id].websiteUrl = websiteUrl
 
       data.coins[id].algorithm = response.data.hashing_algorithm
@@ -60,7 +60,7 @@ const getCoinInfo = async (app, id) => {
       data.coins[id].lastUpdated = response.data.last_updated
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 }
 
@@ -90,8 +90,8 @@ const getCoinList = async (app) => {
                 symbol: item.symbol,
               },
               // callback function
-              (err) => {
-                if (err) { logger.error(err) }
+              (error) => {
+                if (error) { logger.error(`${format(new Date())} - ${error}`) }
               },
             )
           }
@@ -112,8 +112,8 @@ const getCoinList = async (app) => {
             },
             { upsert: true },
             // callback function
-            (err) => {
-              if (err) { logger.error(err) }
+            (error) => {
+              if (error) { logger.error(`${format(new Date())} - ${error}`) }
             },
           )
 
@@ -172,7 +172,7 @@ const getCoinList = async (app) => {
       }
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 }
 
@@ -212,7 +212,7 @@ const getPricesByChunk = async (page, limit) => {
       })
     }
   } catch (error) {
-    logger.error(error)
+    logger.error(`${format(new Date())} - ${error}`)
   }
 
   return prices;
@@ -244,7 +244,6 @@ const sortByMktCap = (app, list) => {
 
   return sortedList
 }
-
 
 const topGainers = (app, list) => {
   const { prices } = app.locals.data

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const path = require('path')
 const express = require('express')
+const format = require('date-fns/format')
 const logger = require('loglevel')
 const mongoose = require('mongoose')
 const cookieSession = require('cookie-session')
@@ -19,9 +20,9 @@ mongoose.connect(keys.mongoURI, {
   useNewUrlParser: true,
   useFindAndModify: false,
 }).then(
-  () => logger.info('MongoDB successfully connected'),
+  () => logger.info(`${format(new Date())} - MongoDB successfully connected`),
 ).catch((err) => {
-  logger.error(`DB Connection Error: ${err.message}`)
+  logger.error(`${format(new Date())} - DB Connection Error: ${err.message}`)
   process.exit(-1)
 });
 
@@ -49,7 +50,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
-logger.info(`Server is running in ${process.env.NODE_ENV} mode`)
+logger.info(`${format(new Date())} - Server is running in ${process.env.NODE_ENV} mode`)
 
 require('./scripts/coingecko')(app).setup()
 
@@ -61,5 +62,5 @@ require('./routes/productionRoutes')(app)
 
 const port = process.env.PORT || 3001
 const server = app.listen(port, () => {
-  logger.info(`Listening on port ${server.address().port}`)
+  logger.info(`${format(new Date())} - Listening on port ${server.address().port}`)
 })
