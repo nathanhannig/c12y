@@ -1,6 +1,5 @@
 // React
 import React, { Component } from 'react'
-// import { Grid, Row, Col, Button } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -15,7 +14,7 @@ import { fetchCoin } from '../../actions'
 
 // App
 import API from '../../utils'
-import './index.css'
+import styles from './index.module.scss'
 
 Number.isNaN = require('number-is-nan')
 
@@ -34,12 +33,12 @@ class Overview extends Component {
   }
 
   renderCoinOverviewItem = (item, title, value) => (
-    <Col className={item} xs={12}>
+    <Col id={item} xs={12}>
       <Row>
-        <Col xs={12} className="title">
+        <Col xs={12} className={styles.title}>
           {title}
         </Col>
-        <Col xs={12} className="value">
+        <Col xs={12} className={styles.value}>
           {value}
         </Col>
       </Row>
@@ -47,12 +46,12 @@ class Overview extends Component {
   )
 
   renderCoinOverviewItemHTML = (item, title, value) => (
-    <Col className={item} xs={12}>
+    <Col id={item} xs={12}>
       <Row>
-        <Col xs={12} className="title">
+        <Col xs={12} className={styles.title}>
           {title}
         </Col>
-        <Col xs={12} className="value" dangerouslySetInnerHTML={{ __html: value }} />
+        <Col xs={12} className={styles.value} dangerouslySetInnerHTML={{ __html: value }} />
       </Row>
     </Col>
   )
@@ -125,12 +124,12 @@ class Overview extends Component {
     const html = [
       <div key="overview">
         <Row>
-          <Col xs={12} sm={4} md={3} className="meta">
-            {icon ? <img className="icon" src={icon} alt={name} /> : ''}
+          <Col xs={12} sm={4} md={3} className={styles.meta}>
+            {icon ? <img className={styles.icon} src={icon} alt={name} /> : ''}
 
             {coin.coin.websiteUrl ? (
               <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="primary" className="coin-urls">
+                <Button bsSize="small" bsStyle="primary" className={styles['coin-urls']}>
                   Website
                 </Button>
               </a>
@@ -140,7 +139,7 @@ class Overview extends Component {
 
             {twitter ? (
               <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="info" className="coin-urls">
+                <Button bsSize="small" bsStyle="info" className={styles['coin-urls']}>
                   Twitter - {twitter}
                 </Button>
               </a>
@@ -148,7 +147,7 @@ class Overview extends Component {
               ''
             )}
           </Col>
-          <Col xs={12} sm={4} md={4} className="details">
+          <Col xs={12} sm={4} md={4} className={styles.details}>
             <Row>
               {this.renderCoinOverviewItem('price', 'Price', price)}
               {this.renderCoinOverviewItemHTML(
@@ -160,7 +159,7 @@ class Overview extends Component {
               {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
             </Row>
           </Col>
-          <Col xs={12} sm={4} md={5} className="details">
+          <Col xs={12} sm={4} md={5} className={styles.details}>
             <Row>
               {this.renderCoinOverviewItem('volume', 'Volume', volume24Hour)}
               {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
@@ -169,7 +168,7 @@ class Overview extends Component {
             </Row>
           </Col>
         </Row>
-        <Row className="details">
+        <Row className={styles.details}>
           {coin.coin.description ? (
             <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.description)}</Col>
           ) : (
@@ -190,7 +189,7 @@ class Overview extends Component {
     const symbol = coin.coin ? coin.coin.symbol : ''
 
     return (
-      <div className="Overview">
+      <div>
         <Helmet>
           <meta charSet="utf-8" />
           <title>{`${name} (${symbol.toUpperCase()}) price, volume, market cap, and info | c12y.com`}</title>

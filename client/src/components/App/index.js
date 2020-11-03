@@ -16,14 +16,12 @@ import Coins from '../../pages/Coins'
 import Contact from '../../pages/Contact'
 import Exchanges from '../../pages/Exchanges'
 import Header from '../../pages/Header'
-import Login from '../../pages/Login'
 import Footer from '../../pages/Footer'
 import Main from '../../pages/Main'
 import Overview from '../../pages/Overview'
 import Privacy from '../../pages/Privacy'
-import Register from '../../pages/Register'
 import Wallets from '../../pages/Wallets'
-import './index.css'
+import './index.module.scss'
 
 // wrapping/composing
 const withTrackerWrapper = (Page) => {
@@ -54,9 +52,7 @@ class App extends Component {
                 <Route path="/about" component={withTracker(About)} />
                 <Route path="/contact" component={withTracker(Contact)} />
                 <Route path="/exchanges" component={withTracker(Exchanges)} />
-                <Route path="/login" component={withTracker(Login)} />
                 <Route path="/privacy" component={withTracker(Privacy)} />
-                <Route path="/register" component={withTracker(Register)} />
                 <Route path="/wallets" component={withTracker(Wallets)} />
                 <Route
                   path="/:coin"

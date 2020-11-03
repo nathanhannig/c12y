@@ -1,6 +1,5 @@
 // React
 import React, { Component } from 'react'
-// import { Row, Col, Modal, Button, FormGroup, InputGroup, FormControl } from 'react-bootstrap'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import Modal from 'react-bootstrap/lib/Modal'
@@ -13,7 +12,7 @@ import PropTypes from 'prop-types'
 
 // App
 import { IoMdHappy as SmileyFace } from 'react-icons/io'
-import './index.css'
+import styles from './index.module.scss'
 
 class TipModal extends Component {
   state = {
@@ -29,11 +28,7 @@ class TipModal extends Component {
     <>
       <h4>
         {title}
-        {copied ? (
-          <span style={{ display: 'inline-block', float: 'right' }} className="green">
-            Copied
-          </span>
-        ) : null}
+        {copied ? <span className={`green ${styles.copied}`}>Copied</span> : null}
       </h4>
       <FormGroup>
         <InputGroup>
@@ -62,7 +57,7 @@ class TipModal extends Component {
                 donate a cryptocurrency not listed below, please contact us!
               </p>
             </Col>
-            <Col xs={12} sm={3} style={{ textAlign: 'center' }}>
+            <Col xs={12} sm={3} className="center">
               <SmileyFace size={60} />
             </Col>
           </Row>

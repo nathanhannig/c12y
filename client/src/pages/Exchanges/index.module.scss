@@ -1,0 +1,40 @@
+.header {
+    padding: 10px 0;
+    color: #818181;
+    font-size: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    border-bottom: 1px solid #818181;
+}
+
+.list {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(129, 129, 129, 0.205);
+    text-align: center;
+}
+
+.counter {
+    font-size: 160%;
+}
+
+.name {
+    font-size: 120%;
+}
+
+.description {
+    font-size: 120%;
+    text-align: left;
+}
+
+/* Extra small devices (991px and down) */
+@media only screen and (max-width: 992px) {
+    .list {
+        text-align: left;
+    }
+
+    .header {
+        text-align: left;
+    }
+}

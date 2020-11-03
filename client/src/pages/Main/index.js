@@ -18,7 +18,7 @@ import Metrics from '../../components/Metrics'
 import Search from '../../components/Search'
 import CoinItem from '../../components/CoinItem'
 import API from '../../utils'
-import './index.css'
+import styles from './index.module.scss'
 
 class Main extends Component {
   state = { loading: true }
@@ -98,8 +98,8 @@ class Main extends Component {
         name="Name"
         price="Price"
         change="Change"
-        volume="Volume"
-        supply="Circulating"
+        volume="24h Volume"
+        marketCap="Market Cap"
       />
     )
 
@@ -118,7 +118,7 @@ class Main extends Component {
 
     html.push(
       <Link key="viewTopCoins" to="/coins">
-        <Row className="viewTopCoins">
+        <Row className={styles.viewTopCoins}>
           <Col xs={12}>
             <p>View Top 100 Coins</p>
           </Col>
@@ -131,7 +131,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div className="Main">
+      <div>
         <Helmet>
           <meta charSet="utf-8" />
           <title>Cryptocurrency Prices - c12y.com</title>

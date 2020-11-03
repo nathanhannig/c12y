@@ -1,0 +1,16 @@
+.formSuccess {
+  background-color: rgba(0, 255, 4, 0.301);
+  border: solid 1px #3c763d;
+  color: #3c763d;
+  padding: 10px 10px 0px 10px;
+  margin-bottom: 20px;
+}
+
+.formErrors {
+  background-color: rgba(255, 64, 64, 0.301);
+  border: solid 1px #ff0000;
+  color: #ff0000;
+  padding: 10px 10px 0px 10px;
+  margin-bottom: 20px;
+}
+

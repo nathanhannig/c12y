@@ -1,7 +1,6 @@
 // React
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-// import { Grid, Row, Col, Button } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -19,7 +18,7 @@ import { fetchGainers, fetchLosers } from '../../actions'
 import TopList from '../../components/TopList'
 import TipModal from '../../components/TipModal'
 import API from '../../utils'
-import './index.css'
+import styles from './index.module.scss'
 
 class Footer extends Component {
   state = {
@@ -45,9 +44,9 @@ class Footer extends Component {
 
   render() {
     return (
-      <footer>
+      <footer className={styles.footer}>
         <Grid>
-          <Row className="topLists">
+          <Row className={styles.topLists}>
             <Col xsHidden sm={1} />
             <Col xs={12} sm={4}>
               {this.props.gainers.list !== undefined ? (
@@ -80,7 +79,7 @@ class Footer extends Component {
             </Col>
             <Col xsHidden sm={1} />
           </Row>
-          <Row className="nav">
+          <Row className={styles.nav}>
             <Col xs={12}>
               <ul>
                 <li>
@@ -95,14 +94,14 @@ class Footer extends Component {
               </ul>
             </Col>
           </Row>
-          <Row className="tip">
+          <Row className={styles.tip}>
             <Col xs={12}>
               <Button bsStyle="success" onClick={this.handleModalShow}>
-                <SmileyFace className="smiley" size={40} /> Give A Tip!
+                <SmileyFace className={styles.smiley} size={40} /> Give A Tip!
               </Button>
             </Col>
           </Row>
-          <Row className="nav">
+          <Row className={styles.nav}>
             <Col xs={12}>
               <ul>
                 <li>Copyright &copy; {format(new Date(), 'yyyy')} by c12y.com</li>

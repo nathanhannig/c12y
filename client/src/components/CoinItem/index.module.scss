@@ -1,0 +1,94 @@
+.list {
+    padding: 18px 0;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid hsla(0, 0%, 51%, 0.205);
+    border-radius: 10px;
+    transition: background-color 0.2s;
+    text-align: center;
+    overflow-wrap: break-word;
+
+    &:hover {
+        background-color: #ececec;
+    }
+}
+
+.header {
+    padding: 10px 0;
+    color: #818181;
+    font-size: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    border-bottom: 1px solid #818181;
+}
+
+.counter {
+    font-size: 160%;
+}
+
+.icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.name,
+.price,
+.supply,
+.volume,
+.market {
+    font-size: 120%;
+}
+
+@media only screen and (max-width: 992px) {
+    .header:global(.vertical-align):global(.row) {
+        display: none;
+    }
+
+    .list {
+        text-align: left;
+    }
+
+    .icon {
+        display: inline-block;
+        padding: 0 5px;
+        width: auto;
+    }
+
+    .icon img {
+        height: 25px;
+        width: 25px;
+        vertical-align: bottom;
+    }
+
+    .name,
+    .counter {
+        display: inline-block;
+        padding: 0 5px;
+        width: auto;
+    }
+
+    .list:global(.row) div {
+        position: relative;
+    }
+
+    .list:global(.row) div:before {
+        color: rgba(0, 0, 0, 0.25);
+        position: absolute;
+        left: 30px;
+    }
+
+    .list:global(.row) div:nth-child(3) {
+        font-size: 160%;
+        margin-bottom: 10px;
+    }
+
+    .list:global(.row) div:nth-child(n + 4) {
+        padding-left: 130px;
+    }
+
+    .list:global(.row) div:nth-child(n + 1):before {
+        content: attr(data-title);
+        padding-left: -110px;
+    }
+}

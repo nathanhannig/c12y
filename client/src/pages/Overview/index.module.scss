@@ -1,0 +1,44 @@
+.icon {
+    width: 75%;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.meta {
+    text-align: center;
+}
+
+.details {
+    padding-top: 10px;
+    font-size: 140%;
+}
+
+.title {
+    color: #818181;
+    font-size: 70%;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.value {
+    margin: 0 0 18px 0;
+}
+
+.coin-urls {
+    width: 75%;
+    margin: 5px 0;
+}
+
+/* Extra small devices (991px and down) */
+@media only screen and (max-width: 992px) {
+    .icon {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .coin-urls {
+        width: 100%;
+    }
+}

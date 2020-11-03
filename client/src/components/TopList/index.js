@@ -1,13 +1,12 @@
 // React
 import React from 'react'
 import { Link } from 'react-router-dom'
-// import { Row, Col } from 'react-bootstrap'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import PropTypes from 'prop-types'
 
 // App
-import './index.css'
+import styles from './index.module.scss'
 
 const TopList = (props) => {
   const { name, list } = props
@@ -23,7 +22,7 @@ const TopList = (props) => {
 
     return (
       <Link key={item.id} to={item.id}>
-        <Row className="item">
+        <Row className={styles.item}>
           <Col xs={6}>{item.name}</Col>
           <Col className={`right ${valueStyle}`} xs={6}>
             {item.value}
@@ -34,10 +33,10 @@ const TopList = (props) => {
   })
 
   return (
-    <div className="TopList">
+    <div>
       <Row>
         <Col xs={12}>
-          <p className="title">{name}</p>
+          <p className={styles.title}>{name}</p>
         </Col>
       </Row>
       {listItems}

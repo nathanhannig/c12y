@@ -1,6 +1,5 @@
 // React
 import React, { Component } from 'react'
-// import { Row, Col } from 'react-bootstrap'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import { Typeahead } from 'react-bootstrap-typeahead'
@@ -11,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 
 // App
 import { IoMdSearch as SearchIcon } from 'react-icons/io'
-import './index.css'
+import styles from './index.module.scss'
 
 class Search extends Component {
   state = {}
@@ -32,9 +31,10 @@ class Search extends Component {
     return (
       <Row>
         <Col xs={12}>
-          <div className="search">
-            <div className="search-input">
+          <div className={styles.search}>
+            <div className={styles['search-input']}>
               <Typeahead
+                id="search-coins-typeahead"
                 placeholder="Find a coin"
                 bsSize="large"
                 onChange={this.handleChange}
@@ -42,7 +42,7 @@ class Search extends Component {
                 selected={this.state.selected}
               />
             </div>
-            <div className="search-icon">
+            <div className={styles['search-icon']}>
               <SearchIcon />
             </div>
           </div>
