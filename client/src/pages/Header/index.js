@@ -1,6 +1,5 @@
 // React
 import React, { Component } from 'react'
-// import { Navbar, Nav, NavItem } from 'react-bootstrap'
 import Navbar from 'react-bootstrap/lib/Navbar'
 import Nav from 'react-bootstrap/lib/Nav'
 import NavItem from 'react-bootstrap/lib/NavItem'
@@ -11,7 +10,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 // App
-import './index.css'
+import styles from './index.module.scss'
 
 class Header extends Component {
   renderContent() {
@@ -22,7 +21,7 @@ class Header extends Component {
         return (
           <Nav pullRight>
             <NavItem href="/auth/google" eventKey={1}>
-              Login with <span style={{ fontWeight: 'bold' }}>Google</span>
+              Login with <span className={styles.google}>Google</span>
             </NavItem>
           </Nav>
         )
@@ -39,17 +38,17 @@ class Header extends Component {
 
   render() {
     return (
-      <header>
+      <header className={styles.header}>
         <Navbar collapseOnSelect>
           <Navbar.Header>
             <LinkContainer to="/">
-              <Navbar.Brand>
-                <span className="crypto">c</span>
-                <span className="underline">
-                  <span className="crypto">rypto</span>
-                  <span className="currency">currenc</span>
+              <Navbar.Brand className={styles.logo}>
+                <span className={styles.crypto}>c</span>
+                <span className={styles.underline}>
+                  <span className={styles.crypto}>rypto</span>
+                  <span className={styles.currency}>currenc</span>
                 </span>
-                <span className="currency">y</span>
+                <span className={styles.currency}>y</span>
               </Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle />
@@ -57,13 +56,19 @@ class Header extends Component {
           <Navbar.Collapse>
             <Nav>
               <LinkContainer to="/coins">
-                <NavItem eventKey={1}>Coins</NavItem>
+                <NavItem eventKey={1} className={styles.link}>
+                  Coins
+                </NavItem>
               </LinkContainer>
               <LinkContainer to="/exchanges">
-                <NavItem eventKey={2}>Exchanges</NavItem>
+                <NavItem eventKey={2} className={styles.link}>
+                  Exchanges
+                </NavItem>
               </LinkContainer>
               <LinkContainer to="/wallets">
-                <NavItem eventKey={3}>Wallets</NavItem>
+                <NavItem eventKey={3} className={styles.link}>
+                  Wallets
+                </NavItem>
               </LinkContainer>
             </Nav>
 

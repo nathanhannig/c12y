@@ -1,6 +1,5 @@
 // React
 import React from 'react'
-// import { Grid, Row, Col } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -8,25 +7,25 @@ import { Helmet } from 'react-helmet'
 
 // App
 import walletList from './data.json'
-import './index.css'
+import styles from './index.module.scss'
 
 const renderList = () => {
   const html = walletList.map((item, i) => (
-    <Row key={item.name} className="list vertical-align">
-      <Col className="counter" xs={12} md={1}>
+    <Row key={item.name} className={`${styles.list} vertical-align`}>
+      <Col className={styles.counter} xs={12} md={1}>
         {i + 1}
       </Col>
-      <Col className="name" xs={12} md={2}>
+      <Col className={styles.name} xs={12} md={2}>
         <a href={item.link}>{item.name}</a>
       </Col>
-      <Col className="description" xs={12} md={9}>
+      <Col className={styles.description} xs={12} md={9}>
         {item.description}
       </Col>
     </Row>
   ))
 
   html.unshift(
-    <Row key="header" className="header vertical-align">
+    <Row key="header" className={`${styles.header} vertical-align`}>
       <Col xs={12} md={1}>
         #
       </Col>
@@ -43,7 +42,7 @@ const renderList = () => {
 }
 
 const Wallets = () => (
-  <div className="Wallets">
+  <div>
     <Helmet>
       <meta charSet="utf-8" />
       <title>Wallets - c12y.com</title>

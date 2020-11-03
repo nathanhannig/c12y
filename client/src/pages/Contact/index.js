@@ -1,14 +1,5 @@
 // React
 import React, { Component } from 'react'
-// import {
-//   Grid,
-//   Row,
-//   Col,
-//   FormGroup,
-//   FormControl,
-//   ControlLabel,
-//   Button,
-// } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -20,7 +11,7 @@ import { Helmet } from 'react-helmet'
 
 // App
 import axios from 'axios'
-import './index.css'
+import styles from './index.module.scss'
 
 class Contact extends Component {
   state = {
@@ -112,7 +103,7 @@ class Contact extends Component {
     const { submitted, sent, errors } = this.state
 
     return (
-      <div className="Contact">
+      <div>
         <Helmet>
           <meta charSet="utf-8" />
           <title>Contact Us - c12y.com</title>
@@ -129,7 +120,7 @@ class Contact extends Component {
             <Col xs={12}>
               <form onSubmit={this.handleSubmit}>
                 {sent ? (
-                  <div className="formSuccess">
+                  <div className={styles.formSuccess}>
                     <p>Email Sent</p>
                   </div>
                 ) : (
@@ -137,7 +128,7 @@ class Contact extends Component {
                 )}
 
                 {Object.keys(errors).length ? (
-                  <div className="formErrors">
+                  <div className={styles.formErrors}>
                     {Object.keys(errors).map((item) => {
                       if (errors[item].length > 0) {
                         return <p key={item}>{errors[item]}</p>

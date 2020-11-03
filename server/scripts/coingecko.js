@@ -405,6 +405,8 @@ module.exports = (app) => {
 
         // Calculate BTC Dominance
         data.btcDominance = calculateBTCDominance(app)
+
+        data.lastUpdated = Date.now()
       }
     }, 2 * 1000)
   }

@@ -19,7 +19,6 @@ import { fetchCoins } from '../../actions'
 import Search from '../../components/Search'
 import CoinItem from '../../components/CoinItem'
 import API from '../../utils'
-import './index.css'
 
 Number.isNaN = require('number-is-nan')
 
@@ -188,7 +187,7 @@ class Coins extends Component {
     const renderPager = this.renderPager()
 
     return (
-      <div className="Coins">
+      <div>
         {!this.state.loading ? (
           <Helmet>
             <meta charSet="utf-8" />

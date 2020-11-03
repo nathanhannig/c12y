@@ -9,7 +9,7 @@ import store from './store'
 
 // App
 import App from './components/App'
-import './index.css'
+import './index.module.scss'
 
 ReactDOM.render(
   <Provider store={store}>

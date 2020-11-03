@@ -1,0 +1,88 @@
+:global {
+    h3 {
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        color: #818181;
+        clear: both;
+    }
+
+    a:link,
+    a:visited {
+        color: #777;
+        transition: color 0.2s;
+    }
+
+    a:active,
+    a:focus,
+    a:hover {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .loader {
+        margin: 20px auto;
+        border: 16px solid #d1d1d1; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .green {
+        color: #2ecc71;
+    }
+
+    .red {
+        color: #e74c3c;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .Content .container {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 5px rgba(0, 0, 0, 0.075);
+        border: 1px solid #e7e7e7;
+    }
+
+    .last-updated {
+        margin-top: 10px;
+        color: #818181;
+        font-size: 120%;
+        text-align: right;
+    }
+
+    /*
+    Vertical Align
+    https://stackoverflow.com/questions/20547819/vertical-align-with-bootstrap-3
+    */
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Extra small devices (991px and down) */
+    @media only screen and (max-width: 992px) {
+        .vertical-align.row {
+            display: block; /* Turn off the flexible box layout */
+        }
+    }
+}

@@ -1,16 +1,12 @@
 // React
 import React from 'react'
-// import { Grid, Row, Col } from 'react-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import { Helmet } from 'react-helmet'
 
-// App
-import './index.css'
-
 const About = () => (
-  <div className="About">
+  <div>
     <Helmet>
       <meta charSet="utf-8" />
       <title>About Us - c12y.com</title>
