@@ -1,11 +1,24 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 
 const coinSchema = new Schema({
-  id: String,
-  name: String,
-  symbol: String,
+  id: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  symbol: {
+    type: String,
+    required: true,
+  },
+}, {
+  timestamps: true,
 })
 
-mongoose.model('coins', coinSchema)
+const Coin = mongoose.model('coins', coinSchema)
+
+export default Coin

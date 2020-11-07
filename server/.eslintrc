@@ -13,7 +13,8 @@
     },
     "rules": {
         "import/first": 0,
-        "semi": 0,
+        "import/extensions": ["error", { "js": "always" }],
+        "semi": ["error", "never"],
         "linebreak-style": 0,
         "max-len": ["error", { "code": 120 }]
     }

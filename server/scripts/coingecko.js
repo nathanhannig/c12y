@@ -3,18 +3,16 @@
   "ignorePropertyModificationsFor": ["app"]
 }] */
 
-const CoinGecko = require('coingecko-api');
-const logger = require('loglevel')
-const format = require('date-fns/format')
-const util = require('util')
-const fs = require('fs')
-const mongoose = require('mongoose')
-require('../models/Coin')
+import CoinGecko from 'coingecko-api'
+import logger from 'loglevel'
+import format from 'date-fns/format/index.js'
+import util from 'util'
+import fs from 'fs'
+import Coin from '../models/Coin.js'
 
-const Coin = mongoose.model('coins')
 const writeFileAsync = util.promisify(fs.writeFile)
 const readFileAsync = util.promisify(fs.readFile)
-const CoinGeckoClient = new CoinGecko();
+const CoinGeckoClient = new CoinGecko()
 
 // Gets the details of a coins
 const getCoinInfo = async (app, id) => {
@@ -69,7 +67,7 @@ const getCoinList = async (app) => {
   const { data } = app.locals
 
   try {
-    const response = await CoinGeckoClient.coins.list();
+    const response = await CoinGeckoClient.coins.list()
 
     if (response.data) {
       data.lastUpdated = Date.now()
@@ -163,7 +161,7 @@ const getCoinList = async (app) => {
 
           if (counterCoinInfo === newCoins.length) {
             clearInterval(getCoinInfoTimer)
-            await writeFileAsync('./json/coins.json', JSON.stringify(data.coins, null, 2))
+            await writeFileAsync('./data/coins.json', JSON.stringify(data.coins, null, 2))
             logger.info(`${format(new Date())} - Coin info processed (${newCoins.length} new coins)`)
           }
         }, 2 * 1000) // 2 call per second
@@ -186,7 +184,7 @@ const getPricesByChunk = async (page, limit) => {
       page,
       localization: false,
       sparkline: false,
-    });
+    })
 
     if (response.data) {
       response.data.forEach((item) => {
@@ -215,7 +213,7 @@ const getPricesByChunk = async (page, limit) => {
     logger.error(`${format(new Date())} - ${error}`)
   }
 
-  return prices;
+  return prices
 }
 
 const sortByMktCap = (app, list) => {
@@ -345,73 +343,68 @@ const calculateBTCDominance = (app) => {
   return ((data.prices?.bitcoin?.market_cap / data.totalMarketCap) * 100)
 }
 
-module.exports = (app) => {
+const setup = async (app) => {
   // initialize the object we will be storing all data
   app.locals.data = {}
+  const { data } = app.locals
+  logger.info(`${format(new Date())} - Server setup starting`)
 
-  const setup = async () => {
-    const { data } = app.locals
-    logger.info(`${format(new Date())} - Server setup starting`)
+  try {
+    // Load initial coin list
+    const content = await readFileAsync('./data/coins.json')
+    data.coins = JSON.parse(content)
+  } catch (error) {
+    data.coins = {}
+    logger.warn(`${format(new Date())} - No JSON file loaded`, error)
+  }
 
-    try {
-      // Load initial coin list
-      const content = await readFileAsync('./json/coins.json')
-      data.coins = JSON.parse(content)
-    } catch (error) {
-      data.coins = {}
-      logger.warn(`${format(new Date())} - No JSON file loaded`, error)
-    }
+  await getCoinList(app)
 
+  // Set a timer to update coin list
+  setInterval(async () => {
     await getCoinList(app)
+  }, 3 * 60 * 60 * 1000) // Calls every 3 hours
 
-    // Set a timer to update coin list
-    setInterval(async () => {
-      await getCoinList(app)
-    }, 3 * 60 * 60 * 1000) // Calls every 3 hours
+  let chunkCounter = 0
+  let page = 1
 
-    let chunkCounter = 0
-    let page = 1;
+  // Set a timer to update coin prices
+  setInterval(async () => {
+    logger.info(`${format(new Date())} - Fetching coin prices for page ${page}`)
 
-    // Set a timer to update coin prices
-    setInterval(async () => {
-      logger.info(`${format(new Date())} - Fetching coin prices for page ${page}`)
+    const chunk = Object.keys(data.coins)
+    const chunkSize = 250
 
-      const chunk = Object.keys(data.coins)
-      const chunkSize = 250
+    if (chunkCounter + chunkSize < chunk.length) {
+      chunkCounter += chunkSize
+      page += 1
+      data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
+    } else {
+      chunkCounter = 0
+      page = 1
+      data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
+      // await writeFileAsync('./data/prices.json', JSON.stringify(data.prices, null, 2))
 
-      if (chunkCounter + chunkSize < chunk.length) {
-        chunkCounter += chunkSize
-        page += 1
-        data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
-      } else {
-        chunkCounter = 0
-        page = 1
-        data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
-        // await writeFileAsync('./json/prices.json', JSON.stringify(data.prices, null, 2))
+      // Provide a default sort after all coin prices obtained
+      data.coinList = sortByMktCap(app, data.coinList)
+      data.watchList = sortByMktCap(app, data.watchList)
 
-        // Provide a default sort after all coin prices obtained
-        data.coinList = sortByMktCap(app, data.coinList)
-        data.watchList = sortByMktCap(app, data.watchList)
+      // Find top 5 Gainers / Losers
+      data.topGainers = topGainers(app, data.coinList)
+      data.topLosers = topLosers(app, data.coinList)
 
-        // Find top 5 Gainers / Losers
-        data.topGainers = topGainers(app, data.coinList)
-        data.topLosers = topLosers(app, data.coinList)
+      // Calculate Total Market Cap
+      data.totalMarketCap = calculateTotalMarketCap(app, data.coinList)
 
-        // Calculate Total Market Cap
-        data.totalMarketCap = calculateTotalMarketCap(app, data.coinList)
+      // Calculate Total 24h Volume
+      data.totalVolume24h = calculateTotal24hVolume(app, data.coinList)
 
-        // Calculate Total 24h Volume
-        data.totalVolume24h = calculateTotal24hVolume(app, data.coinList)
+      // Calculate BTC Dominance
+      data.btcDominance = calculateBTCDominance(app)
 
-        // Calculate BTC Dominance
-        data.btcDominance = calculateBTCDominance(app)
-
-        data.lastUpdated = Date.now()
-      }
-    }, 2 * 1000)
-  }
-
-  return {
-    setup,
-  }
+      data.lastUpdated = Date.now()
+    }
+  }, 2 * 1000)
 }
+
+export default setup

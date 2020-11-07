@@ -9,15 +9,15 @@ import { connect } from 'react-redux'
 import { fetchUser } from '../../actions'
 
 // App
-import withTracker from '../../pages/withTracker'
-import ScrollToTop from '../../pages/ScrollToTop'
+import Header from '../Header'
+import Footer from '../Footer'
+import withTracker from '../withTracker'
+import ScrollToTop from '../ScrollToTop'
 import About from '../../pages/About'
 import Coins from '../../pages/Coins'
 import Contact from '../../pages/Contact'
 import Exchanges from '../../pages/Exchanges'
-import Header from '../../pages/Header'
-import Footer from '../../pages/Footer'
-import Main from '../../pages/Main'
+import Home from '../../pages/Home'
 import Overview from '../../pages/Overview'
 import Privacy from '../../pages/Privacy'
 import Wallets from '../../pages/Wallets'
@@ -58,7 +58,7 @@ class App extends Component {
                   path="/:coin"
                   render={(props) => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })}
                 />
-                <Route path="/" component={withTracker(Main)} />
+                <Route path="/" component={withTracker(Home)} />
               </Switch>
             </div>
             <Footer />

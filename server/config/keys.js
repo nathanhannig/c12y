@@ -1,4 +1,8 @@
-module.exports = {
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+export default {
   googleClientID: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   sendgridApiKey: process.env.SENDGRID_API_KEY,
