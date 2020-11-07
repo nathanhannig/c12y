@@ -10,7 +10,7 @@ import numeral from 'numeral'
 // const putHeaders = { method: 'PUT', headers: headers }
 // const deleteHeaders = { method: 'DELETE', headers: headers }
 
-const fetchUser = () => axios.get('/api/current_user')
+const fetchUser = () => axios.get('/auth/current_user')
 
 const fetchWatchlist = () => axios.get('/api/watchlist')
 
