@@ -1,10 +1,22 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 
-const userFavoritesSchema = new Schema({
-  _user: { type: Schema.Types.ObjectId, ref: 'User' },
-  _coin: { type: Schema.Types.ObjectId, ref: 'Coin' },
+const userFavoriteSchema = new Schema({
+  _user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  _coin: {
+    type: Schema.Types.ObjectId,
+    ref: 'Coin',
+    required: true,
+  },
+}, {
+  timestamps: true,
 })
 
-mongoose.model('userFavorites', userFavoritesSchema)
+const UserFavorite = mongoose.model('userFavorites', userFavoriteSchema)
+
+export default UserFavorite

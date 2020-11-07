@@ -1,30 +1,34 @@
-require('dotenv').config()
-const path = require('path')
-const express = require('express')
-const format = require('date-fns/format')
-const logger = require('loglevel')
-const mongoose = require('mongoose')
-const cookieSession = require('cookie-session')
-const passport = require('passport')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const keys = require('./config/keys')
-require('./services/passport')
+import dotenv from 'dotenv'
 
-const app = express()
+dotenv.config()
+
+import path from 'path'
+import express from 'express'
+import format from 'date-fns/format/index.js'
+import logger from 'loglevel'
+import cookieSession from 'cookie-session'
+import passport from 'passport'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import keys from './config/keys.js'
+import connectDB from './config/db.js'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import './config/passport.js'
+import coinGeckoSetup from './scripts/coingecko.js'
+
+import apiRoutes from './routes/apiRoutes.js'
+import authRoutes from './routes/authRoutes.js'
+import emailRoutes from './routes/emailRoutes.js'
+
 logger.setLevel('info')
 
-// Connect to database
-mongoose.connect(keys.mongoURI, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useFindAndModify: false,
-}).then(
-  () => logger.info(`${format(new Date())} - MongoDB successfully connected`),
-).catch((err) => {
-  logger.error(`${format(new Date())} - DB Connection Error: ${err.message}`)
-  process.exit(-1)
-});
+connectDB()
+
+const app = express()
+
+// https://nodejs.org/api/esm.html#esm_no_require_exports_module_exports_filename_dirname
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = path.resolve()
 
 // http://expressjs.com/en/starter/static-files.html
 // Serves the help page CSS
@@ -50,17 +54,27 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 
-logger.info(`${format(new Date())} - Server is running in ${process.env.NODE_ENV} mode`)
-
-require('./scripts/coingecko')(app).setup()
-
 // ROUTES --
-require('./routes/apiRoutes')(app)
-require('./routes/authRoutes')(app)
-require('./routes/emailRoutes')(app)
-require('./routes/productionRoutes')(app)
+app.use('/api', apiRoutes)
+app.use('/auth', authRoutes)
+app.use('/email', emailRoutes)
+
+if (process.env.NODE_ENV === 'production') {
+  // Serves the React app assets in production
+  app.use(express.static(path.join(__dirname, '/../../client/build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  })
+}
+
+app.use(notFound)
+app.use(errorHandler)
 
 const port = process.env.PORT || 3001
 const server = app.listen(port, () => {
-  logger.info(`${format(new Date())} - Listening on port ${server.address().port}`)
+  logger.info(`${format(new Date())} - Server is running in ${process.env.NODE_ENV} mode \
+on port ${server.address().port}`)
 })
+
+coinGeckoSetup(app)

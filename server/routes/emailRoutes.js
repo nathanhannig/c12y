@@ -1,48 +1,51 @@
-const sendgridMail = require('@sendgrid/mail')
-const keys = require('../config/keys')
+import sendgridMail from '@sendgrid/mail'
+import express from 'express'
+import keys from '../config/keys.js'
 
-module.exports = (app) => {
-  app.post('/email/contact', async (req, res) => {
-    const { name, email, message } = req.body
-    const errors = {}
+const router = express.Router()
 
-    if (!name.length) {
-      errors.name = 'Name cannot be empty'
-    }
+router.post('/contact', async (req, res) => {
+  const { name, email, message } = req.body
+  const errors = {}
 
-    // eslint-disable-next-line max-len
-    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    if (!regex.test(email)) {
-      errors.email = 'Email address is not valid.'
-    }
+  if (!name.length) {
+    errors.name = 'Name cannot be empty'
+  }
 
-    if (!message.length) {
-      errors.message = 'Message cannot be empty'
-    }
+  // eslint-disable-next-line max-len
+  const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  if (!regex.test(email)) {
+    errors.email = 'Email address is not valid.'
+  }
 
-    if (Object.keys(errors).length) {
-      return res.status(500).send(errors)
-    }
+  if (!message.length) {
+    errors.message = 'Message cannot be empty'
+  }
 
-    // using SendGrid's v3 Node.js Library
-    // https://github.com/sendgrid/sendgrid-nodejs
-    sendgridMail.setApiKey(keys.sendgridApiKey)
+  if (Object.keys(errors).length) {
+    return res.status(500).send(errors)
+  }
 
-    const msgSendgrid = {
-      to: keys.contactFormEmail,
-      from: email,
-      subject: `Contact Form - ${name}`,
-      text: message,
-      // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-    }
+  // using SendGrid's v3 Node.js Library
+  // https://github.com/sendgrid/sendgrid-nodejs
+  sendgridMail.setApiKey(keys.sendgridApiKey)
 
-    try {
-      await sendgridMail.send(msgSendgrid)
-    } catch (error) {
-      errors.submitted = 'Error sending email'
-      return res.status(500).send(errors)
-    }
+  const msgSendgrid = {
+    to: keys.contactFormEmail,
+    from: email,
+    subject: `Contact Form - ${name}`,
+    text: message,
+    // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+  }
 
-    return res.send('Sent email')
-  })
-}
+  try {
+    await sendgridMail.send(msgSendgrid)
+  } catch (error) {
+    errors.submitted = 'Error sending email'
+    return res.status(500).send(errors)
+  }
+
+  return res.send('Sent email')
+})
+
+export default router
