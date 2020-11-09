@@ -7,12 +7,12 @@ router.get('/help', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'))
 })
 
-
 router.get('/watchlist', (req, res) => {
   const { data } = req.app.locals
 
   if (!data.coins || !data.watchList) {
-    return res.status(500).send({ error: 'watch list not yet ready' })
+    res.status(500)
+    throw new Error('Watch list not yet ready, please try again in a few moments.')
   }
 
   // Build watch list
@@ -46,7 +46,8 @@ router.get('/all/:page', (req, res) => {
   const { data } = req.app.locals
 
   if (!data || !data.coinList) {
-    return res.status(500).send({ error: 'coin list not yet ready' })
+    res.status(500)
+    throw new Error('Coin list not yet ready, please try again in a few moments.')
   }
 
   // Check that page is a number and greater than 0, else default it to 1
@@ -91,7 +92,8 @@ router.get('/coin/:coin', (req, res) => {
   const coin = req.params.coin.toLowerCase()
 
   if (!data) {
-    return res.status(500).send({ error: 'coin list not yet ready' })
+    res.status(500)
+    throw new Error('Coin list not yet ready, please try again in a few moments.')
   }
 
   if (data.coins
@@ -113,14 +115,16 @@ router.get('/coin/:coin', (req, res) => {
     })
   }
 
-  return res.status(404).send({ error: 'coin doesn\'t exist' })
+  res.status(404)
+  throw new Error('Coin not found.')
 })
 
 router.get('/gainers', (req, res) => {
   const { data } = req.app.locals
 
   if (!data.topGainers) {
-    return res.status(500).send({ error: 'gainers not yet ready' })
+    res.status(500)
+    throw new Error('Gainers not yet ready, please try again in a few moments.')
   }
 
   const list = []
@@ -142,7 +146,8 @@ router.get('/losers', (req, res) => {
   const { data } = req.app.locals
 
   if (!data.topLosers) {
-    return res.status(500).send({ error: 'losers not yet ready' })
+    res.status(500)
+    throw new Error('Losers not yet ready, please try again in a few moments.')
   }
 
   const list = []

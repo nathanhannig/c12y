@@ -1,10 +1,11 @@
 import sendgridMail from '@sendgrid/mail'
 import express from 'express'
+import asyncHandler from 'express-async-handler'
 import keys from '../config/keys.js'
 
 const router = express.Router()
 
-router.post('/contact', async (req, res) => {
+router.post('/contact', asyncHandler(async (req, res) => {
   const { name, email, message } = req.body
   const errors = {}
 
@@ -23,7 +24,8 @@ router.post('/contact', async (req, res) => {
   }
 
   if (Object.keys(errors).length) {
-    return res.status(500).send(errors)
+    res.status(500)
+    throw new Error(errors)
   }
 
   // using SendGrid's v3 Node.js Library
@@ -32,20 +34,19 @@ router.post('/contact', async (req, res) => {
 
   const msgSendgrid = {
     to: keys.contactFormEmail,
-    from: email,
+    from: keys.contactFormEmail,
     subject: `Contact Form - ${name}`,
-    text: message,
+    text: `${email} - ${message}`,
     // html: '<strong>and easy to do anywhere, even with Node.js</strong>',
   }
-
   try {
     await sendgridMail.send(msgSendgrid)
   } catch (error) {
-    errors.submitted = 'Error sending email'
-    return res.status(500).send(errors)
+    res.status(500)
+    throw new Error('Error sending email.')
   }
 
   return res.send('Sent email')
-})
+}))
 
 export default router
