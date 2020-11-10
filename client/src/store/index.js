@@ -1,11 +1,13 @@
 // Redux
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import ReduxThunk from 'redux-thunk'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import reducer from '../reducers'
 
-// https://github.com/zalmoxisus/redux-devtools-extension
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // eslint-disable-line
+const initialState = {}
 
-const store = createStore(reducer, composeEnhancers(applyMiddleware(ReduxThunk)))
+const middleware = [ReduxThunk]
+
+const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware(...middleware)))
 
 export default store
