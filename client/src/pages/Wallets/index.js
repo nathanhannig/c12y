@@ -1,16 +1,16 @@
 // React
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
 import { Helmet } from 'react-helmet'
+import axios from 'axios'
 
 // App
-import walletList from './data.json'
 import styles from './index.module.scss'
 
-const renderList = () => {
-  const html = walletList.map((item, i) => (
+const renderList = (wallets) => {
+  const html = wallets.map((item, i) => (
     <Row key={item.name} className={`${styles.list} vertical-align`}>
       <Col className={styles.counter} xs={12} md={1}>
         {i + 1}
@@ -41,32 +41,49 @@ const renderList = () => {
   return html
 }
 
-const Wallets = () => (
-  <div>
-    <Helmet>
-      <meta charSet="utf-8" />
-      <title>Wallets - c12y.com</title>
-      <link rel="canonical" href="https://c12y.com/wallets" />
-      <meta name="description" content="List of the best cryptocurrency wallets. - c12y.com." />
-    </Helmet>
-    <Grid>
-      <Row>
-        <Col xs={12}>
-          <h3>Wallets</h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <p>
-            Wallets are a software program that stores private and public keys and interacts with various blockchain to
-            allow users to send and receive cryptocurrencies and view their balance. If you want to use cryptocurrency,
-            you will need to have a digital wallet to store your cryptocurrency off of exchange websites.
-          </p>
-        </Col>
-      </Row>
-      {renderList()}
-    </Grid>
-  </div>
-)
+const Wallets = () => {
+  const [loading, setLoading] = useState(true)
+  const [wallets, setWallets] = useState([])
+
+  useEffect(() => {
+    async function fetchWallets() {
+      const result = await axios('/api/wallets')
+
+      setWallets(result.data)
+      setLoading(false)
+    }
+
+    fetchWallets()
+  }, [])
+
+  return (
+    <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Wallets - c12y.com</title>
+        <link rel="canonical" href="https://c12y.com/wallets" />
+        <meta name="description" content="List of the best cryptocurrency wallets. - c12y.com." />
+      </Helmet>
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            <h3>Wallets</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <p>
+              Wallets are a software program that stores private and public keys and interacts with various blockchain
+              to allow users to send and receive cryptocurrencies and view their balance. If you want to use
+              cryptocurrency, you will need to have a digital wallet to store your cryptocurrency off of exchange
+              websites.
+            </p>
+          </Col>
+        </Row>
+        {loading ? <div className="loader" /> : renderList(wallets)}
+      </Grid>
+    </div>
+  )
+}
 
 export default Wallets

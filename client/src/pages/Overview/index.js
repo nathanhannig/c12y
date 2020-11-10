@@ -129,7 +129,7 @@ class Overview extends Component {
 
             {coin.coin.websiteUrl ? (
               <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="primary" className={styles['coin-urls']}>
+                <Button bsSize="medium" bsStyle="primary" className={styles['coin-urls']}>
                   Website
                 </Button>
               </a>
@@ -139,8 +139,8 @@ class Overview extends Component {
 
             {twitter ? (
               <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="small" bsStyle="info" className={styles['coin-urls']}>
-                  Twitter - {twitter}
+                <Button bsSize="medium" bsStyle="info" className={styles['coin-urls']}>
+                  Twitter - @{twitter}
                 </Button>
               </a>
             ) : (

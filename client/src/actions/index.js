@@ -1,4 +1,4 @@
-import API from '../utils'
+import axios from 'axios'
 
 export const USER_FETCH = 'USER_FETCH'
 export const COINS_FETCH = 'COINS_FETCH'
@@ -7,7 +7,7 @@ export const GAINERS_FETCH = 'GAINERS_FETCH'
 export const LOSERS_FETCH = 'LOSERS_FETCH'
 
 export const fetchUser = () => async (dispatch) => {
-  const response = await API.fetchUser()
+  const response = await axios.get('/auth/current_user')
 
   dispatch({
     type: USER_FETCH,
@@ -19,9 +19,9 @@ export const fetchCoins = (page) => async (dispatch) => {
   let response
 
   if (page) {
-    response = await API.fetchCoinlist(page)
+    response = await axios.get(`/api/coins?page=${page}`)
   } else {
-    response = await API.fetchWatchlist()
+    response = await axios.get('/api/lists/watchlist')
   }
 
   dispatch({
@@ -31,7 +31,7 @@ export const fetchCoins = (page) => async (dispatch) => {
 }
 
 export const fetchCoin = (coin) => async (dispatch) => {
-  const response = await API.fetchCoin(coin)
+  const response = await axios.get(`/api/coins/${coin}`)
 
   dispatch({
     type: COIN_FETCH,
@@ -40,7 +40,7 @@ export const fetchCoin = (coin) => async (dispatch) => {
 }
 
 export const fetchGainers = () => async (dispatch) => {
-  const response = await API.fetchGainers()
+  const response = await axios.get('/api/lists/gainers')
 
   dispatch({
     type: GAINERS_FETCH,
@@ -49,7 +49,7 @@ export const fetchGainers = () => async (dispatch) => {
 }
 
 export const fetchLosers = () => async (dispatch) => {
-  const response = await API.fetchLosers()
+  const response = await axios.get('/api/lists/losers')
 
   dispatch({
     type: LOSERS_FETCH,
