@@ -16,9 +16,9 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import './config/passport.js'
 import coinGeckoSetup from './scripts/coingecko.js'
 
-import apiRoutes from './routes/apiRoutes.js'
-import authRoutes from './routes/authRoutes.js'
-import emailRoutes from './routes/emailRoutes.js'
+import apiRoutes from './routes/api.js'
+import authRoutes from './routes/auth.js'
+import emailRoutes from './routes/email.js'
 
 logger.setLevel('info')
 
@@ -29,10 +29,6 @@ const app = express()
 // https://nodejs.org/api/esm.html#esm_no_require_exports_module_exports_filename_dirname
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.resolve()
-
-// http://expressjs.com/en/starter/static-files.html
-// Serves the help page CSS
-app.use(express.static(path.join(__dirname, 'views/public')))
 
 app.use(cookieSession({
   maxAge: 30 * 24 * 60 * 60 * 1000,
