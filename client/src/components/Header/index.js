@@ -1,5 +1,5 @@
 // React
-import React, { Component } from 'react'
+import React from 'react'
 import Navbar from 'react-bootstrap/lib/Navbar'
 import Nav from 'react-bootstrap/lib/Nav'
 import NavItem from 'react-bootstrap/lib/NavItem'
@@ -12,9 +12,9 @@ import { connect } from 'react-redux'
 // App
 import styles from './index.module.scss'
 
-class Header extends Component {
-  renderLogin() {
-    switch (this.props.auth) {
+const Header = (props) => {
+  const renderLogin = () => {
+    switch (props.auth) {
       case null:
         return ''
       case false:
@@ -36,48 +36,46 @@ class Header extends Component {
     }
   }
 
-  render() {
-    return (
-      <header className={styles.header}>
-        <Navbar collapseOnSelect>
-          <Navbar.Header>
-            <LinkContainer to="/">
-              <Navbar.Brand className={styles.logo}>
-                <span className={styles.crypto}>c</span>
-                <span className={styles.underline}>
-                  <span className={styles.crypto}>rypto</span>
-                  <span className={styles.currency}>currenc</span>
-                </span>
-                <span className={styles.currency}>y</span>
-              </Navbar.Brand>
+  return (
+    <header className={styles.header}>
+      <Navbar collapseOnSelect>
+        <Navbar.Header>
+          <LinkContainer to="/">
+            <Navbar.Brand className={styles.logo}>
+              <span className={styles.crypto}>c</span>
+              <span className={styles.underline}>
+                <span className={styles.crypto}>rypto</span>
+                <span className={styles.currency}>currenc</span>
+              </span>
+              <span className={styles.currency}>y</span>
+            </Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+          <Nav>
+            <LinkContainer to="/coins">
+              <NavItem eventKey={1} className={styles.link}>
+                Coins
+              </NavItem>
             </LinkContainer>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <LinkContainer to="/coins">
-                <NavItem eventKey={1} className={styles.link}>
-                  Coins
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to="/exchanges">
-                <NavItem eventKey={2} className={styles.link}>
-                  Exchanges
-                </NavItem>
-              </LinkContainer>
-              <LinkContainer to="/wallets">
-                <NavItem eventKey={3} className={styles.link}>
-                  Wallets
-                </NavItem>
-              </LinkContainer>
-            </Nav>
+            <LinkContainer to="/exchanges">
+              <NavItem eventKey={2} className={styles.link}>
+                Exchanges
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to="/wallets">
+              <NavItem eventKey={3} className={styles.link}>
+                Wallets
+              </NavItem>
+            </LinkContainer>
+          </Nav>
 
-            {this.renderLogin()}
-          </Navbar.Collapse>
-        </Navbar>
-      </header>
-    )
-  }
+          {renderLogin()}
+        </Navbar.Collapse>
+      </Navbar>
+    </header>
+  )
 }
 
 Header.propTypes = {
