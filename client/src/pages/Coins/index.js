@@ -23,8 +23,6 @@ import API from '../../utils'
 Number.isNaN = require('number-is-nan')
 
 class Coins extends Component {
-  state = { loading: true }
-
   async componentDidMount() {
     const { match } = this.props
 
@@ -38,17 +36,13 @@ class Coins extends Component {
       page = parseInt(match.params.page, 10)
     }
 
-    try {
-      await this.props.fetchCoins(page)
-    } finally {
-      this.setState({ loading: false })
-    }
+    await this.props.fetchCoins(page)
   }
 
   renderCoinList = () => {
     const { coins } = this.props
 
-    if (this.state.loading) {
+    if (coins.loading) {
       return <div className="loader" />
     }
 
@@ -141,7 +135,7 @@ class Coins extends Component {
   renderPager = () => {
     const { coins } = this.props
 
-    if (this.state.loading || !coins.coins || Object.keys(coins.coins).length === 0) {
+    if (coins.loading || !coins.coins || Object.keys(coins.coins).length === 0) {
       return ''
     }
 
@@ -188,7 +182,7 @@ class Coins extends Component {
 
     return (
       <div>
-        {!this.state.loading ? (
+        {!coins.loading ? (
           <Helmet>
             <meta charSet="utf-8" />
             <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
@@ -207,7 +201,7 @@ class Coins extends Component {
         <Grid>
           <Row>
             <Col xs={12}>
-              {!this.state.loading ? (
+              {!coins.loading ? (
                 <h3>
                   Coins (List {coins.begin + 1} - {coins.end + 1})
                 </h3>

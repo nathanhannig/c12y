@@ -3,7 +3,19 @@ const authGoogleCallback = (req, res) => {
 }
 
 const getUser = (req, res) => {
-  res.send(req.user)
+  const user = {
+    isLoggedIn: false,
+  }
+
+  if (req.user) {
+    user.isLoggedIn = true
+    user.email = req.user.email
+    user.firstName = req.user.firstName
+    user.lastName = req.user.lastName
+    user.isAdmin = req.user.isAdmin
+  }
+
+  res.send(user)
 }
 
 const logoutUser = (req, res) => {

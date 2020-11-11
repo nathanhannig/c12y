@@ -14,22 +14,24 @@ import styles from './index.module.scss'
 
 const Header = (props) => {
   const renderLogin = () => {
-    switch (props.auth) {
-      case null:
-        return ''
-      case false:
+    if (!props.auth || props.auth.loading) {
+      return ''
+    }
+
+    switch (props.auth.isLoggedIn) {
+      case true:
         return (
           <Nav pullRight>
-            <NavItem href="/auth/google" eventKey={1}>
-              Sign in with <span className={styles.google}>Google</span>
+            <NavItem href="/auth/logout" eventKey={1}>
+              Logout
             </NavItem>
           </Nav>
         )
       default:
         return (
           <Nav pullRight>
-            <NavItem href="/auth/logout" eventKey={1}>
-              Logout
+            <NavItem href="/auth/google" eventKey={1}>
+              Sign in with <span className={styles.google}>Google</span>
             </NavItem>
           </Nav>
         )

@@ -1,9 +1,13 @@
-import { USER_FETCH } from '../actions'
+import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/user'
 
 function auth(state = null, action) {
   switch (action.type) {
-    case USER_FETCH:
-      return action.payload || false
+    case USER_DETAILS_REQUEST:
+      return { loading: true }
+    case USER_DETAILS_SUCCESS:
+      return action.payload ? { loading: false, ...action.payload } : false
+    case USER_DETAILS_FAIL:
+      return { loading: false, error: action.payload }
     default:
       return state
   }

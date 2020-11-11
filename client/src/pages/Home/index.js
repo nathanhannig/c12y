@@ -21,20 +21,14 @@ import API from '../../utils'
 import styles from './index.module.scss'
 
 class Main extends Component {
-  state = { loading: true }
-
   async componentDidMount() {
-    try {
-      await this.props.fetchCoins()
-    } finally {
-      this.setState({ loading: false })
-    }
+    await this.props.fetchCoins()
   }
 
   renderCoinList = () => {
     const { coins } = this.props
 
-    if (this.state.loading) {
+    if (coins.loading) {
       return <div className="loader" />
     }
 

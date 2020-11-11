@@ -19,14 +19,11 @@ import styles from './index.module.scss'
 Number.isNaN = require('number-is-nan')
 
 class Overview extends Component {
-  state = { loading: true }
-
   async componentDidMount() {
     const { match } = this.props
 
     try {
       await this.props.fetchCoin(match.params.coin)
-      this.setState({ loading: false })
     } catch (error) {
       this.props.history.replace('/')
     }
@@ -59,7 +56,7 @@ class Overview extends Component {
   renderCoinOverview = () => {
     const { coin } = this.props
 
-    if (this.state.loading) {
+    if (coin.loading) {
       return <div className="loader" />
     }
 
