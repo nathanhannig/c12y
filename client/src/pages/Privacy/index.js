@@ -9,7 +9,7 @@ const Privacy = () => (
   <div>
     <Helmet>
       <meta charSet="utf-8" />
-      <title>Privacy Policy- c12y.com</title>
+      <title>Privacy Policy| c12y.com</title>
       <link rel="canonical" href="https://c12y.com/privacy" />
       <meta name="description" content="Privacy Policy at c12y.com." />
     </Helmet>

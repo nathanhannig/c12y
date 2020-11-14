@@ -1,5 +1,5 @@
 // React
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import Grid from 'react-bootstrap/lib/Grid'
@@ -9,10 +9,10 @@ import Pager from 'react-bootstrap/lib/Pager'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { formatDistance } from 'date-fns'
+import numberisNaN from 'number-is-nan'
 
 // Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
@@ -20,33 +20,32 @@ import Search from '../../components/Search'
 import CoinItem from '../../components/CoinItem'
 import API from '../../utils'
 
-Number.isNaN = require('number-is-nan')
+const Coins = ({ match, history }) => {
+  const dispatch = useDispatch()
 
-class Coins extends Component {
-  async componentDidMount() {
-    const { match } = this.props
+  const coinList = useSelector((state) => state.coins)
+  const { loading, coins, prices, list, page = 0, begin = 0, end = 0, total = 0, lastUpdated } = coinList
 
-    let page = 1
-
+  useEffect(() => {
     if (match.params.page) {
-      if (Number.isNaN(Number(match.params.page)) || parseInt(match.params.page, 10) < 1) {
-        this.props.history.replace('/coins')
+      // Check if page value is valid
+      if (numberisNaN(Number(match.params.page)) || parseInt(match.params.page, 10) < 1) {
+        history.replace('/coins')
       }
 
-      page = parseInt(match.params.page, 10)
+      dispatch(fetchCoins(parseInt(match.params.page, 10)))
+    } else {
+      // No page parameter provided, default to page 1
+      dispatch(fetchCoins(1))
     }
+  }, [dispatch, match, history])
 
-    await this.props.fetchCoins(page)
-  }
-
-  renderCoinList = () => {
-    const { coins } = this.props
-
-    if (coins.loading) {
+  const renderCoinList = () => {
+    if (loading) {
       return <div className="loader" />
     }
 
-    if (!coins.coins) {
+    if (!coins) {
       return (
         <Row>
           <Col xs={12}>
@@ -56,7 +55,7 @@ class Coins extends Component {
       )
     }
 
-    if (Object.keys(coins.coins).length === 0) {
+    if (Object.keys(coins).length === 0) {
       return (
         <Row>
           <Col xs={12}>No coins to list.</Col>
@@ -64,12 +63,11 @@ class Coins extends Component {
       )
     }
 
-    const html = Object.keys(coins.coins).map((item, i) => {
-      const counter = coins.begin + i + 1
+    const html = Object.keys(coins).map((item, i) => {
+      const counter = begin + i + 1
+      const { name } = coins[item]
 
-      const { name } = coins.coins[item]
-
-      const icon = coins.coins[item].image && coins.coins[item].image.small
+      const icon = coins[item].image && coins[item].image.small
 
       let price = 'N/A'
       let change = 'N/A'
@@ -77,19 +75,19 @@ class Coins extends Component {
       let volume = 'N/A'
       let marketCap = 'N/A'
 
-      if (coins.prices[item]) {
+      if (prices[item]) {
         // Convert to $ with commas
-        price = API.formatDollars(coins.prices[item].price)
+        price = API.formatDollars(prices[item].price)
 
         // Convert to percent
-        change = API.formatPercent(coins.prices[item].change_percentage_24h)
+        change = API.formatPercent(prices[item].change_percentage_24h)
 
         // Convert to whole number with commas
-        supply = API.formatWholeNumber(coins.prices[item].circulating_supply)
+        supply = API.formatWholeNumber(prices[item].circulating_supply)
 
         // Convert to whole $ with commas
-        volume = API.formatDollarsWholeNumber(coins.prices[item].volume_24h)
-        marketCap = API.formatDollarsWholeNumber(coins.prices[item].market_cap)
+        volume = API.formatDollarsWholeNumber(prices[item].volume_24h)
+        marketCap = API.formatDollarsWholeNumber(prices[item].market_cap)
       }
 
       return (
@@ -116,15 +114,15 @@ class Coins extends Component {
         name="Name"
         price="Price"
         change="Change"
-        volume="Volume"
-        supply="Circulating"
+        volume="24h Volume"
+        marketCap="Market Cap"
       />
     )
 
     html.push(
       <Row key="lastUpdated" className="last-updated">
         <Col xs={12}>
-          <p>Last updated {formatDistance(this.props.coins.lastUpdated, new Date(), { addSuffix: true })}</p>
+          <p>Last updated {formatDistance(lastUpdated, new Date(), { addSuffix: true })}</p>
         </Col>
       </Row>
     )
@@ -132,41 +130,39 @@ class Coins extends Component {
     return html
   }
 
-  renderPager = () => {
-    const { coins } = this.props
-
-    if (coins.loading || !coins.coins || Object.keys(coins.coins).length === 0) {
+  const renderPager = () => {
+    if (loading || !coins || Object.keys(coins).length === 0) {
       return ''
     }
 
-    const page = parseInt(coins.page, 10)
-    const last = Math.ceil(parseInt(coins.total, 10) / 100)
+    const currentPage = parseInt(page, 10)
+    const lastPage = Math.ceil(parseInt(total, 10) / 100)
 
     let pager = ''
 
-    if (page === 1) {
+    if (currentPage === 1) {
       pager = (
         <Pager>
-          <LinkContainer to={`/coins/${page + 1}`}>
+          <LinkContainer to={`/coins/${currentPage + 1}`}>
             <Pager.Item next>Next 100 &rarr;</Pager.Item>
           </LinkContainer>
         </Pager>
       )
-    } else if (page === last) {
+    } else if (currentPage === lastPage) {
       pager = (
         <Pager>
-          <LinkContainer to={`/coins/${page - 1}`}>
+          <LinkContainer to={`/coins/${currentPage - 1}`}>
             <Pager.Item previous>&larr; Previous 100</Pager.Item>
           </LinkContainer>
         </Pager>
       )
-    } else if (page > 1 && page < last) {
+    } else if (currentPage > 1 && currentPage < lastPage) {
       pager = (
         <Pager>
-          <LinkContainer to={`/coins${page - 1 === 1 ? '' : `/${page - 1}`}`}>
+          <LinkContainer to={`/coins${currentPage - 1 === 1 ? '' : `/${currentPage - 1}`}`}>
             <Pager.Item previous>&larr; Previous 100</Pager.Item>
           </LinkContainer>
-          <LinkContainer to={`/coins/${page + 1}`}>
+          <LinkContainer to={`/coins/${currentPage + 1}`}>
             <Pager.Item next>Next 100 &rarr;</Pager.Item>
           </LinkContainer>
         </Pager>
@@ -176,66 +172,44 @@ class Coins extends Component {
     return pager
   }
 
-  render() {
-    const { coins } = this.props
-    const renderPager = this.renderPager()
-
-    return (
-      <div>
-        {!coins.loading ? (
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>{`Coins (List ${coins.begin + 1} - ${coins.end + 1}) - c12y.com`}</title>
-            <link rel="canonical" href={`https://c12y.com/coins${coins.page === 1 ? '' : `/${coins.page}`}`} />
-            <meta
-              name="description"
-              content={`List of the top ${coins.begin + 1} - ${coins.end + 1} cryptocurrency coins. - c12y.com.`}
-            />
-          </Helmet>
-        ) : (
-          ''
-        )}
-        <Grid>
-          <Search coins={this.props.coins} />
-        </Grid>
-        <Grid>
-          <Row>
-            <Col xs={12}>
-              {!coins.loading ? (
-                <h3>
-                  Coins (List {coins.begin + 1} - {coins.end + 1})
-                </h3>
-              ) : (
-                ''
-              )}
-            </Col>
-          </Row>
-          {renderPager}
-          {this.renderCoinList()}
-          {renderPager}
-        </Grid>
-      </div>
-    )
-  }
+  return (
+    <div>
+      {!loading ? (
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`Coins (List ${begin + 1} - ${end + 1}) | c12y.com`}</title>
+          <link rel="canonical" href={`https://c12y.com/coins${page === 1 ? '' : `/${page}`}`} />
+          <meta name="description" content={`List of the top ${begin + 1} - ${end + 1} cryptocurrency coins.`} />
+        </Helmet>
+      ) : (
+        ''
+      )}
+      <Grid>
+        <Search list={list} />
+      </Grid>
+      <Grid>
+        <Row>
+          <Col xs={12}>
+            {!loading ? (
+              <h3>
+                Coins (List {begin + 1} - {end + 1})
+              </h3>
+            ) : (
+              ''
+            )}
+          </Col>
+        </Row>
+        {renderPager()}
+        {renderCoinList()}
+        {renderPager()}
+      </Grid>
+    </div>
+  )
 }
 
 Coins.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  fetchCoins: PropTypes.func.isRequired,
-  coins: PropTypes.object.isRequired,
 }
 
-function mapStateToProps({ coins }) {
-  return {
-    coins,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchCoins: bindActionCreators(fetchCoins, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Coins)
+export default Coins

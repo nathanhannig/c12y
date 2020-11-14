@@ -25,7 +25,7 @@ const getWatchlist = (req, res) => {
     coins,
     prices,
     watchList: data.watchList,
-    coinList: data.coinList,
+    list: data.list,
     totalMarketCap: data.totalMarketCap,
     totalVolume24h: data.totalVolume24h,
     btcDominance: data.btcDominance,

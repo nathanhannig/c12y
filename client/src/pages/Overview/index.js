@@ -1,5 +1,5 @@
 // React
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import Grid from 'react-bootstrap/lib/Grid'
 import Row from 'react-bootstrap/lib/Row'
 import Col from 'react-bootstrap/lib/Col'
@@ -8,28 +8,28 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 
 // Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchCoin } from '../../actions'
 
 // App
 import API from '../../utils'
 import styles from './index.module.scss'
 
-Number.isNaN = require('number-is-nan')
+const Overview = ({ match, history }) => {
+  const dispatch = useDispatch()
 
-class Overview extends Component {
-  async componentDidMount() {
-    const { match } = this.props
+  const coinDetails = useSelector((state) => state.coin)
+  const { loading, error, coin, price } = coinDetails
 
-    try {
-      await this.props.fetchCoin(match.params.coin)
-    } catch (error) {
-      this.props.history.replace('/')
-    }
+  useEffect(() => {
+    dispatch(fetchCoin(match.params.coin))
+  }, [dispatch, history, match])
+
+  if (error) {
+    history.replace('/')
   }
 
-  renderCoinOverviewItem = (item, title, value) => (
+  const renderCoinOverviewItem = (item, title, value) => (
     <Col id={item} xs={12}>
       <Row>
         <Col xs={12} className={styles.title}>
@@ -42,7 +42,7 @@ class Overview extends Component {
     </Col>
   )
 
-  renderCoinOverviewItemHTML = (item, title, value) => (
+  const renderCoinOverviewItemHTML = (item, title, value) => (
     <Col id={item} xs={12}>
       <Row>
         <Col xs={12} className={styles.title}>
@@ -53,14 +53,12 @@ class Overview extends Component {
     </Col>
   )
 
-  renderCoinOverview = () => {
-    const { coin } = this.props
-
-    if (coin.loading) {
+  const renderCoinOverview = () => {
+    if (loading) {
       return <div className="loader" />
     }
 
-    if (!coin.coin) {
+    if (!coin) {
       return (
         <Row>
           <Col xs={12}>
@@ -70,51 +68,49 @@ class Overview extends Component {
       )
     }
 
-    const { name } = coin.coin
-    const algorithm = coin.coin.algorithm ? coin.coin.algorithm : 'N/A'
-    const icon = coin.coin.image && coin.coin.image.large
-    const { twitter } = coin.coin
-    const twitterUrl = `http://www.twitter.com/${coin.coin.twitter}`
+    const algorithm = coin.algorithm ? coin.algorithm : 'N/A'
+    const icon = coin.image && coin.image.large
+    const twitterUrl = `http://www.twitter.com/${coin.twitter}`
 
-    let price = 'N/A'
-    let volume24Hour = 'N/A'
-    let high24Hour = 'N/A'
-    let low24Hour = 'N/A'
-    let change24Hour = 'N/A'
-    let changePct24Hour = 'N/A'
-    let marketCap = 'N/A'
-    let circulatingSupply = 'N/A'
+    let formattedPrice = 'N/A'
+    let formattedVolume24Hour = 'N/A'
+    let formattedHigh24Hour = 'N/A'
+    let formattedLow24Hour = 'N/A'
+    let formattedChange24Hour = 'N/A'
+    let formattedChangePct24Hour = 'N/A'
+    let formattedMarketCap = 'N/A'
+    let formattedCirculatingSupply = 'N/A'
 
-    if (coin.price) {
+    if (price) {
       // Convert to $ with commas
-      price = API.formatDollars(coin.price.price)
+      formattedPrice = API.formatDollars(price.price)
 
       // Convert to $ with commas
-      volume24Hour = API.formatDollars(coin.price.volume_24h)
+      formattedVolume24Hour = API.formatDollars(price.volume_24h)
 
       // Convert to $ with commas
-      high24Hour = API.formatDollars(coin.price.volume_high_24h)
+      formattedHigh24Hour = API.formatDollars(price.volume_high_24h)
 
       // Convert to $ with commas
-      low24Hour = API.formatDollars(coin.price.volume_low_24h)
+      formattedLow24Hour = API.formatDollars(price.volume_low_24h)
 
       // Convert to $ with commas
-      change24Hour = API.formatDollars(coin.price.change_24h)
+      formattedChange24Hour = API.formatDollars(price.change_24h)
 
       // Convert to % with commas
-      changePct24Hour = API.formatPercent(coin.price.change_percentage_24h)
+      formattedChangePct24Hour = API.formatPercent(price.change_percentage_24h)
 
       // Convert to $ with commas
-      marketCap = API.formatDollars(coin.price.market_cap)
+      formattedMarketCap = API.formatDollars(price.market_cap)
 
-      circulatingSupply = API.formatWholeNumber(coin.price.circulating_supply)
+      formattedCirculatingSupply = API.formatWholeNumber(price.circulating_supply)
     }
 
     let changeStyle
 
-    if (changePct24Hour[0] === '-') {
+    if (formattedChangePct24Hour[0] === '-') {
       changeStyle = 'change red'
-    } else if (changePct24Hour === '0.00%') {
+    } else if (formattedChangePct24Hour === '0.00%') {
       changeStyle = 'change'
     }
 
@@ -122,11 +118,11 @@ class Overview extends Component {
       <div key="overview">
         <Row>
           <Col xs={12} sm={4} md={3} className={styles.meta}>
-            {icon ? <img className={styles.icon} src={icon} alt={name} /> : ''}
+            {icon ? <img className={styles.icon} src={icon} alt={coin.name} /> : ''}
 
-            {coin.coin.websiteUrl ? (
-              <a href={coin.coin.websiteUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="medium" bsStyle="primary" className={styles['coin-urls']}>
+            {coin.websiteUrl ? (
+              <a href={coin.websiteUrl} rel="noopener noreferrer" target="_blank">
+                <Button bsStyle="primary" className={styles['coin-urls']}>
                   Website
                 </Button>
               </a>
@@ -134,10 +130,10 @@ class Overview extends Component {
               ''
             )}
 
-            {twitter ? (
+            {coin.twitter ? (
               <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsSize="medium" bsStyle="info" className={styles['coin-urls']}>
-                  Twitter - @{twitter}
+                <Button bsStyle="info" className={styles['coin-urls']}>
+                  Twitter - @{coin.twitter}
                 </Button>
               </a>
             ) : (
@@ -146,28 +142,28 @@ class Overview extends Component {
           </Col>
           <Col xs={12} sm={4} md={4} className={styles.details}>
             <Row>
-              {this.renderCoinOverviewItem('price', 'Price', price)}
-              {this.renderCoinOverviewItemHTML(
+              {renderCoinOverviewItem('price', 'Price', formattedPrice)}
+              {renderCoinOverviewItemHTML(
                 'change24HourCombined',
                 'Change',
-                `${change24Hour} <span class="${changeStyle}">(${changePct24Hour})</span>`
+                `${formattedChange24Hour} <span class="${changeStyle}">(${formattedChangePct24Hour})</span>`
               )}
-              {this.renderCoinOverviewItem('high24Hour', 'High', high24Hour)}
-              {this.renderCoinOverviewItem('low24Hour', 'Low', low24Hour)}
+              {renderCoinOverviewItem('high24Hour', 'High', formattedHigh24Hour)}
+              {renderCoinOverviewItem('low24Hour', 'Low', formattedLow24Hour)}
             </Row>
           </Col>
           <Col xs={12} sm={4} md={5} className={styles.details}>
             <Row>
-              {this.renderCoinOverviewItem('volume', 'Volume', volume24Hour)}
-              {this.renderCoinOverviewItem('marketCap', 'Market Cap', marketCap)}
-              {this.renderCoinOverviewItem('circulatingSupply', 'Circulating Supply', circulatingSupply)}
-              {this.renderCoinOverviewItem('algorithm', 'Algorithm', algorithm)}
+              {renderCoinOverviewItem('volume', 'Volume', formattedVolume24Hour)}
+              {renderCoinOverviewItem('marketCap', 'Market Cap', formattedMarketCap)}
+              {renderCoinOverviewItem('circulatingSupply', 'Circulating Supply', formattedCirculatingSupply)}
+              {renderCoinOverviewItem('algorithm', 'Algorithm', algorithm)}
             </Row>
           </Col>
         </Row>
         <Row className={styles.details}>
-          {coin.coin.description ? (
-            <Col xs={12}>{this.renderCoinOverviewItemHTML('description', 'Description', coin.coin.description)}</Col>
+          {coin.description ? (
+            <Col xs={12}>{renderCoinOverviewItemHTML('description', 'Description', coin.description)}</Col>
           ) : (
             ''
           )}
@@ -178,55 +174,37 @@ class Overview extends Component {
     return html
   }
 
-  render() {
-    const { coin } = this.props
+  const id = coin ? coin.id : ''
+  const name = coin ? coin.name : ''
+  const symbol = coin ? coin.symbol : ''
 
-    const id = coin.coin ? coin.coin.id : ''
-    const name = coin.coin ? coin.coin.name : ''
-    const symbol = coin.coin ? coin.coin.symbol : ''
-
-    return (
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>{`${name} (${symbol.toUpperCase()}) price, volume, market cap, and info | c12y.com`}</title>
-          <link rel="canonical" href={`https://c12y.com/${id.toLowerCase()}`} />
-          <meta name="description" content={`${name}`} />
-        </Helmet>
-        <Grid>
-          {coin.coin ? (
-            <Row>
-              <Col xs={12}>
-                <h3>{`${coin.coin.name} (${coin.coin.symbol.toUpperCase()}) Details`}</h3>
-              </Col>
-            </Row>
-          ) : (
-            ''
-          )}
-          {this.renderCoinOverview()}
-        </Grid>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`${name} (${symbol.toUpperCase()}) price, volume, market cap, and info | c12y.com`}</title>
+        <link rel="canonical" href={`https://c12y.com/${id.toLowerCase()}`} />
+        <meta name="description" content={`${name}`} />
+      </Helmet>
+      <Grid>
+        {coin ? (
+          <Row>
+            <Col xs={12}>
+              <h3>{`${name} (${symbol.toUpperCase()}) Details`}</h3>
+            </Col>
+          </Row>
+        ) : (
+          ''
+        )}
+        {renderCoinOverview()}
+      </Grid>
+    </div>
+  )
 }
 
 Overview.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  fetchCoin: PropTypes.func.isRequired,
-  coin: PropTypes.object.isRequired,
 }
 
-function mapStateToProps({ coin }) {
-  return {
-    coin,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchCoin: bindActionCreators(fetchCoin, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Overview)
+export default Overview

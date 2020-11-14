@@ -60,9 +60,9 @@ const Wallets = () => {
     <div>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Wallets - c12y.com</title>
+        <title>Wallets | c12y.com</title>
         <link rel="canonical" href="https://c12y.com/wallets" />
-        <meta name="description" content="List of the best cryptocurrency wallets. - c12y.com." />
+        <meta name="description" content="List of the best cryptocurrency wallets." />
       </Helmet>
       <Grid>
         <Row>

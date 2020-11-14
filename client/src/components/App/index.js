@@ -1,11 +1,9 @@
 // React
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 // Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { fetchUser } from '../../actions'
 
 // App
@@ -30,53 +28,43 @@ const withTrackerWrapper = (Page) => {
   return (props) => <Wrapper {...props} />
 }
 
-class App extends Component {
-  componentDidMount() {
-    this.props.fetchUser()
-  }
+const App = () => {
+  const dispatch = useDispatch()
 
-  render() {
-    return (
-      <Router>
-        <ScrollToTop>
-          <div className="App">
-            <Header />
-            <div className="Content">
-              <Switch>
-                <Route exact path="/coins" render={(props) => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
-                <Route exact path="/coins/1" render={() => <Redirect to="/coins" />} />
-                <Route
-                  path="/coins/:page"
-                  render={(props) => withTrackerWrapper(Coins)({ ...props, key: props.match.params.coin })}
-                />
-                <Route path="/about" component={withTracker(About)} />
-                <Route path="/contact" component={withTracker(Contact)} />
-                <Route path="/exchanges" component={withTracker(Exchanges)} />
-                <Route path="/privacy" component={withTracker(Privacy)} />
-                <Route path="/wallets" component={withTracker(Wallets)} />
-                <Route
-                  path="/:coin"
-                  render={(props) => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })}
-                />
-                <Route path="/" component={withTracker(Home)} />
-              </Switch>
-            </div>
-            <Footer />
+  useEffect(() => {
+    dispatch(fetchUser())
+  }, [dispatch])
+
+  return (
+    <Router>
+      <ScrollToTop>
+        <div className="App">
+          <Header />
+          <div className="Content">
+            <Switch>
+              <Route exact path="/coins" render={(props) => withTrackerWrapper(Coins)({ ...props, key: 1 })} />
+              <Route exact path="/coins/1" render={() => <Redirect to="/coins" />} />
+              <Route
+                path="/coins/:page"
+                render={(props) => withTrackerWrapper(Coins)({ ...props, key: props.match.params.coin })}
+              />
+              <Route path="/about" component={withTracker(About)} />
+              <Route path="/contact" component={withTracker(Contact)} />
+              <Route path="/exchanges" component={withTracker(Exchanges)} />
+              <Route path="/privacy" component={withTracker(Privacy)} />
+              <Route path="/wallets" component={withTracker(Wallets)} />
+              <Route
+                path="/:coin"
+                render={(props) => withTrackerWrapper(Overview)({ ...props, key: props.match.params.coin })}
+              />
+              <Route path="/" component={withTracker(Home)} />
+            </Switch>
           </div>
-        </ScrollToTop>
-      </Router>
-    )
-  }
+          <Footer />
+        </div>
+      </ScrollToTop>
+    </Router>
+  )
 }
 
-App.propTypes = {
-  fetchUser: PropTypes.func.isRequired,
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchUser: bindActionCreators(fetchUser, dispatch),
-  }
-}
-
-export default connect(null, mapDispatchToProps)(App)
+export default App

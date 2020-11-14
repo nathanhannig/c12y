@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import GoogleAnalytics from 'react-ga'
+import React, { useEffect } from 'react'
+import ReactGA from 'react-ga'
 import PropTypes from 'prop-types'
 
 const DEFAULT_CONFIG = {
-  // // Un-comment below lines to use for development debugging
+  // Un-comment below lines to use for development debugging
   // trackingId: '',
   // debug: true,
   // gaOptions: {
@@ -11,43 +11,27 @@ const DEFAULT_CONFIG = {
   // },
 }
 
-GoogleAnalytics.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID, DEFAULT_CONFIG)
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID, DEFAULT_CONFIG)
 
-const withTracker = (ChildComponent, options = {}) => {
+export default (WrappedComponent, options = {}) => {
   const trackPage = (page) => {
-    GoogleAnalytics.set({
+    ReactGA.set({
       page,
       ...options,
     })
-    GoogleAnalytics.pageview(page)
+    ReactGA.pageview(page)
   }
 
-  class ComposedComponent extends Component {
-    componentDidMount() {
-      const page = this.props.location.pathname
-      trackPage(page)
-    }
+  const HOC = (props) => {
+    useEffect(() => trackPage(props.location.pathname), [props.location.pathname])
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-      const currentPage = this.props.location.pathname
-      const nextPage = nextProps.location.pathname
-
-      if (currentPage !== nextPage) {
-        trackPage(nextPage)
-      }
-    }
-
-    render() {
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      return <ChildComponent {...this.props} />
-    }
+    // eslint-disable-next-line
+    return <WrappedComponent {...props} />
   }
 
-  ComposedComponent.propTypes = {
+  HOC.propTypes = {
     location: PropTypes.object.isRequired,
   }
 
-  return ComposedComponent
+  return HOC
 }
-
-export default withTracker
