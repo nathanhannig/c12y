@@ -1,22 +1,17 @@
 // React
 import React from 'react'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import 'react-bootstrap-typeahead/css/Typeahead.css'
-import 'react-bootstrap-typeahead/css/Typeahead-bs4.css'
+import { Row, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 
 // App
 import API from '../../utils'
 import styles from './index.module.scss'
 
-const Metrics = (props) => {
-  const { coins } = props
-  const totalMarketCap = (coins.totalMarketCap && API.formatDollarsWholeNumber(coins.totalMarketCap)) || '-'
-  const totalVolume24h = (coins.totalVolume24h && API.formatDollarsWholeNumber(coins.totalVolume24h)) || '-'
-  const totalCoins = (coins.coinList && API.formatWholeNumber(coins.coinList.length)) || '-'
-  const btcDominance = (coins.btcDominance && API.formatPercent(coins.btcDominance)) || '-'
+const Metrics = ({ totalMarketCap, totalVolume24h, totalCoins, btcDominance }) => {
+  const formattedTotalMarketCap = (totalMarketCap && API.formatDollarsWholeNumber(totalMarketCap)) || '-'
+  const formattedTotalVolume24h = (totalVolume24h && API.formatDollarsWholeNumber(totalVolume24h)) || '-'
+  const formattedTotalCoins = (totalCoins && API.formatWholeNumber(totalCoins)) || '-'
+  const formattedBtcDominance = (btcDominance && API.formatPercent(btcDominance)) || '-'
 
   return (
     <div className={styles.metrics}>
@@ -29,7 +24,7 @@ const Metrics = (props) => {
                   Market Cap
                 </Col>
                 <Col className={styles.value} xs={12}>
-                  {totalMarketCap}
+                  {formattedTotalMarketCap}
                 </Col>
               </Row>
             </Col>
@@ -39,7 +34,7 @@ const Metrics = (props) => {
                   24H Volume
                 </Col>
                 <Col className={styles.value} xs={12}>
-                  {totalVolume24h}
+                  {formattedTotalVolume24h}
                 </Col>
               </Row>
             </Col>
@@ -53,7 +48,7 @@ const Metrics = (props) => {
                   Total Coins
                 </Col>
                 <Col className={styles.value} xs={12}>
-                  {totalCoins}
+                  {formattedTotalCoins}
                 </Col>
               </Row>
             </Col>
@@ -63,7 +58,7 @@ const Metrics = (props) => {
                   BTC Dominance
                 </Col>
                 <Col className={styles.value} xs={12}>
-                  {btcDominance}
+                  {formattedBtcDominance}
                 </Col>
               </Row>
             </Col>
@@ -74,8 +69,18 @@ const Metrics = (props) => {
   )
 }
 
-Metrics.propTypes = {
-  coins: PropTypes.object.isRequired,
+Metrics.defaultProps = {
+  totalMarketCap: undefined,
+  totalVolume24h: undefined,
+  totalCoins: undefined,
+  btcDominance: undefined,
 }
 
-export default withRouter(Metrics)
+Metrics.propTypes = {
+  totalMarketCap: PropTypes.number,
+  totalVolume24h: PropTypes.number,
+  totalCoins: PropTypes.number,
+  btcDominance: PropTypes.number,
+}
+
+export default Metrics

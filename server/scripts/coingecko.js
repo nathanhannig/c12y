@@ -122,7 +122,7 @@ const getCoinList = async (app) => {
       })
 
       // Build the coin list
-      data.coinList = Object.keys(data.coins).map(item => ({
+      data.list = Object.keys(data.coins).map(item => ({
         id: item,
         label: data.coins[item].name,
       }))
@@ -309,7 +309,7 @@ const topLosers = (app, list) => {
 const calculateTotalMarketCap = (app, list) => {
   const { prices } = app.locals.data
 
-  // Only include top 100 coins due to inaccurate CryptoCompare API info
+  // Only include top 100 coins due to inaccurate API info
   // for small market coins
   const totalMarketCap = list.slice(0, 100).reduce((acc, cur) => {
     if (prices[cur.id]?.market_cap) {
@@ -386,18 +386,18 @@ const setup = async (app) => {
       // await writeFileAsync('./data/prices.json', JSON.stringify(data.prices, null, 2))
 
       // Provide a default sort after all coin prices obtained
-      data.coinList = sortByMktCap(app, data.coinList)
+      data.list = sortByMktCap(app, data.list)
       data.watchList = sortByMktCap(app, data.watchList)
 
       // Find top 5 Gainers / Losers
-      data.topGainers = topGainers(app, data.coinList)
-      data.topLosers = topLosers(app, data.coinList)
+      data.topGainers = topGainers(app, data.list)
+      data.topLosers = topLosers(app, data.list)
 
       // Calculate Total Market Cap
-      data.totalMarketCap = calculateTotalMarketCap(app, data.coinList)
+      data.totalMarketCap = calculateTotalMarketCap(app, data.list)
 
       // Calculate Total 24h Volume
-      data.totalVolume24h = calculateTotal24hVolume(app, data.coinList)
+      data.totalVolume24h = calculateTotal24hVolume(app, data.list)
 
       // Calculate BTC Dominance
       data.btcDominance = calculateBTCDominance(app)

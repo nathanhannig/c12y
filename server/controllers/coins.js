@@ -1,7 +1,7 @@
 const getCoins = (req, res) => {
   const { data } = req.app.locals
 
-  if (!data || !data.coinList) {
+  if (!data || !data.list) {
     res.status(500)
     throw new Error('Coin list not yet ready, please try again in a few moments.')
   }
@@ -13,23 +13,23 @@ const getCoins = (req, res) => {
   const limit = 100
   const end = (page * limit) - 1
   const begin = end - (limit - 1)
-  const total = data.coinList.length
+  const total = data.list.length
 
   const coins = {}
   const prices = {}
   for (let i = begin; i <= end && i < total; i += 1) {
-    coins[data.coinList[i].id] = data.coins[data.coinList[i].id]
+    coins[data.list[i].id] = data.coins[data.list[i].id]
 
     if (data.prices
-          && data.prices[data.coinList[i].id]) {
-      prices[data.coinList[i].id] = data.prices[data.coinList[i].id]
+          && data.prices[data.list[i].id]) {
+      prices[data.list[i].id] = data.prices[data.list[i].id]
     }
   }
 
   return res.send({
     coins,
     prices,
-    coinList: data.coinList,
+    list: data.list,
     totalMarketCap: data.totalMarketCap,
     totalVolume24h: data.totalVolume24h,
     btcDominance: data.btcDominance,

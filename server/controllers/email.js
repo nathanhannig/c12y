@@ -22,7 +22,7 @@ const sendEmail = asyncHandler(async (req, res) => {
 
   if (Object.keys(errors).length) {
     res.status(500)
-    throw new Error(errors)
+    throw new Error(JSON.stringify(Object.values(errors).join(', ')))
   }
 
   // using SendGrid's v3 Node.js Library

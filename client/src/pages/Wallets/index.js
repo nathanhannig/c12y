@@ -1,8 +1,6 @@
 // React
 import React, { useState, useEffect } from 'react'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 import axios from 'axios'
 
@@ -60,14 +58,14 @@ const Wallets = () => {
     <div>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Wallets - c12y.com</title>
+        <title>Wallets | c12y.com</title>
         <link rel="canonical" href="https://c12y.com/wallets" />
-        <meta name="description" content="List of the best cryptocurrency wallets. - c12y.com." />
+        <meta name="description" content="List of the best cryptocurrency wallets." />
       </Helmet>
-      <Grid>
+      <Container>
         <Row>
           <Col xs={12}>
-            <h3>Wallets</h3>
+            <h3 className="mt-4 mb-2">Wallets</h3>
           </Col>
         </Row>
         <Row>
@@ -81,7 +79,7 @@ const Wallets = () => {
           </Col>
         </Row>
         {loading ? <div className="loader" /> : renderList(wallets)}
-      </Grid>
+      </Container>
     </div>
   )
 }

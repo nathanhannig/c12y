@@ -8,8 +8,9 @@ import { unregister } from './registerServiceWorker'
 import store from './store'
 
 // App
-import App from './components/App'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.module.scss'
+import App from './components/App'
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,16 +1,12 @@
 // React
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import PropTypes from 'prop-types'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
+import { formatDistance } from 'date-fns'
 
 // Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { formatDistance } from 'date-fns'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchCoins } from '../../actions'
 
 // App
@@ -20,19 +16,22 @@ import CoinItem from '../../components/CoinItem'
 import API from '../../utils'
 import styles from './index.module.scss'
 
-class Main extends Component {
-  async componentDidMount() {
-    await this.props.fetchCoins()
-  }
+const Main = () => {
+  const dispatch = useDispatch()
 
-  renderCoinList = () => {
-    const { coins } = this.props
+  const coinList = useSelector((state) => state.coins)
+  const { loading, coins, prices, totalMarketCap, totalVolume24h, list, btcDominance, lastUpdated } = coinList
 
-    if (coins.loading) {
+  useEffect(() => {
+    dispatch(fetchCoins())
+  }, [dispatch])
+
+  const renderCoinList = () => {
+    if (loading) {
       return <div className="loader" />
     }
 
-    if (!coins.coins) {
+    if (!coins) {
       return (
         <Row>
           <Col xs={12}>
@@ -42,10 +41,10 @@ class Main extends Component {
       )
     }
 
-    const html = Object.keys(coins.coins).map((item, i) => {
-      const { name } = coins.coins[item]
+    const html = Object.keys(coins).map((item, i) => {
+      const { name } = coins[item]
 
-      const icon = coins.coins[item].image && coins.coins[item].image.small
+      const icon = coins[item].image && coins[item].image.small
 
       let price = 'N/A'
       let change = 'N/A'
@@ -53,19 +52,19 @@ class Main extends Component {
       let volume = 'N/A'
       let marketCap = 'N/A'
 
-      if (coins.prices[item]) {
+      if (prices[item]) {
         // Convert to $ with commas
-        price = API.formatDollars(coins.prices[item].price)
+        price = API.formatDollars(prices[item].price)
 
         // Convert to percent
-        change = API.formatPercent(coins.prices[item].change_percentage_24h)
+        change = API.formatPercent(prices[item].change_percentage_24h)
 
         // Convert to whole number with commas
-        supply = API.formatWholeNumber(coins.prices[item].circulating_supply)
+        supply = API.formatWholeNumber(prices[item].circulating_supply)
 
         // Convert to whole $ with commas
-        volume = API.formatDollarsWholeNumber(coins.prices[item].volume_24h)
-        marketCap = API.formatDollarsWholeNumber(coins.prices[item].market_cap)
+        volume = API.formatDollarsWholeNumber(prices[item].volume_24h)
+        marketCap = API.formatDollarsWholeNumber(prices[item].market_cap)
       }
 
       return (
@@ -102,7 +101,7 @@ class Main extends Component {
         <Col xs={12}>
           <p>
             Last updated{' '}
-            {formatDistance(this.props.coins.lastUpdated, new Date(), {
+            {formatDistance(lastUpdated, new Date(), {
               addSuffix: true,
             })}
           </p>
@@ -123,50 +122,36 @@ class Main extends Component {
     return html
   }
 
-  render() {
-    return (
-      <div>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Cryptocurrency Prices - c12y.com</title>
-          <link rel="canonical" href="https://c12y.com/" />
-          <meta
-            name="description"
-            content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)."
-          />
-        </Helmet>
-        <Grid>
-          <Metrics coins={this.props.coins} />
-          <Search coins={this.props.coins} />
-        </Grid>
-        <Grid>
-          <Row>
-            <Col xs={12}>
-              <h3>Featured Coins</h3>
-            </Col>
-          </Row>
-          {this.renderCoinList()}
-        </Grid>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Cryptocurrency Prices | c12y.com</title>
+        <link rel="canonical" href="https://c12y.com/" />
+        <meta
+          name="description"
+          content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)."
+        />
+      </Helmet>
+      <Container>
+        <Metrics
+          totalMarketCap={totalMarketCap}
+          totalVolume24h={totalVolume24h}
+          totalCoins={list?.length}
+          btcDominance={btcDominance}
+        />
+        <Search list={list} />
+      </Container>
+      <Container>
+        <Row>
+          <Col xs={12}>
+            <h3 className="mt-4 mb-2">Featured Coins</h3>
+          </Col>
+        </Row>
+        {renderCoinList()}
+      </Container>
+    </div>
+  )
 }
 
-Main.propTypes = {
-  fetchCoins: PropTypes.func.isRequired,
-  coins: PropTypes.object.isRequired,
-}
-
-function mapStateToProps(state) {
-  return {
-    coins: state.coins,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchCoins: bindActionCreators(fetchCoins, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default Main

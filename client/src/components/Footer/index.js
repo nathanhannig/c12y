@@ -1,16 +1,10 @@
 // React
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Button from 'react-bootstrap/lib/Button'
-import PropTypes from 'prop-types'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 
 // Redux
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
 // App
 import { IoMdHappy as SmileyFace } from 'react-icons/io'
 import format from 'date-fns/format'
@@ -20,126 +14,102 @@ import TipModal from '../TipModal'
 import API from '../../utils'
 import styles from './index.module.scss'
 
-class Footer extends Component {
-  state = {
-    showModal: false,
+const Footer = () => {
+  const [showModal, setShowModal] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const gainers = useSelector((state) => state.gainers)
+  const losers = useSelector((state) => state.losers)
+
+  useEffect(() => {
+    dispatch(fetchGainers())
+    dispatch(fetchLosers())
+  }, [dispatch])
+
+  const handleModalShow = () => {
+    setShowModal(true)
   }
 
-  componentDidMount() {
-    this.props.fetchGainers()
-    this.props.fetchLosers()
+  const handleModalClose = () => {
+    setShowModal(false)
   }
 
-  handleModalShow = () => {
-    this.setState({
-      showModal: true,
-    })
-  }
+  return (
+    <footer className={styles.footer}>
+      <Container>
+        <Row className={styles.topLists}>
+          <Col md={1} className="d-none d-md-block" />
+          <Col sm={12} md={4}>
+            {gainers.list !== undefined ? (
+              <TopList
+                name="Top Gainers"
+                list={gainers.list.map((item) => {
+                  const newValue = API.formatPercent(item.value)
 
-  handleModalClose = () => {
-    this.setState({
-      showModal: false,
-    })
-  }
+                  return { id: item.id, name: item.name, value: newValue }
+                })}
+              />
+            ) : (
+              ''
+            )}
+          </Col>
+          <Col md={2} className="d-none d-md-block" />
+          <Col sm={12} md={4}>
+            {losers.list !== undefined ? (
+              <TopList
+                name="Top Losers"
+                list={losers.list.map((item) => {
+                  const newValue = API.formatPercent(item.value)
 
-  render() {
-    return (
-      <footer className={styles.footer}>
-        <Grid>
-          <Row className={styles.topLists}>
-            <Col xsHidden sm={1} />
-            <Col xs={12} sm={4}>
-              {this.props.gainers.list !== undefined ? (
-                <TopList
-                  name="Top Gainers"
-                  list={this.props.gainers.list.map((item) => {
-                    const newValue = API.formatPercent(item.value)
+                  return { id: item.id, name: item.name, value: newValue }
+                })}
+              />
+            ) : (
+              ''
+            )}
+          </Col>
+          <Col md={1} className="d-none d-md-block" />
+        </Row>
+        <Row className={styles.nav}>
+          <Col xs={12}>
+            <ul>
+              <li>
+                <Link to="/about">About Us</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact Us</Link>
+              </li>
+              <li>
+                <Link to="/privacy">Privacy Policy</Link>
+              </li>
+            </ul>
+          </Col>
+        </Row>
+        <Row className={styles.tip}>
+          <Col xs={12}>
+            <Button variant="success" onClick={handleModalShow}>
+              <SmileyFace className={styles.smiley} size={40} /> Give A Tip!
+            </Button>
+          </Col>
+        </Row>
+        <Row className={styles.nav}>
+          <Col xs={12}>
+            <ul>
+              <li>Copyright &copy; {format(new Date(), 'yyyy')} by c12y.com</li>
+            </ul>
+          </Col>
+          <Col xs={12}>
+            <ul>
+              <li>Powered by CoinGecko API</li>
+            </ul>
+          </Col>
+        </Row>
+      </Container>
 
-                    return { id: item.id, name: item.name, value: newValue }
-                  })}
-                />
-              ) : (
-                ''
-              )}
-            </Col>
-            <Col xsHidden sm={2} />
-            <Col xs={12} sm={4}>
-              {this.props.losers.list !== undefined ? (
-                <TopList
-                  name="Top Losers"
-                  list={this.props.losers.list.map((item) => {
-                    const newValue = API.formatPercent(item.value)
-
-                    return { id: item.id, name: item.name, value: newValue }
-                  })}
-                />
-              ) : (
-                ''
-              )}
-            </Col>
-            <Col xsHidden sm={1} />
-          </Row>
-          <Row className={styles.nav}>
-            <Col xs={12}>
-              <ul>
-                <li>
-                  <Link to="/about">About Us</Link>
-                </li>
-                <li>
-                  <Link to="/contact">Contact Us</Link>
-                </li>
-                <li>
-                  <Link to="/privacy">Privacy Policy</Link>
-                </li>
-              </ul>
-            </Col>
-          </Row>
-          <Row className={styles.tip}>
-            <Col xs={12}>
-              <Button bsStyle="success" onClick={this.handleModalShow}>
-                <SmileyFace className={styles.smiley} size={40} /> Give A Tip!
-              </Button>
-            </Col>
-          </Row>
-          <Row className={styles.nav}>
-            <Col xs={12}>
-              <ul>
-                <li>Copyright &copy; {format(new Date(), 'yyyy')} by c12y.com</li>
-              </ul>
-            </Col>
-            <Col xs={12}>
-              <ul>
-                <li>Powered by CoinGecko API</li>
-              </ul>
-            </Col>
-          </Row>
-        </Grid>
-
-        <TipModal show={this.state.showModal} onHide={this.handleModalClose} />
-      </footer>
-    )
-  }
+      <TipModal show={showModal} onHide={handleModalClose} />
+    </footer>
+  )
 }
 
-Footer.propTypes = {
-  fetchGainers: PropTypes.func.isRequired,
-  fetchLosers: PropTypes.func.isRequired,
-  gainers: PropTypes.object.isRequired,
-  losers: PropTypes.object.isRequired,
-}
-
-function mapStateToProps(state) {
-  return {
-    gainers: state.gainers,
-    losers: state.losers,
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchGainers: bindActionCreators(fetchGainers, dispatch),
-    fetchLosers: bindActionCreators(fetchLosers, dispatch),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Footer)
+export default Footer
