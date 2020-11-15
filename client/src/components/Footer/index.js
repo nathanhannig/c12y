@@ -1,10 +1,7 @@
 // React
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Button from 'react-bootstrap/lib/Button'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,10 +37,10 @@ const Footer = () => {
 
   return (
     <footer className={styles.footer}>
-      <Grid>
+      <Container>
         <Row className={styles.topLists}>
-          <Col xsHidden sm={1} />
-          <Col xs={12} sm={4}>
+          <Col md={1} className="d-none d-md-block" />
+          <Col sm={12} md={4}>
             {gainers.list !== undefined ? (
               <TopList
                 name="Top Gainers"
@@ -57,8 +54,8 @@ const Footer = () => {
               ''
             )}
           </Col>
-          <Col xsHidden sm={2} />
-          <Col xs={12} sm={4}>
+          <Col md={2} className="d-none d-md-block" />
+          <Col sm={12} md={4}>
             {losers.list !== undefined ? (
               <TopList
                 name="Top Losers"
@@ -72,7 +69,7 @@ const Footer = () => {
               ''
             )}
           </Col>
-          <Col xsHidden sm={1} />
+          <Col md={1} className="d-none d-md-block" />
         </Row>
         <Row className={styles.nav}>
           <Col xs={12}>
@@ -91,7 +88,7 @@ const Footer = () => {
         </Row>
         <Row className={styles.tip}>
           <Col xs={12}>
-            <Button bsStyle="success" onClick={handleModalShow}>
+            <Button variant="success" onClick={handleModalShow}>
               <SmileyFace className={styles.smiley} size={40} /> Give A Tip!
             </Button>
           </Col>
@@ -108,7 +105,7 @@ const Footer = () => {
             </ul>
           </Col>
         </Row>
-      </Grid>
+      </Container>
 
       <TipModal show={showModal} onHide={handleModalClose} />
     </footer>

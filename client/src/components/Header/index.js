@@ -1,38 +1,39 @@
 // React
 import React from 'react'
-import Navbar from 'react-bootstrap/lib/Navbar'
-import Nav from 'react-bootstrap/lib/Nav'
-import NavItem from 'react-bootstrap/lib/NavItem'
+import { Container, Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import PropTypes from 'prop-types'
 
 // Redux
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // App
 import styles from './index.module.scss'
 
-const Header = (props) => {
+const Header = () => {
+  const auth = useSelector((state) => state.auth)
+
   const renderLogin = () => {
-    if (!props.auth || props.auth.loading) {
+    if (!auth || auth.loading) {
       return ''
     }
 
-    switch (props.auth.isLoggedIn) {
+    switch (auth.isLoggedIn) {
       case true:
         return (
-          <Nav pullRight>
-            <NavItem href="/auth/logout" eventKey={1}>
-              Logout
-            </NavItem>
+          <Nav className="justify-content-end">
+            <Nav.Item className={styles.link}>
+              <a href="/auth/logout">Logout</a>
+            </Nav.Item>
           </Nav>
         )
       default:
         return (
-          <Nav pullRight>
-            <NavItem href="/auth/google" eventKey={1}>
-              Sign in with <span className={styles.google}>Google</span>
-            </NavItem>
+          <Nav className="justify-content-end">
+            <Nav.Item className={styles.link}>
+              <a href="/auth/google">
+                Sign in with <span className={styles.google}>Google</span>
+              </a>
+            </Nav.Item>
           </Nav>
         )
     }
@@ -40,8 +41,8 @@ const Header = (props) => {
 
   return (
     <header className={styles.header}>
-      <Navbar collapseOnSelect>
-        <Navbar.Header>
+      <Navbar bg="light" expand="lg" collapseOnSelect>
+        <Container>
           <LinkContainer to="/">
             <Navbar.Brand className={styles.logo}>
               <span className={styles.crypto}>c</span>
@@ -52,49 +53,25 @@ const Header = (props) => {
               <span className={styles.currency}>y</span>
             </Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer to="/coins">
-              <NavItem eventKey={1} className={styles.link}>
-                Coins
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to="/exchanges">
-              <NavItem eventKey={2} className={styles.link}>
-                Exchanges
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to="/wallets">
-              <NavItem eventKey={3} className={styles.link}>
-                Wallets
-              </NavItem>
-            </LinkContainer>
-          </Nav>
-
-          {renderLogin()}
-        </Navbar.Collapse>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <LinkContainer to="/coins">
+                <Nav.Item className={styles.link}>Coins</Nav.Item>
+              </LinkContainer>
+              <LinkContainer to="/exchanges">
+                <Nav.Item className={styles.link}>Exchanges</Nav.Item>
+              </LinkContainer>
+              <LinkContainer to="/wallets">
+                <Nav.Item className={styles.link}>Wallets</Nav.Item>
+              </LinkContainer>
+            </Nav>
+            {renderLogin()}
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     </header>
   )
 }
 
-Header.propTypes = {
-  auth: PropTypes.any,
-}
-
-Header.defaultProps = {
-  auth: null,
-}
-
-function mapStateToProps({ auth }) {
-  return { auth }
-}
-
-// React Router updates active class in Navbar outside Redux
-// 'My views aren’t updating when something changes outside of Redux'
-// https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md
-export default connect(mapStateToProps, null, null, {
-  pure: false,
-})(Header)
+export default Header

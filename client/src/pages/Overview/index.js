@@ -1,9 +1,6 @@
 // React
 import React, { useEffect } from 'react'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Button from 'react-bootstrap/lib/Button'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 
@@ -122,7 +119,7 @@ const Overview = ({ match, history }) => {
 
             {coin.websiteUrl ? (
               <a href={coin.websiteUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsStyle="primary" className={styles['coin-urls']}>
+                <Button variant="primary" className={styles['coin-urls']}>
                   Website
                 </Button>
               </a>
@@ -132,7 +129,7 @@ const Overview = ({ match, history }) => {
 
             {coin.twitter ? (
               <a href={twitterUrl} rel="noopener noreferrer" target="_blank">
-                <Button bsStyle="info" className={styles['coin-urls']}>
+                <Button variant="info" className={styles['coin-urls']}>
                   Twitter - @{coin.twitter}
                 </Button>
               </a>
@@ -186,18 +183,18 @@ const Overview = ({ match, history }) => {
         <link rel="canonical" href={`https://c12y.com/${id.toLowerCase()}`} />
         <meta name="description" content={`${name}`} />
       </Helmet>
-      <Grid>
+      <Container>
         {coin ? (
           <Row>
             <Col xs={12}>
-              <h3>{`${name} (${symbol.toUpperCase()}) Details`}</h3>
+              <h3 className="mt-4 mb-2">{`${name} (${symbol.toUpperCase()}) Details`}</h3>
             </Col>
           </Row>
         ) : (
           ''
         )}
         {renderCoinOverview()}
-      </Grid>
+      </Container>
     </div>
   )
 }

@@ -1,12 +1,6 @@
 // React
 import React, { useState } from 'react'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Modal from 'react-bootstrap/lib/Modal'
-import Button from 'react-bootstrap/lib/Button'
-import FormGroup from 'react-bootstrap/lib/FormGroup'
-import InputGroup from 'react-bootstrap/lib/InputGroup'
-import FormControl from 'react-bootstrap/lib/FormControl'
+import { Container, Row, Col, Modal, Button, InputGroup, FormControl } from 'react-bootstrap'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import PropTypes from 'prop-types'
 
@@ -28,63 +22,64 @@ const TipModal = ({ show, onHide }) => {
 
   const renderAddress = (title, wasCopied, address, handleCopy) => (
     <>
-      <h4>
+      <h5>
         {title}
         {wasCopied ? <span className={`green ${styles.copied}`}>Copied</span> : null}
-      </h4>
-      <FormGroup>
-        <InputGroup>
-          <FormControl type="text" readOnly defaultValue={address} />
-          <InputGroup.Button>
-            <CopyToClipboard text={address} onCopy={handleCopy}>
-              <Button>Copy</Button>
-            </CopyToClipboard>
-          </InputGroup.Button>
-        </InputGroup>
-      </FormGroup>
+      </h5>
+
+      <InputGroup>
+        <FormControl type="text" readOnly defaultValue={address} />
+        <InputGroup.Append>
+          <CopyToClipboard text={address} onCopy={handleCopy}>
+            <Button variant="outline-primary">Copy</Button>
+          </CopyToClipboard>
+        </InputGroup.Append>
+      </InputGroup>
     </>
   )
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal size="lg" show={show} onHide={onHide}>
       <Modal.Header closeButton>
         <Modal.Title>Give A Tip Of Crypto!</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Row>
-          <Col xs={12} sm={9}>
-            <p className="center">
-              Put a smile on our faces and support us by donating to our wallet addresses below. If you would like to
-              donate a cryptocurrency not listed below, please contact us!
-            </p>
-          </Col>
-          <Col xs={12} sm={3} className="center">
-            <SmileyFace size={60} />
-          </Col>
-        </Row>
-        {renderAddress('Bitcoin', copied.BTC, addresses.BTC, () =>
-          setCopied({
-            BTC: true,
-            ETH: false,
-            LTC: false,
-          })
-        )}
-        <hr />
-        {renderAddress('Ethereum', copied.ETH, addresses.ETH, () =>
-          setCopied({
-            BTC: false,
-            ETH: true,
-            LTC: false,
-          })
-        )}
-        <hr />
-        {renderAddress('Litecoin', copied.LTC, addresses.LTC, () =>
-          setCopied({
-            BTC: false,
-            ETH: false,
-            LTC: true,
-          })
-        )}
+        <Container>
+          <Row>
+            <Col xs={12} sm={9}>
+              <p className="center">
+                Put a smile on our faces and support us by donating to our wallet addresses below. If you would like to
+                donate a cryptocurrency not listed below, please contact us!
+              </p>
+            </Col>
+            <Col xs={12} sm={3} className="center">
+              <SmileyFace size={60} />
+            </Col>
+          </Row>
+          {renderAddress('Bitcoin', copied.BTC, addresses.BTC, () =>
+            setCopied({
+              BTC: true,
+              ETH: false,
+              LTC: false,
+            })
+          )}
+          <hr />
+          {renderAddress('Ethereum', copied.ETH, addresses.ETH, () =>
+            setCopied({
+              BTC: false,
+              ETH: true,
+              LTC: false,
+            })
+          )}
+          <hr />
+          {renderAddress('Litecoin', copied.LTC, addresses.LTC, () =>
+            setCopied({
+              BTC: false,
+              ETH: false,
+              LTC: true,
+            })
+          )}
+        </Container>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Close</Button>

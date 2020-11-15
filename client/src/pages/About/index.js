@@ -1,8 +1,6 @@
 // React
 import React from 'react'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 
 const About = () => (
@@ -13,10 +11,10 @@ const About = () => (
       <link rel="canonical" href="https://c12y.com/about" />
       <meta name="description" content="About Us at c12y.com." />
     </Helmet>
-    <Grid>
+    <Container>
       <Row>
         <Col xs={12}>
-          <h3>About Us</h3>
+          <h3 className="mt-4 mb-2">About Us</h3>
         </Col>
       </Row>
       <Row>
@@ -56,7 +54,7 @@ const About = () => (
           </p>
         </Col>
       </Row>
-    </Grid>
+    </Container>
   </div>
 )
 

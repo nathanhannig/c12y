@@ -8,9 +8,23 @@
         }
     }
 
-    .link > a,
-    .link > a:link,
-    .link > a:visited {
+    .link {
+        color: #777;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+        padding: 10px 15px;
+        line-height: 20px;
+
+        &:focus,
+        &:hover {
+            cursor: pointer;
+            color: #333;
+            background-color: transparent;
+        }
+    }
+
+    .link,
+    .link:link,
+    .link:visited {
         transition: color 0.2s;
     }
 

@@ -2,10 +2,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Pager from 'react-bootstrap/lib/Pager'
+import { Container, Row, Col, Pagination } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { formatDistance } from 'date-fns'
@@ -142,30 +139,30 @@ const Coins = ({ match, history }) => {
 
     if (currentPage === 1) {
       pager = (
-        <Pager>
-          <LinkContainer to={`/coins/${currentPage + 1}`}>
-            <Pager.Item next>Next 100 &rarr;</Pager.Item>
+        <Pagination className="flex-row-reverse justify-content-between">
+          <LinkContainer to={`/coins/${currentPage + 1}`} exact>
+            <Pagination.Item>Next 100 &rarr;</Pagination.Item>
           </LinkContainer>
-        </Pager>
+        </Pagination>
       )
     } else if (currentPage === lastPage) {
       pager = (
-        <Pager>
-          <LinkContainer to={`/coins/${currentPage - 1}`}>
-            <Pager.Item previous>&larr; Previous 100</Pager.Item>
+        <Pagination>
+          <LinkContainer to={`/coins/${currentPage - 1}`} exact>
+            <Pagination.Item>&larr; Previous 100</Pagination.Item>
           </LinkContainer>
-        </Pager>
+        </Pagination>
       )
     } else if (currentPage > 1 && currentPage < lastPage) {
       pager = (
-        <Pager>
-          <LinkContainer to={`/coins${currentPage - 1 === 1 ? '' : `/${currentPage - 1}`}`}>
-            <Pager.Item previous>&larr; Previous 100</Pager.Item>
+        <Pagination className="justify-content-between">
+          <LinkContainer to={`/coins${currentPage - 1 === 1 ? '' : `/${currentPage - 1}`}`} exact>
+            <Pagination.Item>&larr; Previous 100</Pagination.Item>
           </LinkContainer>
-          <LinkContainer to={`/coins/${currentPage + 1}`}>
-            <Pager.Item next>Next 100 &rarr;</Pager.Item>
+          <LinkContainer to={`/coins/${currentPage + 1}`} exact>
+            <Pagination.Item>Next 100 &rarr;</Pagination.Item>
           </LinkContainer>
-        </Pager>
+        </Pagination>
       )
     }
 
@@ -184,14 +181,14 @@ const Coins = ({ match, history }) => {
       ) : (
         ''
       )}
-      <Grid>
+      <Container>
         <Search list={list} />
-      </Grid>
-      <Grid>
+      </Container>
+      <Container>
         <Row>
           <Col xs={12}>
             {!loading ? (
-              <h3>
+              <h3 className="mt-4 mb-2">
                 Coins (List {begin + 1} - {end + 1})
               </h3>
             ) : (
@@ -202,7 +199,7 @@ const Coins = ({ match, history }) => {
         {renderPager()}
         {renderCoinList()}
         {renderPager()}
-      </Grid>
+      </Container>
     </div>
   )
 }

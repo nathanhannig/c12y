@@ -1,8 +1,6 @@
 // React
 import React from 'react'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 
 const Privacy = () => (
@@ -13,10 +11,10 @@ const Privacy = () => (
       <link rel="canonical" href="https://c12y.com/privacy" />
       <meta name="description" content="Privacy Policy at c12y.com." />
     </Helmet>
-    <Grid>
+    <Container>
       <Row>
         <Col xs={12}>
-          <h3>Privacy Policy</h3>
+          <h3 className="mt-4 mb-2">Privacy Policy</h3>
         </Col>
       </Row>
       <Row>
@@ -38,7 +36,7 @@ const Privacy = () => (
           </ul>
         </Col>
       </Row>
-    </Grid>
+    </Container>
   </div>
 )
 

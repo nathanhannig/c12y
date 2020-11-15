@@ -1,9 +1,7 @@
 // React
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Grid from 'react-bootstrap/lib/Grid'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+import { Container, Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet'
 import { formatDistance } from 'date-fns'
 
@@ -135,7 +133,7 @@ const Main = () => {
           content="The latest cryptocurrency prices of you favorite coins (BTC, ETH, LTC, EOS, BCH, DASH)."
         />
       </Helmet>
-      <Grid>
+      <Container>
         <Metrics
           totalMarketCap={totalMarketCap}
           totalVolume24h={totalVolume24h}
@@ -143,15 +141,15 @@ const Main = () => {
           btcDominance={btcDominance}
         />
         <Search list={list} />
-      </Grid>
-      <Grid>
+      </Container>
+      <Container>
         <Row>
           <Col xs={12}>
-            <h3>Featured Coins</h3>
+            <h3 className="mt-4 mb-2">Featured Coins</h3>
           </Col>
         </Row>
         {renderCoinList()}
-      </Grid>
+      </Container>
     </div>
   )
 }

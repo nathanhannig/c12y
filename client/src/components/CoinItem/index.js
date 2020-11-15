@@ -1,7 +1,6 @@
 // React
 import React from 'react'
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
+import { Row, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 // App
@@ -14,25 +13,13 @@ const CoinItem = (props) => {
   if (props.header) {
     html = (
       <Row className={`${styles.header} vertical-align`}>
-        <Col sm={12} md={1}>
-          {props.counter}
-        </Col>
-        <Col smHidden md={1} />
-        <Col sm={12} md={2}>
-          {props.name}
-        </Col>
-        <Col sm={12} md={2}>
-          {props.price}
-        </Col>
-        <Col sm={12} md={2}>
-          {props.change}
-        </Col>
-        <Col sm={12} md={2}>
-          {props.volume}
-        </Col>
-        <Col sm={12} md={2}>
-          {props.marketCap}
-        </Col>
+        <Col md={1}>{props.counter}</Col>
+        <Col md={1} className="d-sm-none d-md-block" />
+        <Col md={2}>{props.name}</Col>
+        <Col md={2}>{props.price}</Col>
+        <Col md={2}>{props.change}</Col>
+        <Col md={2}>{props.volume}</Col>
+        <Col md={2}>{props.marketCap}</Col>
       </Row>
     )
   } else {
@@ -46,28 +33,28 @@ const CoinItem = (props) => {
 
     html = (
       <Row className={`vertical-align ${styles.list}`}>
-        <Col xs={2} sm={1} md={1} className={styles.counter}>
+        <Col xs={1} className={styles.counter}>
           {props.counter}
         </Col>
-        <Col xs={4} sm={2} md={1} className={styles.icon}>
+        <Col xs={1} className={styles.icon}>
           {props.icon ? <img src={props.icon} alt={props.name} /> : ''}
         </Col>
-        <Col xs={6} sm={9} md={2} className={styles.name}>
+        <Col xs={10} lg={2} className={styles.name}>
           {props.name}
         </Col>
-        <Col xs={12} sm={12} md={2} data-title="Price:" className={styles.price}>
+        <Col xs={12} lg={2} data-title="Price:" className={styles.price}>
           {props.price}
         </Col>
-        <Col xs={12} sm={12} md={2} data-title="Change:" className={styles.price}>
+        <Col xs={12} lg={2} data-title="Change:" className={styles.price}>
           <span className={changeStyle}>{props.change}</span>
         </Col>
-        <Col xs={12} sm={12} md={2} data-title="24h Volume:" className={styles.volume}>
+        <Col xs={12} lg={2} data-title="24h Volume:" className={styles.volume}>
           {props.volume}
         </Col>
-        <Col xs={12} sm={12} md={2} data-title="Market Cap:" className={styles.market}>
+        <Col xs={12} lg={2} data-title="Market Cap:" className={styles.market}>
           {props.marketCap}
         </Col>
-        <Col xs={12} sm={12} mdHidden lgHidden data-title="Circulating:" className={styles.supply}>
+        <Col xs={12} lg={2} data-title="Circulating:" className={`d-lg-none ${styles.supply}`}>
           {props.supply}
         </Col>
       </Row>
