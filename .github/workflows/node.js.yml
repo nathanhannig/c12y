@@ -47,8 +47,8 @@ jobs:
               cd /var/www/c12y.com/c12y
               git pull origin master
               cd server
-              npm install --production
+              npm install
               pm2 restart c12y-server
               cd ../client
-              npm install --production
+              npm install
               npm run build
