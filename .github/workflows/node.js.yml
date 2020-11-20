@@ -48,4 +48,5 @@ jobs:
               npm install --production
               pm2 restart c12y-server
               cd ../client
+              npm install --production
               npm run build
