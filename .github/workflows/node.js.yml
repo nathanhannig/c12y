@@ -35,7 +35,7 @@ jobs:
 
         steps:
         - name: SSH and deploy
-          uses: nathanhannig/c12y@master
+          uses: appleboy/ssh-action@master
           with:
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
