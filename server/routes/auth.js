@@ -2,8 +2,8 @@ import passport from 'passport'
 import express from 'express'
 import {
   authGoogleCallback,
-  getUser,
-  logoutUser,
+  getCurrentUser,
+  logoutCurrentUser,
 } from '../controllers/auth.js'
 
 const router = express.Router()
@@ -14,8 +14,8 @@ router.route('/google').get(passport.authenticate('google', {
 
 router.route('/google/callback').get(passport.authenticate('google'), authGoogleCallback)
 
-router.route('/current_user').get(getUser)
+router.route('/current_user').get(getCurrentUser)
 
-router.route('/logout').get(logoutUser)
+router.route('/logout').get(logoutCurrentUser)
 
 export default router

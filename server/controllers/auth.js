@@ -2,13 +2,14 @@ const authGoogleCallback = (req, res) => {
   res.redirect('/')
 }
 
-const getUser = (req, res) => {
+const getCurrentUser = (req, res) => {
   const user = {
     isLoggedIn: false,
   }
 
   if (req.user) {
     user.isLoggedIn = true
+    user.id = req.user._id
     user.email = req.user.email
     user.firstName = req.user.firstName
     user.lastName = req.user.lastName
@@ -18,13 +19,14 @@ const getUser = (req, res) => {
   res.send(user)
 }
 
-const logoutUser = (req, res) => {
+const logoutCurrentUser = (req, res) => {
   req.logout()
+
   res.redirect('/')
 }
 
 export {
   authGoogleCallback,
-  getUser,
-  logoutUser,
+  getCurrentUser,
+  logoutCurrentUser,
 }
