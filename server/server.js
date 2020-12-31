@@ -28,10 +28,12 @@ const app = express()
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.resolve()
 
-app.use(cookieSession({
-  maxAge: 30 * 24 * 60 * 60 * 1000,
-  keys: [keys.cookieKey],
-}))
+app.use(cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] }))
+
+// Used to parse POST form requests to req.body
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -42,11 +44,6 @@ const corsOption = {
 }
 app.use(cors(corsOption))
 
-// Used to parse POST form requests to req.body
-app.use(bodyParser.urlencoded({
-  extended: true,
-}))
-app.use(bodyParser.json())
 
 // ROUTES --
 app.use('/api', apiRoutes)

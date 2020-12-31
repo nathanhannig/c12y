@@ -1,4 +1,4 @@
 import { fetchCoins, fetchCoin, fetchGainers, fetchLosers } from './coin'
-import { fetchUser } from './user'
+import { fetchUser, loginUser } from './user'
 
-export { fetchCoins, fetchCoin, fetchGainers, fetchLosers, fetchUser }
+export { fetchCoins, fetchCoin, fetchGainers, fetchLosers, fetchUser, loginUser }

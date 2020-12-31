@@ -29,11 +29,9 @@ const Header = () => {
       default:
         return (
           <Nav className="justify-content-end">
-            <Nav.Item className={styles.link}>
-              <a href="/auth/google">
-                Sign in with <span className={styles.google}>Google</span>
-              </a>
-            </Nav.Item>
+            <LinkContainer to="/login">
+              <Nav.Item className={styles.link}>Login</Nav.Item>
+            </LinkContainer>
           </Nav>
         )
     }

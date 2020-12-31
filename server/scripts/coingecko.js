@@ -365,13 +365,13 @@ const setup = async (app) => {
     await getCoinList(app)
   }, 3 * 60 * 60 * 1000) // Calls every 3 hours
 
+  logger.info(`${format(new Date())} - Fetching coin prices started`)
+
   let chunkCounter = 0
   let page = 1
 
   // Set a timer to update coin prices
   setInterval(async () => {
-    logger.info(`${format(new Date())} - Fetching coin prices for page ${page}`)
-
     const chunk = Object.keys(data.coins)
     const chunkSize = 250
 
@@ -383,6 +383,9 @@ const setup = async (app) => {
       chunkCounter = 0
       page = 1
       data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
+
+      logger.info(`${format(new Date())} - Fetching coin prices finished`)
+
       // await writeFileAsync('./data/prices.json', JSON.stringify(data.prices, null, 2))
 
       // Provide a default sort after all coin prices obtained

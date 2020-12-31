@@ -1,3 +1,5 @@
+import httpStatus from 'http-status'
+
 import sendgridMail from '@sendgrid/mail'
 import asyncHandler from 'express-async-handler'
 import keys from '../config/keys.js'
@@ -21,7 +23,7 @@ const sendEmail = asyncHandler(async (req, res) => {
   }
 
   if (Object.keys(errors).length) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error(JSON.stringify(Object.values(errors).join(', ')))
   }
 
@@ -39,7 +41,7 @@ const sendEmail = asyncHandler(async (req, res) => {
   try {
     await sendgridMail.send(msgSendgrid)
   } catch (error) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Error sending email.')
   }
 
