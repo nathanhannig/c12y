@@ -1,8 +1,10 @@
+import httpStatus from 'http-status'
+
 const getCoins = (req, res) => {
   const { data } = req.app.locals
 
   if (!data || !data.list) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Coin list not yet ready, please try again in a few moments.')
   }
 
@@ -47,7 +49,7 @@ const getCoinById = (req, res) => {
   const coin = req.params.coin.toLowerCase()
 
   if (!data) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Coin list not yet ready, please try again in a few moments.')
   }
 
@@ -70,7 +72,7 @@ const getCoinById = (req, res) => {
     })
   }
 
-  res.status(404)
+  res.status(httpStatus.NOT_FOUND)
   throw new Error('Coin not found.')
 }
 

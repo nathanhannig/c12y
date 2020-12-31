@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/user'
+import { LOGIN_USER, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_DETAILS_FAIL } from '../constants/user'
 
 export const fetchUser = () => async (dispatch) => {
   try {
@@ -17,4 +17,11 @@ export const fetchUser = () => async (dispatch) => {
       payload: error.response && error.response.data.message ? error.response.data.message : error.message,
     })
   }
+}
+
+export const loginUser = (user) => (dispatch) => {
+  dispatch({
+    type: LOGIN_USER,
+    payload: user,
+  })
 }

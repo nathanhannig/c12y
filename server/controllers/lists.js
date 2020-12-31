@@ -1,8 +1,10 @@
+import httpStatus from 'http-status'
+
 const getWatchlist = (req, res) => {
   const { data } = req.app.locals
 
   if (!data.coins || !data.watchList) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Watch list not yet ready, please try again in a few moments.')
   }
 
@@ -37,7 +39,7 @@ const getGainers = (req, res) => {
   const { data } = req.app.locals
 
   if (!data.topGainers) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Gainers not yet ready, please try again in a few moments.')
   }
 
@@ -60,7 +62,7 @@ const getLosers = (req, res) => {
   const { data } = req.app.locals
 
   if (!data.topLosers) {
-    res.status(500)
+    res.status(httpStatus.INTERNAL_SERVER_ERROR)
     throw new Error('Losers not yet ready, please try again in a few moments.')
   }
 

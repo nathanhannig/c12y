@@ -3,24 +3,33 @@ import httpStatus from 'http-status'
 
 const authProvider = {
     // authentication
-    // login: (params) => Promise.resolve(),
+    login: async (params) => {
+        const { username, password } = params
+        const response = await axios.post('auth/login', { email: username, password })
+
+        if (response.data.isAdmin) {
+            return Promise.resolve()
+        } else {
+            return Promise.reject()
+        }
+    },
     checkError: async (error) => {
-        const status = error.status;
+        const status = error.status
 
         if (status === httpStatus.UNAUTHORIZED || status === httpStatus.FORBIDDEN) {
             await axios.get('auth/logout')
 
-            return Promise.reject();
+            return Promise.reject()
         }
 
-        return Promise.resolve();
+        return Promise.resolve()
     },
     checkAuth: async (params) => {
         try {
             const response = await axios.get('auth/current_user')
 
             if (response.data.isAdmin) {
-                return Promise.resolve();
+                return Promise.resolve()
             }
         } catch (error) {
             return Promise.reject(error)
@@ -39,7 +48,7 @@ const authProvider = {
             const id = response.data.id
             const fullName = response.data.firstName
 
-            return Promise.resolve({ id, fullName });
+            return Promise.resolve({ id, fullName })
         } catch (error) {
             return Promise.reject(error)
         }

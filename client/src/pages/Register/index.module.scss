@@ -1,0 +1,26 @@
+.divider {
+    overflow: visible;
+    padding: 0;
+    margin-bottom: 10px;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    color: #6e6d7a;
+    text-align: center;
+
+    &:after {
+        content: 'Or';
+        display: inline-block;
+        position: relative;
+        top: -1em;
+        padding: 0 1.5em;
+        background: #fff;
+    }
+}
+
+.formErrors {
+    background-color: rgba(255, 64, 64, 0.301);
+    border: solid 1px #ff0000;
+    color: #ff0000;
+    padding: 10px;
+    margin-bottom: 20px;
+}

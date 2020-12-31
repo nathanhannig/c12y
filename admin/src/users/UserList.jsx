@@ -7,8 +7,8 @@ const UserList = (props) => (
             <TextField source="id" />
             <TextField source="firstName" />
             <TextField source="lastName" />
-            <TextField source="email" />
-            <TextField source="provider" />
+            <TextField label='Local Email' source="local.email" />
+            <TextField label='Google Id' source="google.id" />
             <BooleanField source="isAdmin" />
         </Datagrid>
     </List>

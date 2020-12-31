@@ -1,5 +1,6 @@
 import httpStatus from 'http-status'
 import asyncHandler from 'express-async-handler'
+import * as Yup from 'yup'
 import User from '../models/User.js'
 
 const deleteUser = asyncHandler(async (req, res) => {
@@ -20,11 +21,25 @@ const updateUser = asyncHandler(async (req, res) => {
     isAdmin,
   } = req.body
 
+  const schema = Yup.object({
+    firstName: Yup.string().trim().min(1).max(20),
+    lastName: Yup.string().trim().max(20).nullable(),
+    isAdmin: Yup.boolean(),
+  })
+
+  const isValid = await schema.isValid({
+    firstName, lastName, isAdmin,
+  })
+
+  if (!isValid) {
+    res.status(httpStatus.BAD_REQUEST)
+    throw new Error('Invalid user data')
+  }
+
   const user = await User.findById(req.params.userId)
 
   if (user) {
     user.firstName = firstName
-    user.lastName = lastName
     user.lastName = lastName
     user.isAdmin = isAdmin
     user.updatedAt = Date.now()
@@ -59,9 +74,9 @@ const getUsers = asyncHandler(async (req, res) => {
         _id: 1,
         firstName: 1,
         lastName: 1,
-        email: 1,
-        provider: 1,
-        googleId: 1,
+        'google.id': 1,
+        'google.email': 1,
+        'local.email': 1,
         isAdmin: 1,
       },
     )

@@ -1,5 +1,6 @@
 import httpStatus from 'http-status'
 import asyncHandler from 'express-async-handler'
+import * as Yup from 'yup'
 import Exchange from '../models/Exchange.js'
 
 const createExchange = asyncHandler(async (req, res) => {
@@ -25,6 +26,21 @@ const updateExchange = asyncHandler(async (req, res) => {
     description,
     link,
   } = req.body
+
+  const schema = Yup.object({
+    name: Yup.string().min(1).max(20),
+    description: Yup.string(),
+    link: Yup.string().url(),
+  })
+
+  const isValid = await schema.isValid({
+    name, description, link,
+  })
+
+  if (!isValid) {
+    res.status(httpStatus.BAD_REQUEST)
+    throw new Error('Invalid exchange data')
+  }
 
   const exchange = await Exchange.findById(req.params.exchangeId)
 

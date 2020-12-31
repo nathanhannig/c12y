@@ -1,5 +1,6 @@
 import httpStatus from 'http-status'
 import asyncHandler from 'express-async-handler'
+import * as Yup from 'yup'
 import Wallet from '../models/Wallet.js'
 
 const createWallet = asyncHandler(async (req, res) => {
@@ -26,6 +27,21 @@ const updateWallet = asyncHandler(async (req, res) => {
     link,
   } = req.body
 
+  const schema = Yup.object({
+    name: Yup.string().min(1).max(20),
+    description: Yup.string(),
+    link: Yup.string().url(),
+  })
+
+  const isValid = await schema.isValid({
+    name, description, link,
+  })
+
+  if (!isValid) {
+    res.status(httpStatus.BAD_REQUEST)
+    throw new Error('Invalid wallet data')
+  }
+
   const wallet = await Wallet.findById(req.params.walletId)
 
   if (wallet) {
@@ -50,8 +66,8 @@ const getWallet = asyncHandler(async (req, res) => {
 })
 
 const getWallets = asyncHandler(async (req, res) => {
-  const start = parseInt(req.query._start)
-  const end = parseInt(req.query._end)
+  const start = parseInt(req.query._start, 10)
+  const end = parseInt(req.query._end, 10)
   const sort = {}
   sort[req.query._sort] = req.query._order === 'DESC' ? -1 : 1
 
