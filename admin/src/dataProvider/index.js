@@ -149,4 +149,4 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         ).then(responses => ({ data: responses.map(({ json }) => json.id) })),
 })
 
-export default dataProvider('/api')
+export default dataProvider

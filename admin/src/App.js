@@ -1,4 +1,3 @@
-// import { Admin, Resource } from 'react-admin';
 import { Admin, Resource } from 'react-admin';
 
 import authProvider from './authProvider'
@@ -8,9 +7,11 @@ import exchanges from './exchanges'
 import wallets from './wallets'
 import users from './users'
 
+const customDataProvider = dataProvider('../api')
+
 const App = () => {
   return (
-    <Admin authProvider={authProvider} dataProvider={dataProvider}>
+    <Admin authProvider={authProvider} dataProvider={customDataProvider}>
       <Resource name="users" {...users} />
       <Resource name="exchanges" {...exchanges} />
       <Resource name="wallets" {...wallets} />

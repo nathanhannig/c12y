@@ -5,7 +5,7 @@ const authProvider = {
     // authentication
     login: async (params) => {
         const { username, password } = params
-        const response = await axios.post('auth/login', { email: username, password })
+        const response = await axios.post('../auth/login', { email: username, password })
 
         if (response.data.isAdmin) {
             return Promise.resolve()
@@ -17,7 +17,7 @@ const authProvider = {
         const status = error.status
 
         if (status === httpStatus.UNAUTHORIZED || status === httpStatus.FORBIDDEN) {
-            await axios.get('auth/logout')
+            await axios.get('../auth/logout')
 
             return Promise.reject()
         }
@@ -26,7 +26,7 @@ const authProvider = {
     },
     checkAuth: async (params) => {
         try {
-            const response = await axios.get('auth/current_user')
+            const response = await axios.get('../auth/current_user')
 
             if (response.data.isAdmin) {
                 return Promise.resolve()
@@ -38,13 +38,13 @@ const authProvider = {
         return Promise.reject({ message: 'Login required' })
     },
     logout: async () => {
-        await axios.get('auth/logout')
+        await axios.get('../auth/logout')
 
         return Promise.resolve()
     },
     getIdentity: async () => {
         try {
-            const response = await axios.get('auth/current_user')
+            const response = await axios.get('../auth/current_user')
             const id = response.data.id
             const fullName = response.data.firstName
 

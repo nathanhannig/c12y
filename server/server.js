@@ -52,8 +52,10 @@ app.use('/email', emailRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   // Serves the React app assets in production
-  app.use(express.static(path.join(__dirname, '../client/build')))
+  app.use('/admin', express.static(path.join(__dirname, '../admin/build')))
+  app.get('admin/*', (req, res) => res.sendFile(path.join(__dirname, '../admin/build/index.html')))
 
+  app.use(express.static(path.join(__dirname, '../client/build')))
   app.get('*', (req, res) => res.sendFile(path.join(__dirname, '../client/build/index.html')))
 }
 
