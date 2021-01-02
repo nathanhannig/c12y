@@ -28,8 +28,11 @@ jobs:
                       cd /var/www/c12y.com/c12y
                       git pull origin master
                       cd server
-                      npm install
+                      npm ci
                       pm2 restart c12y-server
                       cd ../client
-                      npm install
+                      npm ci
+                      npm run build
+                      cd ../admin
+                      npm ci
                       npm run build
