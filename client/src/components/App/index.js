@@ -1,6 +1,7 @@
 // React
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 // Redux
 import { useDispatch } from 'react-redux'
@@ -69,6 +70,10 @@ const App = () => {
       </ScrollToTop>
     </Router>
   )
+}
+
+App.propTypes = {
+  match: PropTypes.object.isRequired,
 }
 
 export default App

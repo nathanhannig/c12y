@@ -1,0 +1,47 @@
+version: '3'
+services:
+    client:
+        container_name: c12y_client
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        image: c12y:client
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./client:/usr/src/app
+            - /usr/src/app/node_modules/
+            - /usr/src/app/build/
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+        depends_on:
+            - server
+    admin:
+        container_name: c12y_admin
+        build:
+            context: ./admin
+            dockerfile: Dockerfile
+        image: c12y:admin
+        ports:
+            - '4000:4000'
+        volumes:
+            - ./admin:/usr/src/app
+            - /usr/src/app/node_modules/
+            - /usr/src/app/build/
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+        depends_on:
+            - server
+    server:
+        container_name: c12y_server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        image: c12y:server
+        ports:
+            - '8080:8080'
+        volumes:
+            - ./server:/usr/src/app
+            - /usr/src/app/node_modules/
+        environment:
+            - CHOKIDAR_USEPOLLING=true
