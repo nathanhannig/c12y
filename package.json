@@ -1,13 +1,10 @@
 {
-  "name": "c12y",
-  "version": "1.0.0",
-  "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
-  "dependencies": {
-    "concurrently": "^5.3.0"
-  },
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start"
-  }
+    "name": "c12y",
+    "version": "1.0.0",
+    "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
+    "dependencies": {},
+    "scripts": {
+        "dev": "docker-compose up",
+        "dev:build": "docker-compose up --build"
+    }
 }

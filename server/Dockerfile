@@ -1,0 +1,17 @@
+FROM node:15-alpine
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package*.json ./
+
+# Install build dependencies required for bcrypt
+RUN apk add --no-cache make gcc g++ python && \
+    npm install && \
+    npm rebuild bcrypt --build-from-source && \
+    apk del make gcc g++ python
+
+EXPOSE 8080
+
+CMD [ "npm", "run", "dev" ]
