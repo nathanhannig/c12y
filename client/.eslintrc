@@ -41,7 +41,6 @@
         "prettier"
     ],
     "rules": {
-        "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
         "import/prefer-default-export": 0,
         "react/react-in-jsx-scope": "off",
         "react/jsx-filename-extension": [
