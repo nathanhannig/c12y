@@ -41,7 +41,6 @@
         "prettier"
     ],
     "rules": {
-        "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
         "import/prefer-default-export": 0,
         "react/react-in-jsx-scope": "off",
         "react/jsx-filename-extension": [
@@ -58,17 +57,6 @@
         "react/destructuring-assignment": 0,
         "react/forbid-prop-types": 0,
         "semi": 0,
-        "linebreak-style": 0,
-        "prettier/prettier": [
-            "error",
-            {
-                "trailingComma": "es5",
-                "singleQuote": true,
-                "printWidth": 120,
-                "tabWidth": 2,
-                "endOfLine": "auto",
-                "semi": false
-            }
-        ]
+        "prettier/prettier": "error"
     }
 }
