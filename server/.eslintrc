@@ -6,16 +6,19 @@
         "codeFrame": false,
         "ecmaVersion": 11
     },
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "prettier"
+    ],
     "env": {
         "node": true,
         "jest": true
     },
+    "plugins": ["prettier"],
     "rules": {
         "import/first": 0,
         "import/extensions": ["error", { "js": "always" }],
-        "semi": ["error", "never"],
-        "linebreak-style": 0,
-        "max-len": ["error", { "code": 120 }]
+        "semi": 0,
+        "prettier/prettier": "error"
     }
 }

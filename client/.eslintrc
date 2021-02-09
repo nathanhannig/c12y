@@ -58,7 +58,6 @@
         "react/destructuring-assignment": 0,
         "react/forbid-prop-types": 0,
         "semi": 0,
-        "linebreak-style": 0,
         "prettier/prettier": "error"
     }
 }
