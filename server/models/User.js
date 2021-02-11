@@ -7,51 +7,54 @@ const SALT_WORK_FACTOR = 10
 const MAX_LOGIN_ATTEMPTS = 5
 const LOCK_TIME = 2 * 60 * 60 * 1000 // 2 hours
 
-const userSchema = new Schema({
-  local: {
-    email: {
+const userSchema = new Schema(
+  {
+    local: {
+      email: {
+        type: String,
+        default: '',
+      },
+      password: {
+        type: String,
+        default: '',
+      },
+    },
+    google: {
+      id: {
+        type: String,
+        default: '',
+      },
+      email: {
+        type: String,
+        default: '',
+      },
+    },
+    firstName: {
       type: String,
       default: '',
     },
-    password: {
+    lastName: {
       type: String,
       default: '',
     },
-  },
-  google: {
-    id: {
-      type: String,
-      default: '',
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
-    email: {
-      type: String,
-      default: '',
+    loginAttempts: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    lockUntil: {
+      type: Number,
     },
   },
-  firstName: {
-    type: String,
-    default: '',
-  },
-  lastName: {
-    type: String,
-    default: '',
-  },
-  isAdmin: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  loginAttempts: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  lockUntil: {
-    type: Number,
-  },
-}, {
-  timestamps: true,
-})
+  {
+    timestamps: true,
+  }
+)
 
 /* eslint-disable func-names */
 userSchema.virtual('isLocked').get(function () {

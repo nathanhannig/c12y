@@ -45,9 +45,9 @@ const sendEmail = asyncHandler(async (req, res) => {
     throw new Error('Error sending email.')
   }
 
-  return res.send('Sent email')
+  return res.send({
+    data: { message: 'Sent email' },
+  })
 })
 
-export {
-  sendEmail,
-}
+export { sendEmail }

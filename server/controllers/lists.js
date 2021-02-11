@@ -10,27 +10,22 @@ const getWatchlist = (req, res) => {
 
   // Build watch list
   const coins = {}
-  const prices = {}
+  const coinsList = Object.values(data.coins).map(({ id, name }) => ({ id, label: name }))
 
   data.watchList.map((item) => {
     coins[item.id] = data.coins[item.id]
 
-    if (data.prices
-          && data.prices[item.id]) {
-      prices[item.id] = data.prices[item.id]
+    if (data.prices?.[item.id]) {
+      coins[item.id].prices = data.prices[item.id]
     }
 
     return null
   })
 
   return res.send({
-    coins,
-    prices,
+    data: coins,
     watchList: data.watchList,
-    list: data.list,
-    totalMarketCap: data.totalMarketCap,
-    totalVolume24h: data.totalVolume24h,
-    btcDominance: data.btcDominance,
+    list: coinsList,
     lastUpdated: data.lastUpdated,
   })
 }
@@ -43,9 +38,9 @@ const getGainers = (req, res) => {
     throw new Error('Gainers not yet ready, please try again in a few moments.')
   }
 
-  const list = []
+  const gainers = []
   data.topGainers.forEach((item) => {
-    list.push({
+    gainers.push({
       id: item.id,
       name: data.coins[item.id].name,
       value: item.value,
@@ -53,7 +48,7 @@ const getGainers = (req, res) => {
   })
 
   return res.send({
-    list,
+    data: gainers,
     lastUpdated: data.lastUpdated,
   })
 }
@@ -66,9 +61,9 @@ const getLosers = (req, res) => {
     throw new Error('Losers not yet ready, please try again in a few moments.')
   }
 
-  const list = []
+  const losers = []
   data.topLosers.forEach((item) => {
-    list.push({
+    losers.push({
       id: item.id,
       name: data.coins[item.id].name,
       value: item.value,
@@ -76,13 +71,9 @@ const getLosers = (req, res) => {
   })
 
   return res.send({
-    list,
+    data: losers,
     lastUpdated: data.lastUpdated,
   })
 }
 
-export {
-  getWatchlist,
-  getGainers,
-  getLosers,
-}
+export { getWatchlist, getGainers, getLosers }

@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package*.json ./
 
-# Install build dependencies required for bcrypt
-RUN apk add --no-cache make gcc g++ python && \
+RUN apk update && \
+    apk add --no-cache make gcc g++ python && \
     npm install && \
     npm rebuild bcrypt --build-from-source && \
     apk del make gcc g++ python

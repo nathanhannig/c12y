@@ -44,12 +44,12 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
         )
       }
 
-      const modifiedJson = json.map((record) => {
+      const modifiedData = json.data.map((record) => {
         return { ...record, ...{ id: record._id } }
       })
 
       return {
-        data: modifiedJson,
+        data: modifiedData,
         total: parseInt(headers.get('x-total-count').split('/').pop(), 10),
       }
     })
@@ -57,10 +57,10 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
 
   getOne: (resource, params) =>
     httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => {
-      const modifiedJson = { ...json, ...{ id: json._id } }
+      const modifiedData = { ...json.data, ...{ id: json.data._id } }
 
       return {
-        data: modifiedJson,
+        data: modifiedData,
       }
     }),
 
@@ -69,7 +69,14 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
       id: params.ids,
     }
     const url = `${apiUrl}/${resource}?${stringify(query)}`
-    return httpClient(url).then(({ json }) => ({ data: json }))
+
+    return httpClient(url).then(({ json }) => {
+      const modifiedData = json.data.map((record) => {
+        return { ...record, ...{ id: record._id } }
+      })
+
+      return { data: modifiedData }
+    })
   },
 
   getManyReference: (resource, params) => {
@@ -91,8 +98,13 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
           'The X-Total-Count header is missing in the HTTP Response. The jsonServer Data Provider expects responses for lists of resources to contain this header with the total number of results to build the pagination. If you are using CORS, did you declare X-Total-Count in the Access-Control-Expose-Headers header?'
         )
       }
+
+      const modifiedData = json.data.map((record) => {
+        return { ...record, ...{ id: record._id } }
+      })
+
       return {
-        data: json,
+        data: modifiedData,
         total: parseInt(headers.get('x-total-count').split('/').pop(), 10),
       }
     })
@@ -103,9 +115,9 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
       method: 'PUT',
       body: JSON.stringify(params.data),
     }).then(({ json }) => {
-      const modifiedJson = { ...json, ...{ id: json._id } }
+      const modifiedData = { ...json.data, ...{ id: json.data._id } }
 
-      return { data: modifiedJson }
+      return { data: modifiedData }
     }),
 
   // json-server doesn't handle filters on UPDATE route, so we fallback to calling UPDATE n times instead
@@ -117,20 +129,30 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
           body: JSON.stringify(params.data),
         })
       )
-    ).then((responses) => ({ data: responses.map(({ json }) => json.id) })),
+    ).then((responses) => {
+      const modifiedResponse = responses.map(({ json }) => json.data._id)
+
+      return { data: modifiedResponse }
+    }),
 
   create: (resource, params) =>
     httpClient(`${apiUrl}/${resource}`, {
       method: 'POST',
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({
-      data: { ...params.data, id: json._id },
-    })),
+    }).then(({ json }) => {
+      const modifiedData = { ...json.data, ...{ id: json.data._id } }
+
+      return { data: modifiedData }
+    }),
 
   delete: (resource, params) =>
     httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: 'DELETE',
-    }).then(({ json }) => ({ data: json })),
+    }).then(({ json }) => {
+      const modifiedData = { ...json.data, ...{ id: json.data._id } }
+
+      return { data: modifiedData }
+    }),
 
   // json-server doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
   deleteMany: (resource, params) =>
@@ -140,7 +162,11 @@ const dataProvider = (apiUrl, httpClient = fetchUtils.fetchJson) => ({
           method: 'DELETE',
         })
       )
-    ).then((responses) => ({ data: responses.map(({ json }) => json.id) })),
+    ).then((responses) => {
+      const modifiedResponse = responses.map(({ json }) => json.data._id)
+
+      return { data: modifiedResponse }
+    }),
 })
 
 export default dataProvider

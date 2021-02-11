@@ -18,7 +18,9 @@
     "rules": {
         "import/first": 0,
         "import/extensions": ["error", { "js": "always" }],
+        "import/prefer-default-export": 0,
         "semi": 0,
+        "no-underscore-dangle": ["error", { "allow": ["_id", "_start", "_end", "_sort", "_order"]}],
         "prettier/prettier": "error"
     }
 }

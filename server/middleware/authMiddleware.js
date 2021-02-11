@@ -18,7 +18,4 @@ const protect = (req, res, next) => {
   }
 }
 
-export {
-  admin,
-  protect,
-}
+export { admin, protect }

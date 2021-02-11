@@ -1,9 +1,5 @@
 import express from 'express'
-import {
-  getWatchlist,
-  getGainers,
-  getLosers,
-} from '../../controllers/lists.js'
+import { getWatchlist, getGainers, getLosers } from '../../controllers/lists.js'
 
 const router = express.Router()
 

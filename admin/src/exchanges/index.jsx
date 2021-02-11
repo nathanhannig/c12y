@@ -4,10 +4,10 @@ import ExchangeEdit from './ExchangeEdit'
 import ExchangeList from './ExchangeList'
 
 const exhanges = {
-    create: ExchangeCreate,
-    edit: ExchangeEdit,
-    icon: Icon,
-    list: ExchangeList,
+  create: ExchangeCreate,
+  edit: ExchangeEdit,
+  icon: Icon,
+  list: ExchangeList,
 }
 
 export default exhanges

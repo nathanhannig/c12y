@@ -7,7 +7,9 @@ const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndRemove(req.params.userId)
 
   if (user) {
-    return res.send({ message: 'User removed' })
+    return res.send({
+      data: user,
+    })
   }
 
   res.status(httpStatus.NOT_FOUND)
@@ -15,11 +17,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 })
 
 const updateUser = asyncHandler(async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    isAdmin,
-  } = req.body
+  const { firstName, lastName, isAdmin } = req.body
 
   const schema = Yup.object({
     firstName: Yup.string().trim().min(1).max(20),
@@ -28,7 +26,9 @@ const updateUser = asyncHandler(async (req, res) => {
   })
 
   const isValid = await schema.isValid({
-    firstName, lastName, isAdmin,
+    firstName,
+    lastName,
+    isAdmin,
   })
 
   if (!isValid) {
@@ -46,7 +46,9 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save()
 
-    return res.send(updatedUser)
+    return res.send({
+      date: updatedUser,
+    })
   }
 
   res.status(httpStatus.NOT_FOUND)
@@ -56,7 +58,9 @@ const updateUser = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.userId)
 
-  return res.send(user)
+  return res.send({
+    data: user,
+  })
 })
 
 const getUsers = asyncHandler(async (req, res) => {
@@ -67,31 +71,27 @@ const getUsers = asyncHandler(async (req, res) => {
 
   const count = await User.countDocuments()
 
-  const users = await User
-    .find(
-      {},
-      {
-        _id: 1,
-        firstName: 1,
-        lastName: 1,
-        'google.id': 1,
-        'google.email': 1,
-        'local.email': 1,
-        isAdmin: 1,
-      },
-    )
+  const users = await User.find(
+    {},
+    {
+      _id: 1,
+      firstName: 1,
+      lastName: 1,
+      'google.id': 1,
+      'google.email': 1,
+      'local.email': 1,
+      isAdmin: 1,
+    }
+  )
     .sort(sort)
     .skip(start)
     .limit(end - start)
 
   res.set('X-Total-Count', count)
 
-  return res.send(users)
+  return res.send({
+    data: users,
+  })
 })
 
-export {
-  deleteUser,
-  getUser,
-  getUsers,
-  updateUser,
-}
+export { deleteUser, getUser, getUsers, updateUser }
