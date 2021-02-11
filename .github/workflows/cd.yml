@@ -4,36 +4,36 @@
 name: Build
 
 on:
-    pull_request:
-        types: [closed]
-        branches: [master]
+  pull_request:
+    types: [closed]
+    branches: [master]
 
 jobs:
-    deploy:
-        if: github.event.pull_request.merged
-        runs-on: ubuntu-latest
+  deploy:
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v2
-            - name: SSH and deploy
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USERNAME }}
-                  key: ${{ secrets.SSH_KEY }}
-                  port: ${{ secrets.SSH_PORT }}
-                  command_timeout: 20m
-                  script: |
-                      export NVM_DIR=~/.nvm
-                      source ~/.nvm/nvm.sh
-                      cd /var/www/c12y.com/c12y
-                      git pull origin master
-                      cd server
-                      npm ci
-                      pm2 restart c12y-server
-                      cd ../client
-                      npm ci
-                      npm run build
-                      cd ../admin
-                      npm ci
-                      npm run build
+    steps:
+      - uses: actions/checkout@v2
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 20m
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd /var/www/c12y.com/c12y
+            git pull origin master
+            cd server
+            npm install
+            pm2 restart c12y-server
+            cd ../client
+            npm install
+            npm run build
+            cd ../admin
+            npm install
+            npm run build
