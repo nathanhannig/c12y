@@ -16,7 +16,7 @@ const Overview = ({ match, history }) => {
   const dispatch = useDispatch()
 
   const coinDetails = useSelector((state) => state.coin)
-  const { loading, error, coin, price } = coinDetails
+  const { loading, error, data: coin } = coinDetails
 
   useEffect(() => {
     dispatch(fetchCoin(match.params.coin))
@@ -78,29 +78,29 @@ const Overview = ({ match, history }) => {
     let formattedMarketCap = 'N/A'
     let formattedCirculatingSupply = 'N/A'
 
-    if (price) {
+    if (coin.prices?.price) {
       // Convert to $ with commas
-      formattedPrice = API.formatDollars(price.price)
+      formattedPrice = API.formatDollars(coin.prices.price)
 
       // Convert to $ with commas
-      formattedVolume24Hour = API.formatDollars(price.volume_24h)
+      formattedVolume24Hour = API.formatDollars(coin.prices.volume_24h)
 
       // Convert to $ with commas
-      formattedHigh24Hour = API.formatDollars(price.volume_high_24h)
+      formattedHigh24Hour = API.formatDollars(coin.prices.volume_high_24h)
 
       // Convert to $ with commas
-      formattedLow24Hour = API.formatDollars(price.volume_low_24h)
+      formattedLow24Hour = API.formatDollars(coin.prices.volume_low_24h)
 
       // Convert to $ with commas
-      formattedChange24Hour = API.formatDollars(price.change_24h)
+      formattedChange24Hour = API.formatDollars(coin.prices.change_24h)
 
       // Convert to % with commas
-      formattedChangePct24Hour = API.formatPercent(price.change_percentage_24h)
+      formattedChangePct24Hour = API.formatPercent(coin.prices.change_percentage_24h)
 
       // Convert to $ with commas
-      formattedMarketCap = API.formatDollars(price.market_cap)
+      formattedMarketCap = API.formatDollars(coin.prices.market_cap)
 
-      formattedCirculatingSupply = API.formatWholeNumber(price.circulating_supply)
+      formattedCirculatingSupply = API.formatWholeNumber(coin.prices.circulating_supply)
     }
 
     let changeStyle

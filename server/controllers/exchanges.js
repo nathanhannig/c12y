@@ -6,14 +6,18 @@ import Exchange from '../models/Exchange.js'
 const createExchange = asyncHandler(async (req, res) => {
   const exchange = await Exchange.create(req.body)
 
-  return res.status(httpStatus.CREATED).send(exchange)
+  return res.status(httpStatus.CREATED).send({
+    data: exchange,
+  })
 })
 
 const deleteExchange = asyncHandler(async (req, res) => {
   const exchange = await Exchange.findByIdAndRemove(req.params.exchangeId)
 
   if (exchange) {
-    return res.send({ message: 'Exchange removed' })
+    return res.send({
+      data: exchange,
+    })
   }
 
   res.status(httpStatus.NOT_FOUND)
@@ -21,11 +25,7 @@ const deleteExchange = asyncHandler(async (req, res) => {
 })
 
 const updateExchange = asyncHandler(async (req, res) => {
-  const {
-    name,
-    description,
-    link,
-  } = req.body
+  const { name, description, link } = req.body
 
   const schema = Yup.object({
     name: Yup.string().min(1).max(20),
@@ -34,7 +34,9 @@ const updateExchange = asyncHandler(async (req, res) => {
   })
 
   const isValid = await schema.isValid({
-    name, description, link,
+    name,
+    description,
+    link,
   })
 
   if (!isValid) {
@@ -52,7 +54,9 @@ const updateExchange = asyncHandler(async (req, res) => {
 
     const updatedExchange = await exchange.save()
 
-    return res.send(updatedExchange)
+    return res.send({
+      data: updatedExchange,
+    })
   }
 
   res.status(httpStatus.NOT_FOUND)
@@ -67,7 +71,9 @@ const getExchange = asyncHandler(async (req, res) => {
     throw new Error('Exchange not found')
   }
 
-  return res.send(exchange)
+  return res.send({
+    data: exchange,
+  })
 })
 
 const getExchanges = asyncHandler(async (req, res) => {
@@ -78,26 +84,24 @@ const getExchanges = asyncHandler(async (req, res) => {
 
   const count = await Exchange.countDocuments()
 
-  const exchanges = await Exchange
-    .find(
-      {},
-      {
-        _id: 1, name: 1, link: 1, description: 1,
-      },
-    )
+  const exchanges = await Exchange.find(
+    {},
+    {
+      _id: 1,
+      name: 1,
+      link: 1,
+      description: 1,
+    }
+  )
     .sort(sort)
     .skip(start)
     .limit(end - start)
 
   res.set('X-Total-Count', count)
 
-  return res.send(exchanges)
+  return res.send({
+    data: exchanges,
+  })
 })
 
-export {
-  createExchange,
-  deleteExchange,
-  getExchange,
-  getExchanges,
-  updateExchange,
-}
+export { createExchange, deleteExchange, getExchange, getExchanges, updateExchange }

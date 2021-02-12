@@ -16,5 +16,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
+package-lock.json
 
 /data/coins.json

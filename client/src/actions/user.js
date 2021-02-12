@@ -5,7 +5,7 @@ export const fetchUser = () => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST })
 
-    const response = await axios.get('/auth/current_user')
+    const response = await axios.get('/auth/me')
 
     dispatch({
       type: USER_DETAILS_SUCCESS,

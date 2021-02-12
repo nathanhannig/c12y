@@ -10,13 +10,8 @@ import {
 
 const router = express.Router()
 
-router.route('/:exchangeId')
-  .get(getExchange)
-  .put(protect, admin, updateExchange)
-  .delete(protect, admin, deleteExchange)
+router.route('/:exchangeId').get(getExchange).put(protect, admin, updateExchange).delete(protect, admin, deleteExchange)
 
-router.route('/')
-  .get(getExchanges)
-  .post(protect, admin, createExchange)
+router.route('/').get(getExchanges).post(protect, admin, createExchange)
 
 export default router

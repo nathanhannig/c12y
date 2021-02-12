@@ -41,32 +41,28 @@ const Footer = () => {
         <Row className={styles.topLists}>
           <Col md={1} className="d-none d-md-block" />
           <Col sm={12} md={4}>
-            {gainers.list !== undefined ? (
+            {gainers.data && (
               <TopList
                 name="Top Gainers"
-                list={gainers.list.map((item) => {
+                list={gainers.data.map((item) => {
                   const newValue = API.formatPercent(item.value)
 
                   return { id: item.id, name: item.name, value: newValue }
                 })}
               />
-            ) : (
-              ''
             )}
           </Col>
           <Col md={2} className="d-none d-md-block" />
           <Col sm={12} md={4}>
-            {losers.list !== undefined ? (
+            {losers.data && (
               <TopList
                 name="Top Losers"
-                list={losers.list.map((item) => {
+                list={losers.data.map((item) => {
                   const newValue = API.formatPercent(item.value)
 
                   return { id: item.id, name: item.name, value: newValue }
                 })}
               />
-            ) : (
-              ''
             )}
           </Col>
           <Col md={1} className="d-none d-md-block" />

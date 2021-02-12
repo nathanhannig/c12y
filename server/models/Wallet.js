@@ -2,22 +2,25 @@ import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 
-const walletSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const walletSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    link: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
   },
-  link: {
-    type: String,
-    default: '',
-  },
-  description: {
-    type: String,
-    default: '',
-  },
-}, {
-  timestamps: true,
-})
+  {
+    timestamps: true,
+  }
+)
 
 const Wallet = mongoose.model('wallets', walletSchema)
 

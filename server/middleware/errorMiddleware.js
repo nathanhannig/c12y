@@ -6,7 +6,7 @@ const notFound = (req, res, next) => {
   next(error)
 }
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   const statusCode = res.statusCode === httpStatus.OK ? httpStatus.INTERNAL_SERVER_ERROR : res.statusCode
   res.status(statusCode)
   res.json({

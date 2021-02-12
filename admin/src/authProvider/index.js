@@ -26,9 +26,9 @@ const authProvider = {
   },
   checkAuth: async (params) => {
     try {
-      const response = await axios.get('../auth/current_user')
+      const response = await axios.get('../auth/me')
 
-      if (response.data.isAdmin) {
+      if (response.data.data.isAdmin) {
         return Promise.resolve()
       }
     } catch (error) {
@@ -44,9 +44,9 @@ const authProvider = {
   },
   getIdentity: async () => {
     try {
-      const response = await axios.get('../auth/current_user')
-      const id = response.data.id
-      const fullName = response.data.firstName
+      const response = await axios.get('../auth/me')
+      const id = response.data.data.id
+      const fullName = response.data.data.firstName
 
       return Promise.resolve({ id, fullName })
     } catch (error) {

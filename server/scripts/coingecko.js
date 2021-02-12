@@ -21,17 +21,14 @@ const getCoinInfo = async (app, id) => {
   try {
     logger.info(`${format(new Date())} - Getting coin info for ${id}`)
 
-    const response = await CoinGeckoClient.coins.fetch(
-      id,
-      {
-        market_data: true,
-        localization: false,
-        developer_data: false,
-        community_data: false,
-        tickers: false,
-        sparkline: false,
-      },
-    )
+    const response = await CoinGeckoClient.coins.fetch(id, {
+      market_data: true,
+      localization: false,
+      developer_data: false,
+      community_data: false,
+      tickers: false,
+      sparkline: false,
+    })
 
     // Regex used to strip empty tags, source must use WYSIWYG
     const reBadSyntax = /<p>\s*[<strong>\s*</strong>]*<\/p>|<strong>\s*<\/strong>/gi
@@ -44,7 +41,8 @@ const getCoinInfo = async (app, id) => {
         large: response.data.image.large,
       }
       data.coins[id].description = response.data.description?.en
-        .replace(reBadSyntax, '').replace(reRelativeURL, '"https://www.coingecko.com/')
+        .replace(reBadSyntax, '')
+        .replace(reRelativeURL, '"https://www.coingecko.com/')
       data.coins[id].facebook = response.data.links?.facebook_username
       data.coins[id].twitter = response.data.links?.twitter_screen_name
       data.coins[id].startDate = response.data.genesis_date
@@ -75,8 +73,7 @@ const getCoinList = async (app) => {
       const newCoins = response.data.filter((item) => {
         if (data.coins[item.id] && data.coins[item.id].lastUpdated) {
           // Update existing coin
-          if (data.coins[item.id].symbol !== item.symbol
-            || data.coins[item.id].name !== item.name) {
+          if (data.coins[item.id].symbol !== item.symbol || data.coins[item.id].name !== item.name) {
             data.coins[item.id].symbol = item.symbol
             data.coins[item.id].mame = item.name
 
@@ -89,8 +86,10 @@ const getCoinList = async (app) => {
               },
               // callback function
               (error) => {
-                if (error) { logger.error(`${format(new Date())} - ${error}`) }
-              },
+                if (error) {
+                  logger.error(`${format(new Date())} - ${error}`)
+                }
+              }
             )
           }
         } else {
@@ -111,8 +110,10 @@ const getCoinList = async (app) => {
             { upsert: true },
             // callback function
             (error) => {
-              if (error) { logger.error(`${format(new Date())} - ${error}`) }
-            },
+              if (error) {
+                logger.error(`${format(new Date())} - ${error}`)
+              }
+            }
           )
 
           return true
@@ -122,7 +123,7 @@ const getCoinList = async (app) => {
       })
 
       // Build the coin list
-      data.list = Object.keys(data.coins).map(item => ({
+      data.list = Object.keys(data.coins).map((item) => ({
         id: item,
         label: data.coins[item].name,
       }))
@@ -142,8 +143,8 @@ const getCoinList = async (app) => {
 
       // Build the watch list
       data.watchList = Object.keys(data.coins)
-        .filter(item => defaultWatchList.includes(data.coins[item].id))
-        .map(item => ({
+        .filter((item) => defaultWatchList.includes(data.coins[item].id))
+        .map((item) => ({
           id: item,
           label: data.coins[item].name,
         }))
@@ -225,15 +226,11 @@ const sortByMktCap = (app, list) => {
 
     // API data is very inaccurate for small market coins so we attempt to filter
     // out small coins with the below filters, usually market cap is too high
-    if (prices[a.id]?.price > 0
-      && prices[a.id]?.volume_24h >= 10000
-      && prices[a.id]?.market_cap) {
+    if (prices[a.id]?.price > 0 && prices[a.id]?.volume_24h >= 10000 && prices[a.id]?.market_cap) {
       aValue = prices[a.id].market_cap
     }
 
-    if (prices[b.id]?.price > 0
-      && prices[b.id]?.volume_24h >= 10000
-      && prices[b.id]?.market_cap) {
+    if (prices[b.id]?.price > 0 && prices[b.id]?.volume_24h >= 10000 && prices[b.id]?.market_cap) {
       bValue = prices[b.id].market_cap
     }
 
@@ -251,15 +248,11 @@ const topGainers = (app, list) => {
     let aValue = 0
     let bValue = 0
 
-    if (prices[a.id]?.price > 0
-      && prices[a.id]?.volume_24h >= 100000
-      && prices[a.id]?.change_percentage_24h) {
+    if (prices[a.id]?.price > 0 && prices[a.id]?.volume_24h >= 100000 && prices[a.id]?.change_percentage_24h) {
       aValue = prices[a.id].change_percentage_24h
     }
 
-    if (prices[b.id]?.price > 0
-      && prices[b.id]?.volume_24h >= 100000
-      && prices[b.id]?.change_percentage_24h) {
+    if (prices[b.id]?.price > 0 && prices[b.id]?.volume_24h >= 100000 && prices[b.id]?.change_percentage_24h) {
       bValue = prices[b.id].change_percentage_24h
     }
 
@@ -268,7 +261,7 @@ const topGainers = (app, list) => {
 
   const top5 = gainers.slice(0, 5)
 
-  return top5.map(item => ({
+  return top5.map((item) => ({
     id: item.id,
     name: item.name,
     value: prices[item.id]?.change_percentage_24h,
@@ -282,15 +275,11 @@ const topLosers = (app, list) => {
     let aValue = 0
     let bValue = 0
 
-    if (prices[a.id]?.price > 0
-      && prices[a.id]?.volume_24h >= 100000
-      && prices[a.id]?.change_percentage_24h) {
+    if (prices[a.id]?.price > 0 && prices[a.id]?.volume_24h >= 100000 && prices[a.id]?.change_percentage_24h) {
       aValue = prices[a.id].change_percentage_24h
     }
 
-    if (prices[b.id]?.price > 0
-      && prices[b.id]?.volume_24h >= 100000
-      && prices[b.id]?.change_percentage_24h) {
+    if (prices[b.id]?.price > 0 && prices[b.id]?.volume_24h >= 100000 && prices[b.id]?.change_percentage_24h) {
       bValue = prices[b.id].change_percentage_24h
     }
 
@@ -299,7 +288,7 @@ const topLosers = (app, list) => {
 
   const top5 = losers.slice(0, 5)
 
-  return top5.map(item => ({
+  return top5.map((item) => ({
     id: item.id,
     name: item.name,
     value: prices[item.id]?.change_percentage_24h,
@@ -340,7 +329,7 @@ const calculateTotal24hVolume = (app, list) => {
 const calculateBTCDominance = (app) => {
   const { data } = app.locals
 
-  return ((data.prices?.bitcoin?.market_cap / data.totalMarketCap) * 100)
+  return (data.prices?.bitcoin?.market_cap / data.totalMarketCap) * 100
 }
 
 const setup = async (app) => {
@@ -378,11 +367,11 @@ const setup = async (app) => {
     if (chunkCounter + chunkSize < chunk.length) {
       chunkCounter += chunkSize
       page += 1
-      data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
+      data.prices = { ...data.prices, ...(await getPricesByChunk(page, chunkSize)) }
     } else {
       chunkCounter = 0
       page = 1
-      data.prices = { ...data.prices, ...await getPricesByChunk(page, chunkSize) }
+      data.prices = { ...data.prices, ...(await getPricesByChunk(page, chunkSize)) }
 
       logger.info(`${format(new Date())} - Fetching coin prices finished`)
 

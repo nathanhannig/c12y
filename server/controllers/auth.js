@@ -8,22 +8,20 @@ const authGoogleCallback = (req, res) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-  const {
-    email, password, firstName, lastName,
-  } = req.body
+  const { email, password, firstName, lastName } = req.body
 
   const schema = Yup.object({
     email: Yup.string().label('Email').required().email(),
-    firstName: Yup.string().label('First name').required().trim()
-      .max(20),
+    firstName: Yup.string().label('First name').required().trim().max(20),
     lastName: Yup.string().label('Last name').trim().max(20),
-    password: Yup.string().label('Password').trim().required()
-      .min(8)
-      .max(20),
+    password: Yup.string().label('Password').trim().required().min(8).max(20),
   })
 
   const isValid = await schema.isValid({
-    email, firstName, lastName, password,
+    email,
+    firstName,
+    lastName,
+    password,
   })
 
   if (!isValid) {
@@ -96,7 +94,9 @@ const getCurrentUser = (req, res) => {
     user.isAdmin = req.user.isAdmin
   }
 
-  res.send(user)
+  res.send({
+    data: user,
+  })
 }
 
 const logoutCurrentUser = (req, res) => {
@@ -105,9 +105,4 @@ const logoutCurrentUser = (req, res) => {
   res.redirect('/')
 }
 
-export {
-  authGoogleCallback,
-  getCurrentUser,
-  logoutCurrentUser,
-  registerUser,
-}
+export { authGoogleCallback, getCurrentUser, logoutCurrentUser, registerUser }

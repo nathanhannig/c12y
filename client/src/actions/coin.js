@@ -12,6 +12,9 @@ import {
   COIN_LOSERS_REQUEST,
   COIN_LOSERS_SUCCESS,
   COIN_LOSERS_FAIL,
+  COIN_TOTALS_REQUEST,
+  COIN_TOTALS_SUCCESS,
+  COIN_TOTALS_FAIL,
 } from '../constants/coin'
 
 export const fetchCoins = (page) => async (dispatch) => {
@@ -87,6 +90,24 @@ export const fetchLosers = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: COIN_LOSERS_FAIL,
+      payload: error.response && error.response.data.message ? error.response.data.message : error.message,
+    })
+  }
+}
+
+export const fetchTotals = () => async (dispatch) => {
+  try {
+    dispatch({ type: COIN_TOTALS_REQUEST })
+
+    const response = await axios.get('/api/totals')
+
+    dispatch({
+      type: COIN_TOTALS_SUCCESS,
+      payload: response.data,
+    })
+  } catch (error) {
+    dispatch({
+      type: COIN_TOTALS_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message,
     })
   }

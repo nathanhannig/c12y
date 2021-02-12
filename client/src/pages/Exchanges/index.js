@@ -15,7 +15,7 @@ const Exchanges = () => {
     async function fetchExchanges() {
       const result = await axios('/api/exchanges')
 
-      setExchanges(result.data)
+      setExchanges(result.data.data)
       setLoading(false)
     }
 

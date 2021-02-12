@@ -7,7 +7,7 @@ import { formatDistance } from 'date-fns'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCoins } from '../../actions'
+import { fetchCoins, fetchTotals } from '../../actions'
 
 // App
 import Metrics from '../../components/Metrics'
@@ -20,10 +20,14 @@ const Main = () => {
   const dispatch = useDispatch()
 
   const coinList = useSelector((state) => state.coins)
-  const { loading, coins, prices, totalMarketCap, totalVolume24h, list, btcDominance, lastUpdated } = coinList
+  const totals = useSelector((state) => state.totals)
+
+  const { loading, data: coins, list, lastUpdated } = coinList
+  const { data: { totalMarketCap, totalVolume24h, totalCoins, btcDominance } = {} } = totals
 
   useEffect(() => {
     dispatch(fetchCoins())
+    dispatch(fetchTotals())
   }, [dispatch])
 
   const renderCoinList = () => {
@@ -52,19 +56,19 @@ const Main = () => {
       let volume = 'N/A'
       let marketCap = 'N/A'
 
-      if (prices[item]) {
+      if (coins[item].prices) {
         // Convert to $ with commas
-        price = API.formatDollars(prices[item].price)
+        price = API.formatDollars(coins[item].prices.price)
 
         // Convert to percent
-        change = API.formatPercent(prices[item].change_percentage_24h)
+        change = API.formatPercent(coins[item].prices.change_percentage_24h)
 
         // Convert to whole number with commas
-        supply = API.formatWholeNumber(prices[item].circulating_supply)
+        supply = API.formatWholeNumber(coins[item].prices.circulating_supply)
 
         // Convert to whole $ with commas
-        volume = API.formatDollarsWholeNumber(prices[item].volume_24h)
-        marketCap = API.formatDollarsWholeNumber(prices[item].market_cap)
+        volume = API.formatDollarsWholeNumber(coins[item].prices.volume_24h)
+        marketCap = API.formatDollarsWholeNumber(coins[item].prices.market_cap)
       }
 
       return (
@@ -137,7 +141,7 @@ const Main = () => {
         <Metrics
           totalMarketCap={totalMarketCap}
           totalVolume24h={totalVolume24h}
-          totalCoins={list?.length}
+          totalCoins={totalCoins}
           btcDominance={btcDominance}
         />
         <Search list={list} />

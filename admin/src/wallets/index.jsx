@@ -4,10 +4,10 @@ import WalletEdit from './WalletEdit'
 import WalletList from './WalletList'
 
 const wallets = {
-    create: WalletCreate,
-    edit: WalletEdit,
-    icon: Icon,
-    list: WalletList,
+  create: WalletCreate,
+  edit: WalletEdit,
+  icon: Icon,
+  list: WalletList,
 }
 
 export default wallets

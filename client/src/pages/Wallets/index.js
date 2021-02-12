@@ -47,7 +47,7 @@ const Wallets = () => {
     async function fetchWallets() {
       const result = await axios('/api/wallets')
 
-      setWallets(result.data)
+      setWallets(result.data.data)
       setLoading(false)
     }
 
