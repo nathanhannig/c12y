@@ -17,7 +17,7 @@ const Header = () => {
       return ''
     }
 
-    switch (auth.data.isLoggedIn) {
+    switch (auth.data?.isLoggedIn) {
       case true:
         return (
           <Nav className="justify-content-end">
