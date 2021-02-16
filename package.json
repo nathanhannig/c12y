@@ -1,10 +1,10 @@
 {
-    "name": "c12y",
-    "version": "1.0.0",
-    "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
-    "dependencies": {},
-    "scripts": {
-        "dev": "docker-compose up",
-        "dev:build": "docker-compose up --build"
-    }
+  "name": "c12y",
+  "version": "1.0.0",
+  "description": "c12y.com is a directory of information related to cryptocurrency coins, exchanges, and wallets.",
+  "dependencies": {},
+  "scripts": {
+    "dev": "docker-compose up",
+    "dev:build": "docker-compose build --no-cache"
+  }
 }

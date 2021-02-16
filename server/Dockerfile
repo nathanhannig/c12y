@@ -1,7 +1,7 @@
 FROM node:15-alpine
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/server
 
 # Install app dependencies
 COPY package*.json ./

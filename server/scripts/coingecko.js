@@ -6,12 +6,10 @@
 import CoinGecko from 'coingecko-api'
 import logger from 'loglevel'
 import format from 'date-fns/format/index.js'
-import util from 'util'
-import fs from 'fs'
+// eslint-disable-next-line import/no-unresolved
+import { readFile, writeFile } from 'fs/promises'
 import Coin from '../models/Coin.js'
 
-const writeFileAsync = util.promisify(fs.writeFile)
-const readFileAsync = util.promisify(fs.readFile)
 const CoinGeckoClient = new CoinGecko()
 
 // Gets the details of a coins
@@ -36,9 +34,9 @@ const getCoinInfo = async (app, id) => {
 
     if (response.data) {
       data.coins[id].image = {
-        thumb: response.data.image.thumb,
-        small: response.data.image.small,
-        large: response.data.image.large,
+        thumb: response.data.image?.thumb,
+        small: response.data.image?.small,
+        large: response.data.image?.large,
       }
       data.coins[id].description = response.data.description?.en
         .replace(reBadSyntax, '')
@@ -162,7 +160,7 @@ const getCoinList = async (app) => {
 
           if (counterCoinInfo === newCoins.length) {
             clearInterval(getCoinInfoTimer)
-            await writeFileAsync('./data/coins.json', JSON.stringify(data.coins, null, 2))
+            await writeFile('./data/coins.json', JSON.stringify(data.coins, null, 2))
             logger.info(`${format(new Date())} - Coin info processed (${newCoins.length} new coins)`)
           }
         }, 2 * 1000) // 2 call per second
@@ -340,7 +338,7 @@ const setup = async (app) => {
 
   try {
     // Load initial coin list
-    const content = await readFileAsync('./data/coins.json')
+    const content = await readFile('./data/coins.json')
     data.coins = JSON.parse(content)
   } catch (error) {
     data.coins = {}
@@ -375,7 +373,7 @@ const setup = async (app) => {
 
       logger.info(`${format(new Date())} - Fetching coin prices finished`)
 
-      // await writeFileAsync('./data/prices.json', JSON.stringify(data.prices, null, 2))
+      // await writeFile('./data/prices.json', JSON.stringify(data.prices, null, 2))
 
       // Provide a default sort after all coin prices obtained
       data.list = sortByMktCap(app, data.list)
